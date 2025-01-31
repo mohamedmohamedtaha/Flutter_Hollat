@@ -1,0 +1,24 @@
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:hollat/login/data/viewmodel/config_viewmodel.dart';
+import 'package:hollat/login/network/error_handling.dart';
+import 'package:hollat/login/network/repositores/normal_login_repository.dart';
+class NafazViewModel extends StateNotifier<ConfigState> {
+  // final NafathResponse nafazResponse;
+  final NormalLoginRepository repository;
+
+  NafazViewModel({required this.repository}) : super(ConfigInitial());
+
+  Future<void> nafath(String id) async {
+    state = ConfigLoading();
+    try {
+      final nafaz = await repository.nafath(id);
+
+      state = ConfigSuccess(nafaz);
+    } on AppException catch (e) {
+      state = ConfigError(e.message);
+    }
+  }
+  void restState(){
+    state  = ConfigInitial();
+  }
+}

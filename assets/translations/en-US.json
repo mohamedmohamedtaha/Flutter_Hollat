@@ -1,0 +1,25 @@
+{
+  "language": "عربي",
+  "idNumber":"Id number",
+  "login": "Login",
+  "enterYourId": "Enter your Id",
+  "confirmationCode": "Confirmation code",
+  "nafazTextCode": "Please open the “National Unified Access” \\n application and confirm the request by choosing the number above",
+  "orderCompleted" :"Order status: The order time has completed",
+  "orderWaiting": "Order status: The order time has waiting",
+  "orderExpired" : "Order status: The order time has expired",
+  "resendCode" : "Resend Code",
+  "yourIdNotValid" : "Your id not valid",
+  "idRequired" : "Please enter your id",
+  "phoneNumber" : " Phone number ",
+  "phoneHint" : " Enter Your phone number ",
+  "phoneRequired" : " Phone number is required",
+  "errorPhoneRequired" : "Invalid phone number",
+  "email" : " Email ",
+  "emailHint" : " Enter your email ",
+  "emailRequired" : "Your user name required",
+  "errorEmailRequired" : "Invalid email address",
+  "confirm" : "Confirm",
+  "createAccount" : "Create an account"
+
+}
