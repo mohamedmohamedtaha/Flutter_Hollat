@@ -50,7 +50,7 @@ class SplashPage_State extends ConsumerState<SplashPage> {
             navigatorControllerReplacement(
                 context,
                 nafathEnabled == "1"
-                    ? const NafazLoginPage()
+                    ? const NafazLoginPage() //NafazLoginPage()
                     : const NormalLoginPage());
           }
         }
@@ -128,18 +128,8 @@ class SplashPage_State extends ConsumerState<SplashPage> {
                                           .read(
                                           serviceConfigDatabaseViewModelProvider)
                                           .saveConfig(serviceConfigDatabase);
-
-                                      // ref.read(
-                                      //     serviceConfigDatabaseViewModelProvider)
-                                      //     .getAllConfig();
-                                      // print('get data from local:  ${ref
-                                      //     .watch(
-                                      //     serviceConfigDatabaseViewModelProvider)
-                                      //     .config}');
-                                      // navigatorControllerReplacement(context,const NavPage());
-                                      //  setState(() {
                                       _isImageLoaded = true;
-                                      // });
+
                                     }
                                     return child;
                                   },

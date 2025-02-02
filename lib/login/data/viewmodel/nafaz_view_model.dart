@@ -15,7 +15,7 @@ class NafazViewModel extends StateNotifier<ConfigState> {
 
       state = ConfigSuccess(nafaz);
     } on AppException catch (e) {
-      state = ConfigError(e.message);
+      state = ConfigError(e.message,e.hashCode);
     }
   }
   void restState(){

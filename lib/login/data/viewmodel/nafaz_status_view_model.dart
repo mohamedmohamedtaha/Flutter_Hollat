@@ -14,7 +14,7 @@ class NafazStatusViewModel extends StateNotifier<ConfigState>{
       final nafazStatusResponse = await repository.nafathStatus(nafazStatus);
       state = ConfigSuccess(nafazStatusResponse);
     }on AppException catch (e) {
-      state = ConfigError(e.message);
+      state = ConfigError(e.message,e.hashCode);
     }
   }
 }

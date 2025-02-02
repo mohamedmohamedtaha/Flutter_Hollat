@@ -1,5 +1,11 @@
 {
   "language": "English",
+  "home": "الرئيسية",
+  "sama": "ساما",
+  "orders": "طلبات",
+  "myProfile": "حسابي",
+  "changeData": "تعديل البيانات",
+  "search": "بحث",
   "idNumber": "رقم الهوية",
   "login": "تسجيل الدخول",
   "enterYourId": "أدخل رقم الهوية",
@@ -11,6 +17,14 @@
   "resendCode" : "إعادة ارسال كود التأكيد ",
   "yourIdNotValid" : "رقم الهوية غير صالح ",
   "idRequired" : "رجاء ادخل رقم الهوية",
+  "userName" : "أدخل الاسم ",
+  "userNameHint" : "الاسم",
+  "userNameRequired" : "الاسم مطلوب",
+  "selectNationalType" : "اختر نوع الهوية",
+  "selectBirthDate" : "اختر تاريخ الميلاد",
+  "checkCode" : "الكود",
+  "checkCodeHint" : "أدخل الكود",
+  "checkCodeRequired" : "الكود مطلوب",
   "phoneNumber" : " رقم الجوال ",
   "phoneHint" : " أدخل رقم الجوال ",
   "phoneRequired" : " رقم الجوال مطلوب",
@@ -20,6 +34,9 @@
   "emailRequired" : "البريد الالكتروني مطلوب",
   "errorEmailRequired" : "البريد الالكتروني غير صحيح",
   "confirm" : "تأكيد",
-  "createAccount" : "إنشاء حساب"
+  "createAccount" : "إنشاء حساب",
+  "tokenExpired" : "انتهت صلاحية الرمز",
+  "confirmText" : "ستصلك رسالة نصية تحتوي على رقم التحقق الموجود على الرقم",
+  "confirmationCodeRequired" : "كود التأكيد مطلوب"
 
 }

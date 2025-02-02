@@ -12,7 +12,7 @@ class GetAllNationalTypesViewModel extends StateNotifier<ConfigState>{
       final nationalTypesResponse = await repository.getAllNationalTypes();
       state = ConfigSuccess(nationalTypesResponse);
     }on AppException catch (e) {
-      state = ConfigError(e.message);
+      state = ConfigError(e.message,e.hashCode);
     }
   }
 }

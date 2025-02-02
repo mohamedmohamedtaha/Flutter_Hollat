@@ -13,6 +13,7 @@ import 'package:hollat/login/data/sharedpreferences/local_storage_service.dart';
 import 'package:hollat/login/network/MyHttpOverrids.dart';
 import 'package:hollat/login/views/login/nafaz_send_verify_code_page.dart';
 import 'package:hollat/login/views/login/splash_page.dart';
+import 'package:hollat/login/views/login/verify_otp_page.dart';
 import 'package:hollat/main/riverpod/providers.dart';
 
 void main() async {

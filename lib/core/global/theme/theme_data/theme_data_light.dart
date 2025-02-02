@@ -11,7 +11,7 @@ ThemeData getThemeDataLight()=> ThemeData(
     textButtonTheme: TextButtonThemeData(
         style: ButtonStyle(
            // backgroundColor:  WidgetStateProperty.all(AppColorsLight.primaryColor),
-            foregroundColor:  WidgetStateProperty.all(AppColorsLight.whiteColor)
+          //  foregroundColor:  WidgetStateProperty.all(AppColorsLight.whiteColor)
         )
     )
 );

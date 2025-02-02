@@ -210,4 +210,5 @@ class _NafazLoginPageState extends ConsumerState<NafazLoginPage> {
           ));
     });
   }
+
 }

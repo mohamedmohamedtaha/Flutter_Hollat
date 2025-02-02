@@ -1,6 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:hollat/login/data/constants/Constants.dart';
+import 'package:hollat/core/utils/constants.dart';
 import 'package:hollat/login/data/sharedpreferences/local_storage_service.dart';
 
 // @immutable

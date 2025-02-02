@@ -21,7 +21,7 @@ class ApiClient {
           }
       );
       // if method post
-     // options.contentType = Headers.formUrlEncodedContentType;
+      options.contentType = Headers.formUrlEncodedContentType;
       final response = await _dio.request(path,
         data: data,
         queryParameters: queryParameters,
@@ -38,6 +38,8 @@ class ApiClient {
   }
 
   Never _handleDioError(DioException error) {
+    print('error.type: ${error.type} response: ${error.response?.data.toString()} '
+        'statusCode: ${error.response?.statusCode}');
     switch (error.type) {
       case DioExceptionType.connectionTimeout:
       case DioExceptionType.sendTimeout:

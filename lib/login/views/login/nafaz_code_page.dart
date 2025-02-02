@@ -15,6 +15,7 @@ import 'package:hollat/login/data/viewmodel/config_viewmodel.dart';
 import 'package:hollat/login/network/repositores/normal_login_repository.dart';
 import 'package:hollat/login/presentation/widgets/custom_status_button.dart';
 import 'package:hollat/login/presentation/widgets/custom_text.dart';
+import 'package:hollat/login/views/login/nafaz_send_verify_code_page.dart';
 import 'package:hollat/login/views/nav_page.dart';
 import 'package:hollat/main/riverpod/providers.dart';
 
@@ -145,11 +146,6 @@ class _NafazCodePageState extends ConsumerState<NafazCodePage> {
                     return switch (state) {
                       ConfigInitial() =>
                           CustomStatusButton(text: LocaleKeys.orderWaiting.tr())
-                    //     Text(
-                    //   _secondsRemaining > 0
-                    //       ? 'Wait (${_secondsRemaining}s)'
-                    //       : 'Resend Code',
-                    // )
                     ,
                       ConfigLoading() => CircularProgressIndicator(),
                       ConfigSuccess(:final data) => switch (data.status) {
@@ -159,6 +155,7 @@ class _NafazCodePageState extends ConsumerState<NafazCodePage> {
                         'EXPIRED' => _buildExpiredWithTimer(),
                         _ => const Text('Unknown Status'),
                       },
+                      ConfigErrorApi(:final data) => Text('Error: $data'),
                       ConfigError(:final message) => Text('Error: $message'),
                       NormalLoginRepository() => throw UnimplementedError(),
                     };
@@ -177,7 +174,7 @@ class _NafazCodePageState extends ConsumerState<NafazCodePage> {
                               .read(nafazCodeViewModelProvider.notifier)
                               .restState();
                         });
-                      }, error: (isError) {
+                      }, error: (isError, code) {
                         WidgetsBinding.instance.addPostFrameCallback((_) {
                           ScaffoldMessenger.of(context).showSnackBar(
                             SnackBar(
@@ -257,19 +254,18 @@ class _NafazCodePageState extends ConsumerState<NafazCodePage> {
     WidgetsBinding.instance.addPostFrameCallback((_) async {
       if (mounted) {
         _timer?.cancel();
+        if (data.token != null) {
+          await saveToken(data.token!);
+        } else {
+          if (kDebugMode) {
+            print('Token is null can not save.');
+          }
+        }
         var mobileVerifiedAt = data.client?.mobileVerifiedAt ?? '';
         if (mobileVerifiedAt.isNotEmpty) {
-          navigatorControllerPush(context, NavPage());
-
+          navigatorControllerPushAndRemoveUntil(context, NavPage(),false);
         } else {
-          if (data.token != null) {
-            await saveToken(data.token!);
-            navigatorControllerPushAndRemoveUntil(context, NavPage(), false);
-          } else {
-            if (kDebugMode) {
-              print('Token is null can not save.');
-            }
-          }
+          navigatorControllerPush(context, NafazSendVerifyCodePage());
         }
       }
     });

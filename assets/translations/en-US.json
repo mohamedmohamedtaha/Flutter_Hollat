@@ -1,5 +1,11 @@
 {
   "language": "عربي",
+  "home": "Main",
+  "samaCare": "Sama",
+  "orders": "Orders",
+  "myProfile": "My profile",
+  "changeData": "Change data",
+  "search": "Search",
   "idNumber":"Id number",
   "login": "Login",
   "enterYourId": "Enter your Id",
@@ -11,6 +17,14 @@
   "resendCode" : "Resend Code",
   "yourIdNotValid" : "Your id not valid",
   "idRequired" : "Please enter your id",
+  "userName" : "Enter user name",
+  "userNameHint" : "User name",
+  "userNameRequired" : "User name required",
+  "selectNationalType" : "Select national type",
+  "selectBirthDate" : "Select birth date",
+  "checkCode" : "Check Code",
+  "checkCodeHint" : "Enter check Code",
+  "checkCodeRequired" : "Check Code required",
   "phoneNumber" : " Phone number ",
   "phoneHint" : " Enter Your phone number ",
   "phoneRequired" : " Phone number is required",
@@ -20,6 +34,9 @@
   "emailRequired" : "Your user name required",
   "errorEmailRequired" : "Invalid email address",
   "confirm" : "Confirm",
-  "createAccount" : "Create an account"
+  "createAccount" : "Create an account",
+  "tokenExpired" : "Token expired",
+  "confirmText": "You will receive a text message containing the verification number on the number",
+  "confirmationCodeRequired" : "Confirmation code required"
 
 }
