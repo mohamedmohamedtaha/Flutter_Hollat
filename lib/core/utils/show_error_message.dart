@@ -41,14 +41,16 @@ void showErrorMessageApi(BuildContext context, int code, dynamic data) async {
   }
 }
 void showSnackBar(BuildContext context,String errorMessage){
-   ScaffoldMessenger.of(context).showSnackBar(
-    SnackBar(
-      backgroundColor: AppColorsLight.primaryColor,
-      duration: Duration(seconds: 2),
-      behavior: SnackBarBehavior.floating,
-      content: Text(errorMessage),
-    ),
-  );
+  WidgetsBinding.instance.addPostFrameCallback((_){
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        backgroundColor: AppColorsLight.primaryColor,
+        duration: Duration(seconds: 2),
+        behavior: SnackBarBehavior.floating,
+        content: Text(errorMessage),
+      ),
+    );
+  });
 }
 
 

@@ -1,6 +1,8 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:hollat/core/global/theme/app_color/app_color_light.dart';
+import 'package:hollat/core/init/gen/translations.g.dart';
 import 'package:hollat/login/data/notifiers.dart';
 
 class NavbarWidget extends StatelessWidget {
@@ -36,11 +38,11 @@ class NavbarWidget extends StatelessWidget {
                     items: [
                       BottomNavigationBarItem(
                         icon: Icon(Icons.home),
-                        label: 'Home',
+                        label:  LocaleKeys.home.tr(),
                       ),
                       BottomNavigationBarItem(
                         icon: Icon(Icons.account_balance),
-                        label: 'Sama',
+                        label: LocaleKeys.sama.tr(),
                       ),
                       // Placeholder for center item (will be replaced)
                       BottomNavigationBarItem(
@@ -49,11 +51,11 @@ class NavbarWidget extends StatelessWidget {
                       ),
                       BottomNavigationBarItem(
                         icon: SvgPicture.asset('assets/images/orders.svg'),
-                        label: 'Orders',
+                        label: LocaleKeys.orders.tr(),
                       ),
                       BottomNavigationBarItem(
                         icon: Icon(Icons.account_circle_outlined),
-                        label: 'Profile',
+                        label: LocaleKeys.myProfile.tr(),
                       ),
                     ],
                     currentIndex: selectedPageNotifier.value,

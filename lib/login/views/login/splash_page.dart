@@ -2,11 +2,14 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:hollat/core/utils/show_error_message.dart';
 import 'package:hollat/login/Navigator.dart';
 import 'package:hollat/login/data/database/service_config_database.dart';
 import 'package:hollat/login/data/sharedpreferences/save_token.dart';
 import 'package:hollat/login/data/viewmodel/config_viewmodel.dart';
+import 'package:hollat/login/domain/entities/config_response/service_config_response.dart';
 import 'package:hollat/login/domain/entities/config_response/theme_config.dart';
+import 'package:hollat/login/presentation/widgets/custom_text.dart';
 import 'package:hollat/login/views/login/nafaz_login_page.dart';
 import 'package:hollat/login/views/login/normal_login_page.dart';
 import 'package:hollat/login/views/nav_page.dart';
@@ -30,16 +33,14 @@ class SplashPage_State extends ConsumerState<SplashPage> {
     Future.microtask(
           () {
         ref.read(configViewModelProvider.notifier).loadConfig();
-        // Provider.of<ConfigViewModel>(context, listen: false).loadConfig();
         startNavigationByTimer();
       },
     );
-    // initThemeMode();
   }
 
   void startNavigationByTimer() async {
     final token = await getToken();
-    _timer = Timer.periodic(const Duration(milliseconds: 100), (_timer) async {
+    _timer = Timer.periodic(const Duration(milliseconds: 100), (_) async {
       if (_isImageLoaded) {
         _timer.cancel();
         await Future.delayed(const Duration(seconds: 3));
@@ -50,9 +51,10 @@ class SplashPage_State extends ConsumerState<SplashPage> {
             navigatorControllerReplacement(
                 context,
                 nafathEnabled == "1"
-                    ? const NafazLoginPage() //NafazLoginPage()
+                    ? const NafazLoginPage()
                     : const NormalLoginPage());
           }
+          _resetConfig();
         }
       }
     });
@@ -60,7 +62,6 @@ class SplashPage_State extends ConsumerState<SplashPage> {
 
   @override
   void dispose() {
-    // TODO: implement dispose
     _timer.cancel();
     super.dispose();
   }
@@ -76,8 +77,8 @@ class SplashPage_State extends ConsumerState<SplashPage> {
         final hiveServiceAsyncValue = ref.watch(hiveServiceProvider);
         return hiveServiceAsyncValue.when(
             data: (hiveState) {
-              final state = ref.watch(configViewModelProvider);
-              return switch (state) {
+              final configState = ref.watch(configViewModelProvider);
+              return switch (configState) {
                 ConfigInitial() => const SizedBox.shrink(),
                 ConfigLoading() =>
                 const Center(child: CircularProgressIndicator()),
@@ -95,41 +96,7 @@ class SplashPage_State extends ConsumerState<SplashPage> {
                                   frameBuilder: (context, child, frame,
                                       wasSynchronouslyLoaded) {
                                     if (frame != null) {
-                                      ServiceConfigDatabase serviceConfigDatabase =
-                                      ServiceConfigDatabase();
-                                      ThemeConfig theme = data.theme;
-                                      serviceConfigDatabase.largeLogo =
-                                          data.theme.logo.value ?? '';
-                                      serviceConfigDatabase.smallLogo =
-                                          data.theme.miniLogo.value ?? "";
-                                      serviceConfigDatabase.primaryColor =
-                                          data.theme.headerColor.value ?? '';
-                                      serviceConfigDatabase.smallImage =
-                                          data.theme.miniLogo.value ?? '';
-
-                                      //---------------------------- Login Config ----------------------------
-                                      serviceConfigDatabase.nafathEnabled =
-                                          data.nafathEnabled.value ?? '';
-                                      nafathEnabled =
-                                          data.nafathEnabled.value ?? '';
-                                      serviceConfigDatabase.selfServiceOtpBy =
-                                          data.selfServiceOtpBy.value;
-                                      serviceConfigDatabase
-                                          .verifyMobileAfterLoginWithEmail = data
-                                          .verifyMobileAfterLoginWithEmail
-                                          ?.value ??
-                                          '';
-                                      ref
-                                          .read(
-                                          serviceConfigDatabaseViewModelProvider)
-                                          .clearConfig();
-
-                                      ref
-                                          .read(
-                                          serviceConfigDatabaseViewModelProvider)
-                                          .saveConfig(serviceConfigDatabase);
-                                      _isImageLoaded = true;
-
+                                      _saveConfiguration(data);
                                     }
                                     return child;
                                   },
@@ -141,7 +108,9 @@ class SplashPage_State extends ConsumerState<SplashPage> {
                             )
                           ],
                         ))),
-                ConfigError(:final message) => Text('Error: $message'),
+                ConfigError(:final message) =>_showError(message),
+                ConfigErrorApi(:final code, :final data) =>
+                    _showErrorApi(code, data),
                 _ => Container(),
               };
             },
@@ -152,9 +121,60 @@ class SplashPage_State extends ConsumerState<SplashPage> {
     );
   }
 
-// void initThemeMode() async{
-//   final prefs = await SharedPreferences.getInstance();
-//   final bool getMode = prefs.getBool(Constants.modeKey) ?? false;
-//   modeNotifier.value = getMode;
-// }
+  Widget _showError(String message) {
+    _resetConfig();
+    return  Center(
+      child: CustomText('Error: $message'));
+  }
+
+  Widget _showErrorApi(int code,ServiceConfigResponse data) {
+         _resetConfig();
+    showErrorMessageApi(context, code, data);
+    return Center(child: CustomText('Error: $code'));
+  }
+
+  void _saveConfiguration(ServiceConfigResponse data) {
+    ServiceConfigDatabase serviceConfigDatabase =
+    ServiceConfigDatabase();
+    ThemeConfig theme = data.theme;
+    serviceConfigDatabase.largeLogo =
+        data.theme.logo.value ?? '';
+    serviceConfigDatabase.smallLogo =
+        data.theme.miniLogo.value ?? "";
+    serviceConfigDatabase.primaryColor =
+        data.theme.headerColor.value ?? '';
+    serviceConfigDatabase.smallImage =
+        data.theme.miniLogo.value ?? '';
+
+    //---------------------------- Login Config ----------------------------
+    serviceConfigDatabase.nafathEnabled =
+        data.nafathEnabled.value ?? '';
+    nafathEnabled =
+        data.nafathEnabled.value ?? '';
+    serviceConfigDatabase.selfServiceOtpBy =
+        data.selfServiceOtpBy.value;
+    serviceConfigDatabase
+        .verifyMobileAfterLoginWithEmail = data
+        .verifyMobileAfterLoginWithEmail
+        ?.value ??
+        '';
+    ref
+        .read(
+        serviceConfigDatabaseViewModelProvider)
+        .clearConfig();
+
+    ref
+        .read(
+        serviceConfigDatabaseViewModelProvider)
+        .saveConfig(serviceConfigDatabase);
+    _isImageLoaded = true;
+  }
+  void _resetConfig(){
+    WidgetsBinding.instance.addPostFrameCallback((_){
+      ref
+          .read(
+          configViewModelProvider.notifier)
+          .resetConfig();
+    });
+  }
 }

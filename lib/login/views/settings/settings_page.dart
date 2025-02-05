@@ -16,29 +16,40 @@ class _SettingsPageState extends State<SettingsPage> {
   bool? isChecked = false;
   bool isSwitch = false;
   double sliderValue = 0.0;
-void simpleDialog()async{
-  switch(await AlertDialog(
-  title: const Text('Alert Dialog'),
-  content: const Text('Alert Message'),
-  actions: [
-    SimpleDialogOption(child: Text('YEs'),onPressed: ()=> Navigator.pop(context,'YES'),)
-    ,SimpleDialogOption(child: Text('YEs'),onPressed: ()=> Navigator.pop(context,'NO'),)
-    ,SimpleDialogOption(child: Text('YEs'),onPressed: ()=> Navigator.pop(context,'May be'),)
-  ,FilledButton(
-  onPressed: () {
-  navigatorControllerPup(context);
-  },
-  child: const Text('Close'))
-  ],
-  )){
-    case 'YES': //do something
-      break;
-    case 'NO': //do something
-      break;case 'May be': //do something
-    break;
 
+  void simpleDialog() async {
+    switch (await AlertDialog(
+      title: const Text('Alert Dialog'),
+      content: const Text('Alert Message'),
+      actions: [
+        SimpleDialogOption(
+          child: Text('YEs'),
+          onPressed: () => Navigator.pop(context, 'YES'),
+        ),
+        SimpleDialogOption(
+          child: Text('YEs'),
+          onPressed: () => Navigator.pop(context, 'NO'),
+        ),
+        SimpleDialogOption(
+          child: Text('YEs'),
+          onPressed: () => Navigator.pop(context, 'May be'),
+        ),
+        FilledButton(
+            onPressed: () {
+              navigatorControllerPup(context);
+            },
+            child: const Text('Close'))
+      ],
+    )) {
+      case 'YES': //do something
+        break;
+      case 'NO': //do something
+        break;
+      case 'May be': //do something
+        break;
+    }
   }
-}
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -89,7 +100,6 @@ void simpleDialog()async{
                   child: const Text("Login"),
                 ),
                 TextButton(
-
                   onPressed: () {},
                   child: const Text("Login"),
                 ),
@@ -156,8 +166,12 @@ void simpleDialog()async{
                             title: const Text('Alert Dialog'),
                             content: const Text('Alert Message'),
                             actions: [
-                              SimpleDialogOption(child: Text('YEs'),onPressed: ()=> navigatorControllerPup(context),)
-                              ,FilledButton(
+                              SimpleDialogOption(
+                                child: Text('YEs'),
+                                onPressed: () =>
+                                    navigatorControllerPup(context),
+                              ),
+                              FilledButton(
                                   onPressed: () {
                                     navigatorControllerPup(context);
                                   },

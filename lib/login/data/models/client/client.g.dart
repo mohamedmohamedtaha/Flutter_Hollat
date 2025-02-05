@@ -13,6 +13,7 @@ Client _$ClientFromJson(Map<String, dynamic> json) => Client(
       birthdate: json['birthdate'] as String,
       mobile: json['mobile'] as String,
       nationalId: json['national_id'] as String,
+      mobileVerifiedAt: json['mobile_verified_at'] as String?,
       nationalIdTypeId: (json['national_id_type_id'] as num?)?.toInt(),
       active: (json['active'] as num?)?.toInt(),
       dataCompleted: (json['data_completed'] as num?)?.toInt(),
@@ -28,4 +29,5 @@ Map<String, dynamic> _$ClientToJson(Client instance) => <String, dynamic>{
       'national_id_type_id': instance.nationalIdTypeId,
       'active': instance.active,
       'data_completed': instance.dataCompleted,
+      'mobile_verified_at': instance.mobileVerifiedAt,
     };

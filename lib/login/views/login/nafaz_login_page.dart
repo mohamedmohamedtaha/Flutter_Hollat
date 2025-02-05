@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:hollat/core/global/theme/app_color/app_color_light.dart';
 import 'package:hollat/core/global/theme/font/fonts_size.dart';
 import 'package:hollat/core/init/gen/translations.g.dart';
+import 'package:hollat/core/utils/show_error_message.dart';
 import 'package:hollat/easy_localization/app_lang.dart';
 import 'package:hollat/login/data/models/nafath/nafath_response.dart';
 import 'package:hollat/login/data/viewmodel/config_viewmodel.dart';
@@ -69,101 +70,57 @@ class _NafazLoginPageState extends ConsumerState<NafazLoginPage> {
                             const SizedBox(height: 12),
                             Consumer(
                               builder: (context, ref, child) {
-                                final state =
+                                final nafazLoginState =
                                 ref.watch(nafazLoginViewModelProvider);
-                                if (state.isSuccess) {
-                                  // Assuming 'state.data' holds the successful response data
-                                  state.whenOrNull(
+                                if (nafazLoginState.isSuccess) {
+                                  nafazLoginState.whenOrNull(
                                     success: (data) {
                                       _navigate(data);
                                     },
                                   );
-                                  // Return a placeholder widget
                                   return const SizedBox.shrink();
-                                } else {
-                                  if (state.isError) {
-                                    WidgetsBinding.instance
-                                        .addPostFrameCallback((_) {
-                                      ScaffoldMessenger.of(context)
-                                          .showSnackBar(
-                                        SnackBar(
-                                          content: Text(
-                                              (state as ConfigError).message),
-                                          duration: const Duration(seconds: 2),
-                                        ),
-                                      );
-                                    });
+                                } else if (nafazLoginState.isError) {
+                                  var error =(nafazLoginState as ConfigError);
+                                  _resetNafazLogin();
+                                    showErrorMessage(context, error.code, error.message);
                                   }
-                                  // Return the login button
-                                  return CustomElevatedButton(
-                                    text: LocaleKeys.login.tr(),
-                                    enabled: !state.isLoading,
-                                    onPressed: state.isLoading
-                                        ? null
-                                        : () {
-                                      if (_idController.text.isEmpty) {
-                                        ScaffoldMessenger.of(context)
-                                            .showSnackBar(
-                                          SnackBar(
-                                            duration:
-                                            Duration(seconds: 2),
-                                            behavior:
-                                            SnackBarBehavior.floating,
-                                            content: Text(LocaleKeys
-                                                .idRequired
-                                                .tr()),
-                                          ),
-                                        );
-                                        return;
-                                      }
-                                      if (_idController.text.length <
-                                          10) {
-                                        ScaffoldMessenger.of(context)
-                                            .showSnackBar(
-                                          SnackBar(
-                                            duration:
-                                            Duration(seconds: 2),
-                                            behavior:
-                                            SnackBarBehavior.floating,
-                                            content: Text(LocaleKeys
-                                                .yourIdNotValid
-                                                .tr()),
-                                          ),
-                                        );
-                                        return;
-                                      }
-                                      ref
-                                          .read(
-                                          nafazLoginViewModelProvider
-                                              .notifier)
-                                          .nafath(_idController.text);
-                                    },
-                                    child: state.isLoading
-                                        ? const SizedBox(
-                                      width: 20,
-                                      height: 20,
-                                      child: CircularProgressIndicator(
-                                        strokeWidth: 2,
-                                        valueColor:
-                                        AlwaysStoppedAnimation(
-                                            AppColorsLight
-                                                .whiteColor),
-                                      ),
-                                    )
-                                        : CustomText(
-                                      LocaleKeys.login.tr(),
-                                      color: AppColorsLight.whiteColor,
-                                        fontWeight: FontWeight.bold,
-                                      fontSize: FontsSize.font_15,
-                                    ),
-                                  );
+                                else if (nafazLoginState.isErrorApi) {
+                                  var error =(nafazLoginState as ConfigErrorApi);
+                                  _resetNafazLogin();
+                                  showErrorMessageApi(context, error.code, error.data);
                                 }
+                                return CustomElevatedButton(
+                                  text: LocaleKeys.login.tr(),
+                                  enabled: !nafazLoginState.isLoading,
+                                  onPressed: nafazLoginState.isLoading
+                                      ? null
+                                      : () {
+                                    _login();
+                                  },
+                                  child: nafazLoginState.isLoading
+                                      ? const SizedBox(
+                                    width: 20,
+                                    height: 20,
+                                    child: CircularProgressIndicator(
+                                      strokeWidth: 2,
+                                      valueColor:
+                                      AlwaysStoppedAnimation(
+                                          AppColorsLight
+                                              .whiteColor),
+                                    ),
+                                  )
+                                      : CustomText(
+                                    LocaleKeys.login.tr(),
+                                    color: AppColorsLight.whiteColor,
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: FontsSize.font_15,
+                                  ),
+                                );
                               },
                             ),
                             // Spacer(),
                           ],
                         )))),
-            // Fixed bottom widget
             Padding(
               padding: const EdgeInsets.all(16.0),
               child: Row(
@@ -178,9 +135,7 @@ class _NafazLoginPageState extends ConsumerState<NafazLoginPage> {
                   ),
                   InkWell(
                     onTap: () {
-                      // Change to Arabic
                       setState(() {
-                        // context.setLocale(AppLang.supportedLocales[1]);
                         AppLang.changeLanguage(context);
                       });
                     },
@@ -200,6 +155,7 @@ class _NafazLoginPageState extends ConsumerState<NafazLoginPage> {
 
   _navigate(NafathResponse data) {
     WidgetsBinding.instance.addPostFrameCallback((_) {
+      _resetNafazLogin();
       Navigator.push(
           context,
           MaterialPageRoute(
@@ -211,4 +167,31 @@ class _NafazLoginPageState extends ConsumerState<NafazLoginPage> {
     });
   }
 
+  void _login() {
+    if (_idController.text.isEmpty) {
+      showMessage(context, LocaleKeys
+          .idRequired
+          .tr());
+      return;
+    }
+    if (_idController.text.length < 10) {
+          showMessage(context, LocaleKeys
+          .yourIdNotValid
+          .tr());
+      return;
+    }
+    ref
+        .read(
+        nafazLoginViewModelProvider
+            .notifier)
+        .nafath(_idController.text);
+  }
+  void _resetNafazLogin(){
+    WidgetsBinding.instance.addPostFrameCallback((_){
+      ref
+          .read(
+          nafazLoginViewModelProvider.notifier)
+          .restState();
+    });
+  }
 }

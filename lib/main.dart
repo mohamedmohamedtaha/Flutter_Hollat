@@ -48,13 +48,9 @@ class HollatApp extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-     //Watch theme state changes
     final isDarkMode = ref.watch(localStorageViewModelProvider);
     return MaterialApp(
         debugShowCheckedModeBanner: false,
-        localizationsDelegates: context.localizationDelegates,
-        supportedLocales: context.supportedLocales,
-        locale: context.locale,
         theme: getThemeDataLight(),
         darkTheme: ThemeData.dark(),
         themeMode: isDarkMode ? ThemeMode.dark : ThemeMode.light,
@@ -64,7 +60,10 @@ class HollatApp extends ConsumerWidget {
         //         seedColor: Colors.teal,
         //         brightness: mode ? Brightness.light : Brightness.dark))
         //
-        home: const SplashPage()
+        home: const SplashPage(),
+      localizationsDelegates: context.localizationDelegates,
+      supportedLocales: context.supportedLocales,
+      locale: context.locale
     );
   }
 }

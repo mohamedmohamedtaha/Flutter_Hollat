@@ -26,6 +26,9 @@ abstract class  LocaleKeys {
   static const userNameRequired = 'userNameRequired';
   static const selectNationalType = 'selectNationalType';
   static const selectBirthDate = 'selectBirthDate';
+  static const dateOfBirth = 'dateOfBirth';
+  static const idExpiryDate = 'idExpiryDate';
+  static const selectIdExpiryDate = 'selectIdExpiryDate';
   static const checkCode = 'checkCode';
   static const checkCodeHint = 'checkCodeHint';
   static const checkCodeRequired = 'checkCodeRequired';
@@ -42,5 +45,32 @@ abstract class  LocaleKeys {
   static const tokenExpired = 'tokenExpired';
   static const confirmText = 'confirmText';
   static const confirmationCodeRequired = 'confirmationCodeRequired';
+  static const address = 'address';
+  static const phone = 'phone';
+  static const change_password = 'change_password';
+  static const notification = 'notification';
+  static const controlInYourData = 'controlInYourData';
+  static const changeYourInformation = 'changeYourInformation';
+  static const changeLanguage = 'changeLanguage';
+  static const contactUs = 'contactUs';
+  static const logout = 'logout';
+  static const exit = 'exit';
+  static const warningExitApp = 'warningExitApp';
+  static const yes = 'yes';
+  static const no = 'no';
+  static const label_english = 'label_english';
+  static const label_arabic = 'label_arabic';
+  static const selectCountry = 'selectCountry';
+  static const selectRegion = 'selectRegion';
+  static const selectCity = 'selectCity';
+  static const update = 'update';
+  static const wellcome = 'wellcome';
+  static const whoAreWe = 'whoAreWe';
+  static const informationBank = 'informationBank';
+  static const aboutUs = 'aboutUs';
+  static const postBox = 'postBox';
+  static const fax = 'fax';
+  static const followUs = 'followUs';
+  static const updateSuccessfully = 'updateSuccessfully';
 
 }

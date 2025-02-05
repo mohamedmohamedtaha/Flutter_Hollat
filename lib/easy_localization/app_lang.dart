@@ -7,7 +7,6 @@ class AppLang {
   static const ar = Locale("ar", "SA");
   static const en = Locale("en", "US");
   static const List<Locale> supportedLocales = [ar, en];
-  // final List<String> supportedLanguage = ["Arabic", "English"];
   static String currentLanguage(BuildContext context){
     Locale currentLocale = context.locale;
    return currentLocale.languageCode;

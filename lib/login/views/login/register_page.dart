@@ -235,7 +235,7 @@ class _RegisterPageState extends ConsumerState<RegisterPage> {
                                   SizedBox(width: 5),
                                   CustomText(
                                     _selectedDate != null
-                                        ? ' ${Validation.formatBirthDate(
+                                        ? ' ${Validation.formatDateTimeToString(
                                         _selectedDate!)}'
                                         : '',
                                     style: TextStyle(fontSize: 16.0),
@@ -452,7 +452,7 @@ class _RegisterPageState extends ConsumerState<RegisterPage> {
                                     name: controllerUserName.text,
                                     mobile: controllerPhoneNumber.text,
                                     email: controllerEmail.text,
-                                    birthDay: Validation.formatBirthDate(_selectedDate!),
+                                    birthDay: Validation.formatDateTimeToString(_selectedDate!),
                                     nationalIdTypeId:
                                     _selectedTypeNationalId.toString());
                                 ref

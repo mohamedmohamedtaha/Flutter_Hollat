@@ -8,7 +8,7 @@ part of 'region_data.dart';
 
 RegionData _$RegionDataFromJson(Map<String, dynamic> json) => RegionData(
       active: (json['active'] as num).toInt(),
-      code: json['code'] as String,
+      code: json['code'] as String?,
       countryId: (json['country_id'] as num).toInt(),
       createdAt: json['created_at'] as String,
       deletedAt: json['deleted_at'],

@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:hollat/core/global/theme/app_color/app_color_light.dart';
 import 'package:hollat/core/global/theme/font/fonts_size.dart';
 
 class CustomText extends StatelessWidget {
   final String text;
   final TextStyle? style;
   final Color? color;
+  final Color? backgroundColor;
   final double? fontSize;
   final FontWeight? fontWeight;
   final TextAlign? textAlign;
@@ -16,6 +18,7 @@ class CustomText extends StatelessWidget {
         super.key,
         this.style,
         this.color,
+        this.backgroundColor,
         this.fontSize,
         this.fontWeight,
         this.textAlign,
@@ -24,12 +27,11 @@ class CustomText extends StatelessWidget {
       });
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);  return Text(
-
-      text,
+    final theme = Theme.of(context);  return Text(text,
       style: (style ?? theme.textTheme.bodyMedium)?.copyWith(
         color: color ?? theme.textTheme.bodyMedium?.color,
-        fontSize: fontSize ?? FontsSize.font_18,
+        backgroundColor: backgroundColor ?? AppColorsLight.transparentColor,
+        fontSize: fontSize ?? FontsSize.font_11,
         fontWeight: fontWeight,
         fontFamily: fontFamily ?? 'Neo Sans',
       ),

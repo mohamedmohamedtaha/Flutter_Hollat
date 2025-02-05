@@ -13,8 +13,14 @@ class NafazStatusViewModel extends StateNotifier<ConfigState>{
     try {
       final nafazStatusResponse = await repository.nafathStatus(nafazStatus);
       state = ConfigSuccess(nafazStatusResponse);
-    }on AppException catch (e) {
+    }on ApiException catch (e) {
+      state = ConfigErrorApi(e.statusCode ?? 0,e.response);
+    }
+    on AppException catch (e) {
       state = ConfigError(e.message,e.hashCode);
     }
+  }
+  void resetSate(){
+    state = ConfigInitial();
   }
 }

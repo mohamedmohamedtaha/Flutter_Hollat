@@ -6,6 +6,7 @@ class Validation{
   static bool checkEmailAddress(String text) => RegExp(RegException.emailPattern).hasMatch(text);
 
   static bool checkPhone(String text)=>  RegExp(RegException.phonePattern).hasMatch(text);
-static String formatBirthDate(DateTime date)=> DateFormat('yyyy-MM-dd').format(date);
+  static String formatDateTimeToString(DateTime date)=> DateFormat('yyyy-MM-dd').format(date);
+  static DateTime formatStringToDateTime(String date)=> DateFormat('yyyy-MM-dd').parse(date);
 
 }

@@ -5,7 +5,7 @@ part 'region_data.g.dart';
 @JsonSerializable()
 class RegionData {
   final int active; // 1
-  final String code; // sa-ri
+  final String? code; // sa-ri
 
   @JsonKey(name: 'country_id')
   final int countryId; // 9
@@ -32,7 +32,7 @@ class RegionData {
 
   RegionData({
     required this.active,
-    required this.code,
+    this.code,
     required this.countryId,
     required this.createdAt,
     this.deletedAt,

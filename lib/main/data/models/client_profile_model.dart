@@ -1,0 +1,78 @@
+import 'package:hollat/login/data/models/client/city_data.dart';
+import 'package:hollat/login/data/models/client/country_data.dart';
+import 'package:hollat/login/data/models/client/national_id_type.dart';
+import 'package:hollat/login/data/models/client/region_data.dart';
+import 'package:hollat/main/domain/entities/client/client_profile.dart';
+
+class ClientProfileModel extends ClientProfile {
+  const ClientProfileModel(
+      {required super.active,
+        super.address,
+        super.birthDate,
+        super.city,
+        super.cityId,
+        super.client,
+        super.clientId,
+        super.clientType,
+        super.clientTypeId,
+        super.country,
+        super.countryId,
+        super.createdAt,
+        required super.dataCompleted,
+        super.deletedAt,
+        super.email,
+        super.gender,
+        required super.id,
+        super.idEndDate,
+        super.mobile,
+        super.mobileVerifiedAt,
+        super.name,
+        super.nationalId,
+        super.nationalIdType,
+        super.nationalityId,
+        super.preferredLanguage,
+        super.region,
+        super.regionId,
+        super.telephone,
+        super.ticketField,
+        super.updatedAt,
+        super.verifiedBy,
+        super.verifieBbyNafath,
+        required super.nationalIdTypeId});
+
+  factory ClientProfileModel.fromJson(Map<String, dynamic> json) =>
+      ClientProfileModel(
+          active: json['active'] as int,
+          address: json['address'] as String?,
+          birthDate: json['birthdate'] as String?,
+          city:  CityData.fromJson(json['city'] as Map<String,dynamic>) ,
+          cityId: json['city_id'] as int?,
+          client: json['client'] as String?,
+          clientId: json['client_id'] as String?,
+          clientType: json['client_type'] as String?,
+          clientTypeId: json['client_type_id'] as String?,
+          country: CountryData.fromJson(json['country'] as Map<String,dynamic>),
+          countryId: json['country_id'] as int?,
+          createdAt: json['created_at'] as String?,
+          dataCompleted: json['data_completed'] as int,
+          deletedAt: json['deleted_at'] as String?,
+          email: json['email'] as String?,
+          gender: json['gender'] as String?,
+          id: json['id'] as int,
+          idEndDate: json['id_endDate'] as String?,
+          mobile: json['mobile'] as String?,
+          mobileVerifiedAt: json['mobile_verified_at'] as String?,
+          name: json['name'] as String?,
+          nationalId: json['national_id'] as String?,
+          nationalIdType: NationalIdType.fromJson(json['national_id_type'] as Map<String,dynamic>) ,
+          nationalIdTypeId: json['national_id_type_id'] as int,
+          nationalityId: json['nationality_id'] as String?,
+          preferredLanguage: json['preferred_language'] as String?,
+          region: RegionData.fromJson(json['region'] as Map<String,dynamic>),
+          regionId: json['region_id'] as int?,
+          telephone: json['telephone'] as String?,
+          ticketField: json['ticketfield'] as String?,
+          updatedAt: json['updated_at'] as String?,
+          verifiedBy: json['verified_by'] as String?,
+          verifieBbyNafath: json['verified_by_nafath'] as int);
+}

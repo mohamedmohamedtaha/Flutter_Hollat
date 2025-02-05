@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:hollat/core/global/theme/app_color/app_color_light.dart';
 
 class CustomDropdown<T> extends StatelessWidget {
   final List<T> items;
@@ -15,28 +16,41 @@ class CustomDropdown<T> extends StatelessWidget {
         required this.onChanged,
         required this.displayText,
         this.selectedValue,
-        this.hintText = 'Select national type',
+        this.hintText = '',
         this.isLoading = false,
         this.disabled = false});
+
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: EdgeInsets.all(18),
-      child:IgnorePointer(
-        ignoring: disabled || isLoading,
-        child: DropdownButtonFormField<T>(
+    return IgnorePointer(
+          ignoring: disabled || isLoading,
+          child: DropdownButtonFormField<T>(
+            decoration: InputDecoration(
+              //filled: true,
+              //fillColor: AppColorsLight.primaryColor,
+                border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(5),
+                    borderSide: BorderSide(color: AppColorsLight.grayColor))),
             value: selectedValue,
             hint: Text(hintText),
-            isExpanded: true,
-          items: items.map((T item){
-        return DropdownMenuItem<T>(
-        value: item,
-        child: Text(displayText(item),
-        overflow: TextOverflow.ellipsis));
-        }).toList(),
-          onChanged:onChanged,
-        )
-      )
+            isExpanded: false,
+            items: items.map((T item) {
+              return DropdownMenuItem<T>(
+                value: item,
+                child: Text(
+                    displayText(item),
+                    overflow: TextOverflow.ellipsis,
+                    style: TextStyle(
+                        color: AppColorsLight.blackColor,
+                        fontWeight: FontWeight.bold),
+                  ),
+
+              );
+            }).toList(),
+            onChanged: onChanged,
+            style: TextStyle(fontWeight: FontWeight.bold),
+            dropdownColor: AppColorsLight.whiteColor,
+          ),
     );
   }
 }

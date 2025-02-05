@@ -50,6 +50,7 @@ Provider<ServiceConfigDatabaseRepository>((ref) {
 //ViewModel
 final configViewModelProvider =
 StateNotifierProvider<ConfigViewModel, ConfigState>((ref) {
+    // ref.watch(configRepositoryProvider);
   return ConfigViewModel(ref.read(configRepositoryProvider));
 });
 final serviceConfigDatabaseViewModelProvider = Provider((ref) =>
@@ -86,8 +87,8 @@ final nafazCodeViewModelProvider =
 StateNotifierProvider.autoDispose<NafazViewModel, ConfigState>((ref) {
   return NafazViewModel(repository: ref.read(normalLoginRepositoryProvider));
 });
-final enableButtonProvider = StateProvider((ref) => false);
-final enableButtonProviderDefaultTrue = StateProvider((ref) => true);
+final enableButtonProvider = StateProvider.autoDispose((ref) => false);
+final enableButtonProviderDefaultTrue = StateProvider.autoDispose((ref) => true);
 
 final nafazStatusViewModelProvider =
 StateNotifierProvider.autoDispose<NafazStatusViewModel, ConfigState>((ref) {

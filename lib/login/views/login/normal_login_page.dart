@@ -3,6 +3,7 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:hollat/core/global/theme/app_color/app_color_light.dart';
 import 'package:hollat/core/global/theme/font/fonts_size.dart';
 import 'package:hollat/core/global/validation/validation.dart';
 import 'package:hollat/core/init/gen/translations.g.dart';
@@ -44,23 +45,19 @@ class _NormalLoginPageState extends ConsumerState<NormalLoginPage> {
     super.initState();
     Future.microtask(
           () {
-            ref.read(normalLoginViewModelProvider.notifier).reloadCaptcha();
+            reloadCaptcha();
             ref.read(serviceConfigDatabaseViewModelProvider).getAllConfig();
             selfServiceOtpBy = ref.watch(serviceConfigDatabaseViewModelProvider).config?.selfServiceOtpBy ?? '';
-            //
-            // Provider.of<NormalLoginViewModel>(context, listen: false)
-        //     .reloadCaptcha();
       },
     );
   }
 
   @override
   void dispose() {
-    // TODO: implement dispose
-    super.dispose();
     controllerCheckCode.dispose();
     controllerIdNumber.dispose();
     controllerPhoneNumber.dispose();
+    super.dispose();
   }
 
   @override
@@ -69,7 +66,7 @@ class _NormalLoginPageState extends ConsumerState<NormalLoginPage> {
     return Scaffold(
       appBar: AppBar(
         automaticallyImplyLeading: false,
-        backgroundColor: Colors.transparent,
+        backgroundColor: AppColorsLight.transparentColor,
         elevation: 0, // f you want to hide back button
       ),
       body: Column(
@@ -162,10 +159,8 @@ class _NormalLoginPageState extends ConsumerState<NormalLoginPage> {
                                         child: CircularProgressIndicator()),
                                     ConfigSuccess(:final data) =>
                                         _capatcha(data),
-                                    ConfigErrorApi(:final data) =>
-                                        Text('Error: $data'),
-                                    ConfigError(:final message) =>
-                                        Text('Error: $message'),
+                                    ConfigErrorApi(:final code, :final data) => _errorApi(code,data),
+                                    ConfigError(:final message) => CustomText('Error: $message'),
                                     NormalLoginRepository() =>
                                     throw UnimplementedError(),
                                   };
@@ -173,13 +168,9 @@ class _NormalLoginPageState extends ConsumerState<NormalLoginPage> {
                                 SizedBox(width: 10),
                                 InkWell(
                                   onTap: () {
-                                    ref
-                                        .read(normalLoginViewModelProvider
-                                        .notifier)
-                                        .reloadCaptcha();
+                                    reloadCaptcha();
                                   },
                                   splashColor: Colors.teal,
-                                  // borderRadius: BorderRadius.circular(12),
                                   child: SvgPicture.asset(
                                     'assets/images/reload.svg',
                                     width: 24,
@@ -194,27 +185,20 @@ class _NormalLoginPageState extends ConsumerState<NormalLoginPage> {
                             SizedBox(height: 20),
                             Consumer(
                               builder: (context, ref, child) {
-                                var state =
+                                var normalLoginState =
                                 ref.watch(normalSendOtpViewModelProvider);
                                 final enableButton =
                                 ref.watch(enableButtonProviderDefaultTrue);
 
-                                if (state is ConfigLoading) {
+                                if (normalLoginState is ConfigLoading) {
                                   return Center(child: CircularProgressIndicator());
                                 }
-                                state.whenOrNull(success: (data) {
+                                normalLoginState.whenOrNull(success: (data) {
+                                  showMessage(context, data.message);
                                   WidgetsBinding.instance
                                       .addPostFrameCallback((_) async {
                                     if (mounted) {
-                                      showMessage(context, data.message);
-                                      ref
-                                          .read(enableButtonProviderDefaultTrue
-                                          .notifier)
-                                          .state = true;
-                                      ref
-                                          .read(normalSendOtpViewModelProvider
-                                          .notifier)
-                                          .restState();
+                                    _resetNormalSendOtp();
                                       if(selfServiceOtpBy == 'sms'){
                                         navigatorControllerPush(
                                             context,
@@ -244,31 +228,11 @@ class _NormalLoginPageState extends ConsumerState<NormalLoginPage> {
                                     }
                                   });
                                 }, error: (message, code) {
-                                  WidgetsBinding.instance
-                                      .addPostFrameCallback((_) {
                                     showErrorMessage(context, code, message);
-                                    ref
-                                        .read(enableButtonProviderDefaultTrue
-                                        .notifier)
-                                        .state = true;
-                                    ref
-                                        .read(normalSendOtpViewModelProvider
-                                        .notifier)
-                                        .restState();
-                                  });
+                                    _resetNormalSendOtp();
                                 }, errorApi: (code, data) {
-                                  WidgetsBinding.instance
-                                      .addPostFrameCallback((_) {
                                     showErrorMessageApi(context, code, data);
-                                    ref
-                                        .read(enableButtonProviderDefaultTrue
-                                        .notifier)
-                                        .state = true;
-                                    ref
-                                        .read(normalSendOtpViewModelProvider
-                                        .notifier)
-                                        .restState();
-                                  });
+                                    _resetNormalSendOtp();
                                 });
                                 return Column(
                                   children: [
@@ -277,81 +241,7 @@ class _NormalLoginPageState extends ConsumerState<NormalLoginPage> {
                                       enabled: enableButton,
                                       onPressed: enableButton
                                           ? () {
-                                        var phone = Validation.checkPhone(
-                                            controllerPhoneNumber.text);
-                                        if (!phone ||
-                                            controllerPhoneNumber
-                                                .text.length !=
-                                                9) {
-                                          ScaffoldMessenger.of(context)
-                                              .showSnackBar(
-                                            SnackBar(
-                                              duration:
-                                              Duration(seconds: 2),
-                                              behavior: SnackBarBehavior
-                                                  .floating,
-                                              content: Text(LocaleKeys
-                                                  .errorPhoneRequired
-                                                  .tr()),
-                                            ),
-                                          );
-                                          return;
-                                        }
-                                        var idNumber =
-                                            controllerIdNumber.text;
-                                        if (idNumber.isEmpty ||
-                                            idNumber.length != 10) {
-                                          ScaffoldMessenger.of(context)
-                                              .showSnackBar(
-                                            SnackBar(
-                                              duration:
-                                              Duration(seconds: 2),
-                                              behavior: SnackBarBehavior
-                                                  .floating,
-                                              content: Text(LocaleKeys
-                                                  .yourIdNotValid
-                                                  .tr()),
-                                            ),
-                                          );
-                                          return;
-                                        }
-                                        var checkCode =
-                                            controllerCheckCode.text;
-                                        if (checkCode.isEmpty ||
-                                            checkCode.length < 5) {
-                                          ScaffoldMessenger.of(context)
-                                              .showSnackBar(
-                                            SnackBar(
-                                              duration:
-                                              Duration(seconds: 2),
-                                              behavior: SnackBarBehavior
-                                                  .floating,
-                                              content: Text(LocaleKeys
-                                                  .checkCodeRequired
-                                                  .tr()),
-                                            ),
-                                          );
-                                          return;
-                                        }
-
-                                        var parameters = SendOtpModel(
-                                            capatchaCode:
-                                            controllerCheckCode.text,
-                                            key: key,
-                                            mobile: controllerPhoneNumber
-                                                .text,
-                                            nationalId:
-                                            controllerIdNumber.text);
-                                        ref
-                                            .read(
-                                            normalSendOtpViewModelProvider
-                                                .notifier)
-                                            .sendOtp(parameters);
-                                        ref
-                                            .read(
-                                            enableButtonProviderDefaultTrue
-                                                .notifier)
-                                            .state = false;
+                                        _login();
                                       }
                                           : null,
                                     ),
@@ -417,18 +307,81 @@ class _NormalLoginPageState extends ConsumerState<NormalLoginPage> {
       ),
     );
   }
-
+  Widget _errorApi(int code,dynamic data) {
+    showErrorMessageApi(context, code, data);
+    key = data.key;
+    return CustomText('Error Api');
+  }
   Widget _capatcha(Captcha data) {
     key = data.key;
     return CustomCaptcha(captcha: data);
   }
+  void reloadCaptcha() {
+    ref.read(normalLoginViewModelProvider.notifier).reloadCaptcha();
+  }
+
+  void _resetNormalSendOtp() {
+    WidgetsBinding.instance.addPostFrameCallback((_){
+      ref
+          .read(enableButtonProviderDefaultTrue
+          .notifier)
+          .state = true;
+      ref
+          .read(normalSendOtpViewModelProvider
+          .notifier)
+          .restState();
+    });
+
+  }
+
+  void _login() {
+    var phone = Validation.checkPhone(
+        controllerPhoneNumber.text);
+    if (!phone ||
+        controllerPhoneNumber
+            .text.length !=
+            9) {
+      showMessage(context, LocaleKeys
+          .errorPhoneRequired
+          .tr());
+      return;
+    }
+    var idNumber =
+        controllerIdNumber.text;
+    if (idNumber.isEmpty ||
+        idNumber.length != 10) {
+      showMessage(context, LocaleKeys
+          .yourIdNotValid
+          .tr());
+      return;
+    }
+    var checkCode =
+        controllerCheckCode.text;
+    if (checkCode.isEmpty ||
+        checkCode.length < 5) {
+      showMessage(context, LocaleKeys
+          .checkCodeRequired
+          .tr());
+      return;
+    }
+
+    var parameters = SendOtpModel(
+        capatchaCode:
+        controllerCheckCode.text,
+        key: key,
+        mobile: controllerPhoneNumber
+            .text,
+        nationalId:
+        controllerIdNumber.text);
+    ref
+        .read(
+        normalSendOtpViewModelProvider
+            .notifier)
+        .sendOtp(parameters);
+    ref
+        .read(
+        enableButtonProviderDefaultTrue
+            .notifier)
+        .state = false;
+  }
 }
-// FutureBuilder<Captcha>(future: Provider.of<NormalLoginViewModel>(context, listen: false).loadConfig(),
-// builder: (context, snapshot) {
-// if(snapshot.hasData){
-// return CustomCaptcha(captcha: snapshot.data!);
-// }else if(snapshot.hasError){
-// return Text('Error: ${snapshot.error}');
-// }
-// return const CircularProgressIndicator();
-// }, )

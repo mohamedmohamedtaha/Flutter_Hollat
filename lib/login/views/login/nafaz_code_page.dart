@@ -7,14 +7,15 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:hollat/core/global/theme/app_color/app_color_light.dart';
 import 'package:hollat/core/global/theme/font/fonts_size.dart';
 import 'package:hollat/core/init/gen/translations.g.dart';
+import 'package:hollat/core/utils/show_error_message.dart';
 import 'package:hollat/login/Navigator.dart';
 import 'package:hollat/login/data/models/nafath/nafaz_status.dart';
 import 'package:hollat/login/data/models/nafath/nafaz_status_response.dart';
 import 'package:hollat/login/data/sharedpreferences/save_token.dart';
 import 'package:hollat/login/data/viewmodel/config_viewmodel.dart';
-import 'package:hollat/login/network/repositores/normal_login_repository.dart';
 import 'package:hollat/login/presentation/widgets/custom_status_button.dart';
 import 'package:hollat/login/presentation/widgets/custom_text.dart';
+import 'package:hollat/login/presentation/widgets/custom_text_button.dart';
 import 'package:hollat/login/views/login/nafaz_send_verify_code_page.dart';
 import 'package:hollat/login/views/nav_page.dart';
 import 'package:hollat/main/riverpod/providers.dart';
@@ -44,7 +45,10 @@ class _NafazCodePageState extends ConsumerState<NafazCodePage> {
     super.initState();
     _code = widget.randomCode;
     transId = widget.transId;
-    _startTimer();
+    Future.microtask(() {
+      _resetButton(false);
+      _startTimer();
+    });
   }
 
   void callNafazStatus() async {
@@ -64,18 +68,18 @@ class _NafazCodePageState extends ConsumerState<NafazCodePage> {
   }
 
   void _startTimer() {
-    int _secondsRemaining = 100;
+    int secondsRemaining = 100;
     // _timer?.cancel();
     _timer = Timer.periodic(const Duration(seconds: 10), (timer) {
-      if (_secondsRemaining > 0) {
+      if (secondsRemaining > 0) {
         if (mounted) {
-          setState(() => _secondsRemaining -= 10);
+          setState(() => secondsRemaining -= 10);
         }
         callNafazStatus();
       } else {
         _timer?.cancel();
         if (mounted) {
-          ref.read(enableButtonProvider.notifier).state = true;
+          _resetButton(true);
         }
       }
     });
@@ -83,8 +87,7 @@ class _NafazCodePageState extends ConsumerState<NafazCodePage> {
 
   @override
   void dispose() {
-    _timer?.cancel();
-    ref.invalidate(nafazCodeViewModelProvider);
+    // ref.invalidate(nafazCodeViewModelProvider);
     super.dispose();
   }
 
@@ -95,6 +98,7 @@ class _NafazCodePageState extends ConsumerState<NafazCodePage> {
         headerSliverBuilder: (context, innerBoxScrolled) => [
           SliverAppBar(
             expandedHeight: 140,
+            iconTheme: IconThemeData(color: AppColorsLight.whiteColor),
             flexibleSpace: Container(
               decoration: const BoxDecoration(
                 gradient: LinearGradient(colors: [
@@ -118,105 +122,88 @@ class _NafazCodePageState extends ConsumerState<NafazCodePage> {
                   Image.asset('assets/images/nafaz_green.png',
                       width: 91, height: 91),
                   const SizedBox(height: 25),
-                  Text(
+                  CustomText(
                     LocaleKeys.confirmationCode.tr(),
-                    style: TextStyle(
-                      fontSize: FontsSize.font_20,
-                      fontWeight: FontWeight.bold,
-                    ),
+                    color: AppColorsLight.textColorNafazCode,
+                    fontSize: FontsSize.font_18,
+                    fontWeight: FontWeight.bold,
                   ),
                   const SizedBox(height: 8),
-                  Text(
+                  CustomText(
                     LocaleKeys.nafazTextCode.tr(),
+                    color: AppColorsLight.grayColor,
+                    fontSize: FontsSize.font_15,
                     textAlign: TextAlign.center,
-                    style: TextStyle(color: AppColorsLight.grayColor),
                   ),
                   const SizedBox(height: 20),
-                  Text(
-                    _code ?? '--',
-                    style: const TextStyle(
+                  CustomText(_code ?? '--',
                       fontSize: FontsSize.font_70,
                       color: AppColorsLight.primaryColor,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
+                      fontWeight: FontWeight.bold),
                   const SizedBox(height: 20),
                   Consumer(builder: (context, ref, child) {
-                    final state = ref.watch(nafazStatusViewModelProvider);
-                    return switch (state) {
-                      ConfigInitial() =>
-                          CustomStatusButton(text: LocaleKeys.orderWaiting.tr())
-                    ,
-                      ConfigLoading() => CircularProgressIndicator(),
-                      ConfigSuccess(:final data) => switch (data.status) {
-                        'WAITING' => CustomStatusButton(
-                            text: LocaleKeys.orderWaiting.tr()),
-                        'COMPLETED' => _buildCompletedWithTimer(data),
-                        'EXPIRED' => _buildExpiredWithTimer(),
-                        _ => const Text('Unknown Status'),
-                      },
-                      ConfigErrorApi(:final data) => Text('Error: $data'),
-                      ConfigError(:final message) => Text('Error: $message'),
-                      NormalLoginRepository() => throw UnimplementedError(),
-                    };
+                    final nafazStatusState =
+                    ref.watch(nafazStatusViewModelProvider);
+                    if (nafazStatusState.isLoading) {
+                      return CircularProgressIndicator();
+                    } else if (nafazStatusState.isSuccess) {
+                      return nafazStatusState.whenOrNull(
+                        success: (data) {
+                          return switch (data.status) {
+                            'WAITING' => _buildWaitingWithTimer(),
+                            'COMPLETED' => _buildCompletedWithTimer(data),
+                            'EXPIRED' => _buildExpiredWithTimer(),
+                            _ => const Text('Unknown Status'),
+                          };
+                        },
+                      ) ??
+                          const SizedBox.shrink();
+                    } else if (nafazStatusState.isError) {
+                      var error = (nafazStatusState as ConfigError);
+                      _resetNafazStatus();
+                      showErrorMessage(context, error.code, error.message);
+                      return const CustomText('Error ');
+                    } else if (nafazStatusState.isErrorApi) {
+                      var error = (nafazStatusState as ConfigErrorApi);
+                      _resetNafazStatus();
+                      showErrorMessageApi(context, error.code, error.data);
+                      return const CustomText('Api Error ');
+                    }
+                    return const SizedBox.shrink();
                   }),
                   const SizedBox(height: 20),
                   Consumer(
                     builder: (context, ref, child) {
-                      final state = ref.watch(nafazCodeViewModelProvider);
+                      final nafazCodeState =
+                      ref.watch(nafazCodeViewModelProvider);
                       final enableButton = ref.watch(enableButtonProvider);
-                      state.whenOrNull(success: (data) {
+                      nafazCodeState.whenOrNull(success: (data) {
                         _startTimer();
                         _code = data.random;
                         transId = data.transId;
-                        Future(() {
-                          ref
-                              .read(nafazCodeViewModelProvider.notifier)
-                              .restState();
-                        });
-                      }, error: (isError, code) {
-                        WidgetsBinding.instance.addPostFrameCallback((_) {
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            SnackBar(
-                              content: Text((state as ConfigError).message),
-                              duration: const Duration(seconds: 2),
-                            ),
-                          );
-                        });
-                        ref.read(enableButtonProvider.notifier).state = true;
+                        _resetNafazCodeStatus();
+                      }, error: (message, code) {
+                        showErrorMessage(context, code, message);
+                        _resetNafazCodeStatus();
+                        _resetButton(true);
+                      }, errorApi: (code, data) {
+                        showErrorMessageApi(context, code, data);
+                        _resetNafazCodeStatus();
+                        _resetButton(true);
                       });
-                      return InkWell(
-                        onTap: enableButton
+                      return CustomTextButton(
+                        directWriting: true,
+                        color: AppColorsLight.redColor,
+                        onPressed: enableButton
                             ? () {
-                          ref.read(enableButtonProvider.notifier).state =
-                          false;
+                          _resetButton(false);
                           ref
                               .read(nafazCodeViewModelProvider.notifier)
                               .nafath(widget.nationalId);
                         }
                             : null,
-                        child: CustomText(
-                          LocaleKeys.resendCode.tr(),
-                          color: enableButton ? Colors.red : Colors.grey,
-                          style: TextStyle(fontSize: FontsSize.font_18),
-                        ),
+                        text: LocaleKeys.resendCode.tr(),
                       );
-                      // return CustomElevatedButton(
-                      //     enabled: enableButton,
-                      //     onPressed: enableButton
-                      //         ? () {
-                      //       ref
-                      //           .read(enableButtonProvider.notifier)
-                      //           .state = false;
-                      //       ref
-                      //           .read(nafazCodeViewModelProvider.notifier)
-                      //           .nafath(widget.nationalId);
-                      //     }
-                      //         : null,
-                      //     text: LocaleKeys.resendCode.tr(),
-                      //     style: ElevatedButton.styleFrom(
-                      //         backgroundColor:
-                      //         enableButton ? Colors.red : Colors.grey));
                     },
                   ),
                 ],
@@ -228,14 +215,13 @@ class _NafazCodePageState extends ConsumerState<NafazCodePage> {
     );
   }
 
-  Widget _buildWaitingWithTimer(String status) {
-    // Schedule timer start after build completes
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      if (!(_timer?.isActive ?? false) && status == 'WAITING') {
-        _startTimer();
-      }
-    });
-    return const Text('Order status: The order time has waiting');
+  Widget _buildWaitingWithTimer() {
+    return CustomStatusButton(text: LocaleKeys.orderWaiting.tr());
+  }
+
+  void _reset() {
+    _resetNafazStatus();
+    _timer?.cancel();
   }
 
   Widget _buildExpiredWithTimer() {
@@ -243,7 +229,8 @@ class _NafazCodePageState extends ConsumerState<NafazCodePage> {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       if (mounted) {
         _timer?.cancel();
-        ref.read(enableButtonProvider.notifier).state = true;
+        //_reset();
+        _resetButton(true);
       }
     });
     return CustomStatusButton(text: LocaleKeys.orderExpired.tr());
@@ -253,7 +240,7 @@ class _NafazCodePageState extends ConsumerState<NafazCodePage> {
     // Schedule timer start after build completes
     WidgetsBinding.instance.addPostFrameCallback((_) async {
       if (mounted) {
-        _timer?.cancel();
+        _reset();
         if (data.token != null) {
           await saveToken(data.token!);
         } else {
@@ -263,12 +250,33 @@ class _NafazCodePageState extends ConsumerState<NafazCodePage> {
         }
         var mobileVerifiedAt = data.client?.mobileVerifiedAt ?? '';
         if (mobileVerifiedAt.isNotEmpty) {
-          navigatorControllerPushAndRemoveUntil(context, NavPage(),false);
+          //     هعمل كوفري
+          // هل متاح ولا لا
+          // وهل مطلوبة ولا لا
+          navigatorControllerPushAndRemoveUntil(context, NavPage(), false);
         } else {
           navigatorControllerPush(context, NafazSendVerifyCodePage());
-        }
+         }
       }
     });
     return CustomStatusButton(text: LocaleKeys.orderCompleted.tr());
+  }
+
+  void _resetNafazStatus() {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      ref.read(nafazStatusViewModelProvider.notifier).resetSate();
+    });
+  }
+
+  void _resetNafazCodeStatus() {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      ref.read(nafazCodeViewModelProvider.notifier).restState();
+    });
+  }
+
+  void _resetButton(bool status) {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      ref.read(enableButtonProvider.notifier).state = status;
+    });
   }
 }

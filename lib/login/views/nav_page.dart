@@ -7,7 +7,7 @@ import 'package:hollat/login/presentation/widgets/navbar_widget.dart';
 import 'package:hollat/main/presentation/views/complaint_page.dart';
 import 'package:hollat/main/presentation/views/home_page.dart';
 import 'package:hollat/main/presentation/views/orders_page.dart';
-import 'package:hollat/main/presentation/views/profile_page.dart';
+import 'package:hollat/main/presentation/views/profile/profile_page.dart';
 import 'package:hollat/main/presentation/views/sama_page.dart';
 import 'package:hollat/main/riverpod/providers.dart';
 
@@ -17,8 +17,9 @@ List<Widget> pages = [
   const HomePage(),
   const SamaPage(),
   const ComplaintPage(),
+  const OrdersPage(),
   const ProfilePage(),
-  const OrdersPage()
+
 ];
 String title = 'Holat';
 
@@ -37,33 +38,24 @@ class NavPage extends ConsumerWidget {
         //  centerTitle: true,
         leading: Icon(Icons.notification_add,),
         actions: [
-          Icon(Icons.person, color: AppColorsLight.whiteColor,),
-          Text('Hello'),
           IconButton(
               onPressed: () {
                 ref
                     .read(localStorageViewModelProvider.notifier)
                     .changeDarkMode(!isDarkMode);
               }
-              // async{
-              //   modeNotifier.value = !modeNotifier.value;
-              //   final SharedPreferences prefs = await SharedPreferences.getInstance();
-              //   await prefs.setBool(Constants.modeKey, modeNotifier.value   );
-              //
-              // }
               ,
               icon: isDarkMode
                   ? const Icon(Icons.light_mode)
                   : const Icon(Icons.dark_mode)),
-          //   Text('Your name'),
-          //   Icon(Icons.phone),
+          Text('Hello'),
           IconButton(
               onPressed: () {
                 // Open new page
                 navigatorControllerPush(
                     context, const SettingsPage(title: 'Settings'));
               },
-              icon: const Icon(Icons.settings))
+              icon: const Icon(Icons.person),color: AppColorsLight.whiteColor)
         ],
       ),
       bottomNavigationBar: const NavbarWidget(),
@@ -73,19 +65,6 @@ class NavPage extends ConsumerWidget {
           return pages.elementAt(value);
         },
       ),
-      // Drawer or SafeArea
-      // drawer: Drawer(
-      //   child: Column(
-      //     children: [
-      //       // DrawerHeader(
-      //       //   child: Text('Hollat'),
-      //       // ),
-      //       ListTile(
-      //         title: Text('Logout'),
-      //       )
-      //     ],
-      //   ),
-      // ),
     );
   }
 }

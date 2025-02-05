@@ -15,6 +15,7 @@ import 'package:hollat/login/domain/entities/create_account/create_account.dart'
 import 'package:hollat/login/domain/entities/response/response.dart';
 import 'package:hollat/login/domain/usecases/nafaz_send_verify_code_reposetory_use_case.dart';
 import 'package:hollat/login/network/repositores/parse_response.dart';
+import 'package:hollat/main/domain/entities/client/update_client_profile.dart';
 import 'package:hollat/main/riverpod/api_client.dart';
 
 class NormalLoginRepository {
