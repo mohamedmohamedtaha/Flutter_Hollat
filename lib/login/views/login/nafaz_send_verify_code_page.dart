@@ -9,13 +9,11 @@ import 'package:hollat/core/init/gen/translations.g.dart';
 import 'package:hollat/core/utils/constants.dart';
 import 'package:hollat/core/utils/show_error_message.dart';
 import 'package:hollat/login/Navigator.dart';
-import 'package:hollat/login/data/sharedpreferences/save_token.dart';
 import 'package:hollat/login/data/viewmodel/config_viewmodel.dart';
 import 'package:hollat/login/domain/usecases/nafaz_send_verify_code_reposetory_use_case.dart';
 import 'package:hollat/login/presentation/widgets/custom_country_code_number.dart';
 import 'package:hollat/login/presentation/widgets/custom_elevated_button.dart';
 import 'package:hollat/login/presentation/widgets/custom_text_field.dart';
-import 'package:hollat/login/views/login/splash_page.dart';
 import 'package:hollat/login/views/login/verify_otp_page.dart';
 import 'package:hollat/main/riverpod/providers.dart';
 
@@ -97,7 +95,7 @@ class _RegisterPageState extends ConsumerState<NafazSendVerifyCodePage> {
                                         _selectedCountry = country;
                                         final fullName =
                                             '${_selectedCountry.dialCode}${controllerPhoneNumber.text}';
-                                        print(' fullName: ${fullName}');
+                                        print(' fullName: $fullName');
                                       });
                                     },
                                     validator: (value) {

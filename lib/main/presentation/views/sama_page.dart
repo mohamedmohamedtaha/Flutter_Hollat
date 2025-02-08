@@ -1,6 +1,5 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:hollat/core/init/gen/translations.g.dart';
 import 'package:hollat/login/Navigator.dart';
 import 'package:hollat/main/presentation/views/information/contact_us_page.dart';

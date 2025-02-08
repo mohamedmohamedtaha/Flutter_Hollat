@@ -2,7 +2,7 @@
 import 'package:hollat/login/domain/entities/config_response/min_chars_on_details.dart';
 
 class MinCharsOnDetailsModel extends MinCharsOnDetails{
-  MinCharsOnDetailsModel({required super.value});
+  const MinCharsOnDetailsModel({required super.value});
 
   factory MinCharsOnDetailsModel.fromJson(Map<String, dynamic> json) =>
       MinCharsOnDetailsModel(

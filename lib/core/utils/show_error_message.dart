@@ -1,9 +1,6 @@
-import 'dart:convert';
 
 import 'package:easy_localization/easy_localization.dart';
-import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
-import 'package:hollat/core/global/theme/app_color/app_color_dark.dart';
 import 'package:hollat/core/global/theme/app_color/app_color_light.dart';
 import 'package:hollat/core/init/gen/translations.g.dart';
 import 'package:hollat/login/Navigator.dart';

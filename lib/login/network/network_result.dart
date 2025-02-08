@@ -1,4 +1,3 @@
-import 'dart:io';
 
 sealed class NetworkResult<T> {
   const NetworkResult();

@@ -2,7 +2,7 @@ import 'package:hollat/login/data/models/configresponse/client_name_ar_model.dar
 import 'package:hollat/login/data/models/configresponse/client_name_model.dart';
 import 'package:hollat/login/domain/entities/config_response/client_details.dart';
 class ClientDetailsModel extends ClientDetails {
-  ClientDetailsModel({
+  const ClientDetailsModel({
     required super.clientName,
     required super.clientNameAr,
   });

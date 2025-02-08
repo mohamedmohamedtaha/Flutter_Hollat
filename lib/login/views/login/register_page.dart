@@ -21,7 +21,6 @@ import 'package:hollat/login/presentation/widgets/custom_dropdown.dart';
 import 'package:hollat/login/presentation/widgets/custom_elevated_button.dart';
 import 'package:hollat/login/presentation/widgets/custom_text.dart';
 import 'package:hollat/login/presentation/widgets/custom_text_field.dart';
-import 'package:hollat/login/views/login/normal_login_page.dart';
 import 'package:hollat/main/riverpod/providers.dart';
 
 class RegisterPage extends ConsumerStatefulWidget {
@@ -43,7 +42,7 @@ class _RegisterPageState extends ConsumerState<RegisterPage> {
   NationalTypes? _selectedType;
   int _selectedTypeNationalId = -1;
 
-  bool _isLoading = true;
+  final bool _isLoading = true;
   String key = '';
 
   @override

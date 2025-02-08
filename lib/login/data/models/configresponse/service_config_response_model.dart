@@ -6,11 +6,10 @@ import 'package:hollat/login/data/models/configresponse/nafaz_enable_model.dart'
 import 'package:hollat/login/data/models/configresponse/self_service_otp_by_model.dart';
 import 'package:hollat/login/data/models/configresponse/theme_config_model.dart';
 import 'package:hollat/login/data/models/configresponse/verify_mobile_after_login_with_email_model.dart';
-import 'package:hollat/login/domain/entities/config_response/nafaz_enable.dart';
 import 'package:hollat/login/domain/entities/config_response/service_config_response.dart';
 
 class ServiceConfigResponseModel extends ServiceConfigResponse {
-  ServiceConfigResponseModel(
+  const ServiceConfigResponseModel(
       {required super.nafathEnabled,
         required super.amplitudeEnabled,
         required super.clientDetails,

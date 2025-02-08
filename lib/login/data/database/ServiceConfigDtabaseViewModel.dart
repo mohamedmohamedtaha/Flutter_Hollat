@@ -23,6 +23,7 @@ Future<ServiceConfigDatabase?> getAllConfig()async{
     _isLoading = false;
     notifyListeners();
   }
+  return null;
 }
 Future<void> saveConfig(ServiceConfigDatabase config)async{
   await _repository.saveConfig(config);

@@ -2,7 +2,7 @@ import 'package:hollat/login/domain/entities/config_response/verify_mobile_after
 
 class VerifyMobileAfterLoginWithEmailModel
     extends VerifyMobileAfterLoginWithEmail {
-  VerifyMobileAfterLoginWithEmailModel({required super.value});
+  const VerifyMobileAfterLoginWithEmailModel({required super.value});
 
   factory VerifyMobileAfterLoginWithEmailModel.fromJson(
       Map<String, dynamic> json) =>

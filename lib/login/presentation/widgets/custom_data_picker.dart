@@ -95,6 +95,8 @@ class CustomDatePicker extends StatelessWidget {
 }
 // Usage example with date display
 class DateSelectionExample extends StatefulWidget {
+  const DateSelectionExample({super.key});
+
   @override
   _DateSelectionExampleState createState() => _DateSelectionExampleState();
 }

@@ -5,15 +5,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:hive_ce_flutter/adapters.dart';
-import 'package:hollat/core/global/theme/theme_data/theme_data_dark.dart';
 import 'package:hollat/core/global/theme/theme_data/theme_data_light.dart';
 import 'package:hollat/easy_localization/app_lang.dart';
 import 'package:hollat/login/data/database/service_config_database.dart';
 import 'package:hollat/login/data/sharedpreferences/local_storage_service.dart';
 import 'package:hollat/login/network/MyHttpOverrids.dart';
-import 'package:hollat/login/views/login/nafaz_send_verify_code_page.dart';
 import 'package:hollat/login/views/login/splash_page.dart';
-import 'package:hollat/login/views/login/verify_otp_page.dart';
 import 'package:hollat/main/riverpod/providers.dart';
 
 void main() async {

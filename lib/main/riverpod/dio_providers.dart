@@ -1,5 +1,4 @@
 import 'package:dio/dio.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:hollat/main/riverpod/api_client.dart';
 import 'package:hollat/main/riverpod/app_config.dart';
