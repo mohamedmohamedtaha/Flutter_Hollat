@@ -1,7 +1,4 @@
 
-import 'package:dartz/dartz.dart';
-import 'package:hollat/core/error/failure.dart';
-import 'package:hollat/core/error/server_exception.dart';
 import 'package:hollat/core/global/url.dart';
 import 'package:hollat/login/data/models/login_response/login_response_model.dart';
 import 'package:hollat/login/data/models/nafath/nafath_response.dart';
@@ -12,10 +9,8 @@ import 'package:hollat/login/data/models/reloadcaptcha/captcha.dart';
 import 'package:hollat/login/data/models/response/response_model.dart';
 import 'package:hollat/login/data/models/send_otp/send_otp_model.dart';
 import 'package:hollat/login/domain/entities/create_account/create_account.dart';
-import 'package:hollat/login/domain/entities/response/response.dart';
 import 'package:hollat/login/domain/usecases/nafaz_send_verify_code_reposetory_use_case.dart';
 import 'package:hollat/login/network/repositores/parse_response.dart';
-import 'package:hollat/main/domain/entities/client/update_client_profile.dart';
 import 'package:hollat/main/riverpod/api_client.dart';
 
 class NormalLoginRepository {

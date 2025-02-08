@@ -18,7 +18,7 @@ class NafazSendVerifyCodeRemoteDataSource
         path: 'api/mobile/reload-captcha', method: 'GET');
     try {
       return ResponseModel.fromJson(response.data);
-    } on ServerException catch (failure) {
+    } on ServerException {
       throw ServerException(
           errorMessageModel: ErrorMessageModel.fromJson(response.data));
     }

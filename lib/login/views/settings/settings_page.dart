@@ -18,7 +18,7 @@ class _SettingsPageState extends State<SettingsPage> {
   double sliderValue = 0.0;
 
   void simpleDialog() async {
-    switch (await AlertDialog(
+    switch (AlertDialog(
       title: const Text('Alert Dialog'),
       content: const Text('Alert Message'),
       actions: [

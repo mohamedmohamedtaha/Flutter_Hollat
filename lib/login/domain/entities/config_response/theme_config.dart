@@ -9,7 +9,7 @@ class ThemeConfig extends Equatable {
   final MiniLogo miniLogo;
   final HeaderColor headerColor;
 
-  ThemeConfig({
+  const ThemeConfig({
     required this.logo,
     required this.miniLogo,
     required this.headerColor,

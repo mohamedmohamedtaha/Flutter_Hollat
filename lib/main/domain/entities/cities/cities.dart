@@ -1,6 +1,5 @@
 import 'package:equatable/equatable.dart';
 import 'package:hollat/login/data/models/client/city_data.dart';
-import 'package:hollat/login/data/models/client/country_data.dart';
 
 class Cities extends Equatable {
   final List<CityData>data;

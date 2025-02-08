@@ -6,7 +6,7 @@ class ClientDetails extends Equatable {
   final ClientNameModel clientName;
   final ClientNameArModel clientNameAr;
 
-  ClientDetails({
+  const ClientDetails({
     required this.clientName,
     required this.clientNameAr,
   });

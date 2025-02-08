@@ -1,3 +1,4 @@
+
 import 'package:shared_preferences/shared_preferences.dart';
 
 class LocalStorageService {
@@ -8,8 +9,9 @@ class LocalStorageService {
   }
 
   static Future<bool> saveData<T>(String key, T value) {
-    if (_preferences == null)
+    if (_preferences == null) {
       throw Exception('SharedPReferences not initialized');
+    }
     switch (T) {
       case String:
         return _preferences!.setString(key, value as String);
@@ -25,8 +27,9 @@ class LocalStorageService {
   }
 
   static T? getData<T>(String key) {
-    if (_preferences == null)
+    if (_preferences == null) {
       throw Exception('SharedPReferences not initialized');
+    }
     switch (T) {
       case String:
         return _preferences!.getString(key) as T?;
@@ -42,13 +45,15 @@ class LocalStorageService {
   }
 
   static Future<bool> deletedata(String key) async {
-    if (_preferences == null)
+    if (_preferences == null) {
       throw Exception('SharedPReferences not initialized');
+    }
     return _preferences!.remove(key);
   }
   static Future<bool> clearAll()async{
-    if (_preferences == null)
+    if (_preferences == null) {
       throw Exception('SharedPReferences not initialized');
+    }
     return _preferences!.clear();
   }
 }

@@ -4,7 +4,7 @@ import 'package:hollat/login/data/models/configresponse/mini_log_model.dart';
 import 'package:hollat/login/domain/entities/config_response/theme_config.dart';
 
 class ThemeConfigModel extends ThemeConfig {
-  ThemeConfigModel(
+  const ThemeConfigModel(
       {required super.logo,
         required super.miniLogo,
         required super.headerColor});

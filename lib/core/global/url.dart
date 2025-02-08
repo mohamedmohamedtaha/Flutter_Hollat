@@ -1,7 +1,8 @@
 class Url{
-  static const String BASE_URL= '';
-  static const String api= 'api/mobile/';
+  static const String baseUrl= 'https://back-dev.hollat.net/hollat_upgrade_develop/public/';
+  static const String api= '${baseUrl}api/mobile/';
   static const String reloadCaptcha= '${api}reload-captcha';
+  static const String selfServiceConfig= '${api}self_service_configs';
   static const String allNationalTypes= '${api}all-national-types';
   static const String nafaz= '${api}nafath';
   static const String nafazStatus= '${api}nafath_status';

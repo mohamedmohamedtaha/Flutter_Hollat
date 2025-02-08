@@ -1,6 +1,4 @@
 import 'package:equatable/equatable.dart';
-import 'package:hollat/login/data/models/configresponse/amplitude_enabled_model.dart';
-import 'package:hollat/login/data/models/configresponse/client_details_model.dart';
 import 'package:hollat/login/domain/entities/config_response/amplitude_enabled.dart';
 import 'package:hollat/login/domain/entities/config_response/client_details.dart';
 import 'package:hollat/login/domain/entities/config_response/maintenance_mode.dart';
@@ -38,7 +36,7 @@ class ServiceConfigResponse extends Equatable {
 
   // Add all other fields following the same pattern
 
-  ServiceConfigResponse({
+  const ServiceConfigResponse({
     required this.nafathEnabled,
     required this.amplitudeEnabled,
     required this.clientDetails,

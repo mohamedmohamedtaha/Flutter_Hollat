@@ -2,7 +2,6 @@
     <uses-permission android:name="android.permission.INTERNET"/>
     <application
         android:label="hollat"
-        android:name="${applicationName}"
         android:icon="@mipmap/launcher_icon">
         <!--        android:enableOnBackInvokedCallback="true"-->
 

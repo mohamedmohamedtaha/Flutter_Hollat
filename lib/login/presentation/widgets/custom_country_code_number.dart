@@ -25,7 +25,7 @@ class PhoneNumberField extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    CountryCode _selectedCountry =
+    CountryCode selectedCountry =
         initialCountry ?? CountryCode.fromCountryCode('SA');
     return TextFormField(
       controller: controller,
@@ -41,7 +41,7 @@ class PhoneNumberField extends StatelessWidget {
             //   borderRadius: BorderRadius.circular(4)
             // ),
             onChanged: (country) {
-              _selectedCountry = country;
+              selectedCountry = country;
               onCountryChanged?.call(country);
             },
             // --- Icon/Text Styling ---
@@ -52,7 +52,7 @@ class PhoneNumberField extends StatelessWidget {
             searchStyle: TextStyle(
               color: AppColorsLight.grayColor, // Search text
             ),
-            initialSelection: _selectedCountry.code,
+            initialSelection: selectedCountry.code,
             favorite: const ['IN', 'EG', 'SA'],
             showCountryOnly: false,
             showOnlyCountryWhenClosed: false,

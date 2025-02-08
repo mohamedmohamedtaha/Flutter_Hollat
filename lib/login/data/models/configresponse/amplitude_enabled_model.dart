@@ -1,7 +1,7 @@
 import 'package:hollat/login/domain/entities/config_response/amplitude_enabled.dart';
 class AmplitudeEnabledModel extends   AmplitudeEnabled
 {
-  AmplitudeEnabledModel({required super.value});
+  const AmplitudeEnabledModel({required super.value});
 
   factory AmplitudeEnabledModel.fromJson(Map<String, dynamic> json) =>
       AmplitudeEnabledModel(

@@ -1,9 +1,4 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
-import 'package:hollat/login/data/models/client/city_data.dart';
-import 'package:hollat/login/data/models/client/country_data.dart';
-import 'package:hollat/login/data/models/client/hospital.dart';
-import 'package:hollat/login/data/models/client/national_id_type.dart';
-import 'package:hollat/login/data/models/client/region_data.dart';
 
 part 'client.g.dart';
 

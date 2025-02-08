@@ -22,7 +22,7 @@ class ResponseParameters extends Equatable {
   final String mobile;
   final String email;
 
-  ResponseParameters({required this.mobile, required this.email});
+  const ResponseParameters({required this.mobile, required this.email});
 
   @override
   List<Object> get props => [mobile, email];
