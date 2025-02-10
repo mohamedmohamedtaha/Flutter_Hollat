@@ -9,6 +9,7 @@ import 'package:hollat/core/init/gen/translations.g.dart';
 import 'package:hollat/core/utils/constants.dart';
 import 'package:hollat/core/utils/show_error_message.dart';
 import 'package:hollat/login/Navigator.dart';
+import 'package:hollat/login/data/database/service_config_database.dart';
 import 'package:hollat/login/data/models/login_response/login_response_model.dart';
 import 'package:hollat/login/data/models/send_otp/send_otp_model.dart';
 import 'package:hollat/login/data/viewmodel/config_viewmodel.dart';
@@ -16,6 +17,7 @@ import 'package:hollat/login/data/viewmodel/timer_view_model.dart';
 import 'package:hollat/login/domain/usecases/nafaz_send_verify_code_reposetory_use_case.dart';
 import 'package:hollat/login/presentation/widgets/custom_elevated_button.dart';
 import 'package:hollat/login/presentation/widgets/custom_text.dart';
+import 'package:hollat/login/views/login/verify_email/nafaz_verify_email_page.dart';
 import 'package:hollat/login/views/nav_page.dart';
 import 'package:hollat/main/riverpod/providers.dart';
 
@@ -42,6 +44,7 @@ class _VerifyOtpPageState extends ConsumerState<VerifyOtpPage> {
   final List<TextEditingController> _controllers =
   List.generate(6, (_) => TextEditingController());
   final List<FocusNode> _focusNodes = List.generate(6, (_) => FocusNode());
+  ServiceConfigDatabase? serviceConfig;
 
   String formatDuration(int totalSeconds) {
     final int minutes = totalSeconds ~/ 60;
@@ -61,6 +64,7 @@ class _VerifyOtpPageState extends ConsumerState<VerifyOtpPage> {
     super.initState();
     Future.microtask(() {
       ref.read(timerViewModelProvider.notifier).startTimer(1);
+      serviceConfig = ref.watch(serviceConfigDatabaseViewModelProvider).config;
     });
     _clearFields();
     // Add listeners to each TextField to handle input
@@ -93,6 +97,7 @@ class _VerifyOtpPageState extends ConsumerState<VerifyOtpPage> {
   @override
   Widget build(BuildContext context) {
     double widthScreen = MediaQuery.of(context).size.width;
+    double heightScreen = MediaQuery.of(context).size.height;
     return Scaffold(
       backgroundColor: AppColorsLight.lightGray, // dark blue color
       appBar: AppBar(
@@ -100,29 +105,35 @@ class _VerifyOtpPageState extends ConsumerState<VerifyOtpPage> {
         iconTheme: IconThemeData(color: AppColorsLight.whiteColor),
         elevation: 0,
       ),
-      body: SingleChildScrollView(
-        child: Column(
-          children: [
-            Container(
-              width: double.infinity,
-              height: 150,
-              decoration: BoxDecoration(
-                  color: AppColorsLight.backgroundColorNafazCode,
-                  borderRadius: BorderRadius.only(
-                      bottomLeft: Radius.circular(15.0),
-                      bottomRight: Radius.circular(15.0))),
-            ),
-            SizedBox(
-              height: 20.0,
-            ),
+      body: Column(
+        children: [
           Container(
-                  width: double.infinity,
-                  decoration: BoxDecoration(
-                      color: AppColorsLight.whiteColor,
-                      borderRadius: BorderRadius.only(
-                          topLeft: Radius.circular(15.0),
-                          topRight: Radius.circular(15.0))),
-                  child: Padding(
+            width: double.infinity,
+            height: heightScreen * 0.2,
+            decoration: BoxDecoration(
+                color: AppColorsLight.backgroundColorNafazCode,
+                borderRadius: BorderRadius.only(
+                    bottomLeft: Radius.circular(15.0),
+                    bottomRight: Radius.circular(15.0))),
+          ),
+          SizedBox(
+            height: 40.0,
+          ),
+          Expanded(child:
+          Container(
+            width: double.infinity,
+            decoration: BoxDecoration(
+                color: AppColorsLight.whiteColor,
+                borderRadius: BorderRadius.only(
+                    topLeft: Radius.circular(15.0),
+                    topRight: Radius.circular(15.0))),
+            child:  SingleChildScrollView(
+              child: Column(
+                children: [
+                  SizedBox(
+                    height: 20.0,
+                  ),
+                  Padding(
                       padding: const EdgeInsets.only(left: 20.0, right: 20.0),
                       child: LayoutBuilder(
                         builder: (context, constraints) {
@@ -142,8 +153,8 @@ class _VerifyOtpPageState extends ConsumerState<VerifyOtpPage> {
                                 CustomText(
                                   LocaleKeys.confirmationCode.tr(),
                                   color: AppColorsLight.primaryColor,
-                                  fontSize:FontsSize.font_20,
-                                  fontWeight:  FontWeight.bold,
+                                  fontSize: FontsSize.font_20,
+                                  fontWeight: FontWeight.bold,
                                 ),
                                 SizedBox(height: 10),
                                 CustomText(
@@ -153,8 +164,8 @@ class _VerifyOtpPageState extends ConsumerState<VerifyOtpPage> {
                                 CustomText(
                                   color: AppColorsLight.primaryColor,
                                   widget.phoneNumber,
-                                    fontSize:FontsSize.font_18,
-                                  fontWeight:  FontWeight.bold,
+                                  fontSize: FontsSize.font_18,
+                                  fontWeight: FontWeight.bold,
                                 ),
                                 SizedBox(height: 20),
                                 Row(
@@ -192,14 +203,14 @@ class _VerifyOtpPageState extends ConsumerState<VerifyOtpPage> {
                                     if (timerState <= 0) {
                                       _resetDefaultButton(false);
                                       _resetAntherButton(true);
-                                    }else{
+                                    } else {
                                       _resetAntherButton(false);
                                     }
                                     return CustomText(
                                       formatDuration(timerState),
                                       textAlign: TextAlign.center,
                                       fontSize: FontsSize.font_15,
-                                      fontWeight:  FontWeight.bold,
+                                      fontWeight: FontWeight.bold,
                                       color: AppColorsLight.primaryColor,
                                     );
                                   },
@@ -208,8 +219,8 @@ class _VerifyOtpPageState extends ConsumerState<VerifyOtpPage> {
                                 Consumer(
                                   builder: (context, ref, child) {
                                     //Nafaz response
-                                    final nafazState =
-                                    ref.watch(nafazVerifyMobileViewModelProvider);
+                                    final nafazState = ref
+                                        .watch(nafazVerifyMobileViewModelProvider);
                                     final enableButtonProviderDefault =
                                     ref.watch(enableButtonProviderDefaultTrue);
                                     // Check if the API is in loading state for nafaz
@@ -219,7 +230,7 @@ class _VerifyOtpPageState extends ConsumerState<VerifyOtpPage> {
                                     }
 
                                     nafazState.whenOrNull(success: (data) {
-                                      goToMainPage();
+                                      goToMainPage(true);
                                     }, error: (message, code) {
                                       showErrorMessage(context, code, message);
                                       _resetDefaultButton(true);
@@ -238,7 +249,7 @@ class _VerifyOtpPageState extends ConsumerState<VerifyOtpPage> {
                                           child: CircularProgressIndicator());
                                     }
                                     verifyState.whenOrNull(success: (data) {
-                                      goToMainPage();
+                                      goToMainPage(false);
                                     }, error: (message, code) {
                                       showErrorMessage(context, code, message);
                                       _resetVerifyOtp();
@@ -266,8 +277,8 @@ class _VerifyOtpPageState extends ConsumerState<VerifyOtpPage> {
                                     final enableButton =
                                     ref.watch(enableButtonProvider);
                                     //Nafaz response resend
-                                    final nafazState =
-                                    ref.watch(resendNafazSendVerifyCodeProvider);
+                                    final nafazState = ref
+                                        .watch(resendNafazSendVerifyCodeProvider);
                                     if (nafazState is ConfigLoading) {
                                       return Center(
                                           child: CircularProgressIndicator());
@@ -285,7 +296,6 @@ class _VerifyOtpPageState extends ConsumerState<VerifyOtpPage> {
                                       showErrorMessage(context, code, message);
                                       _resetAntherButton(true);
                                       _resetNafazSendVerifyCode();
-
                                     }, errorApi: (code, data) {
                                       showErrorMessageApi(context, code, data);
                                       _resetAntherButton(true);
@@ -350,36 +360,38 @@ class _VerifyOtpPageState extends ConsumerState<VerifyOtpPage> {
                           );
                         },
                       )),
-                )
-          ],
-        ),
-      ),
+
+                ],
+              ),
+            ),
+          )
+          )
+
+        ],
+      )
     );
   }
 
-  void goToMainPage() {
+  void goToMainPage(bool nafazState) async{
     _resetNazafVerifyMobile();
     _resetVerifyOtp();
     _resetSendOtp();
     _resetNafazSendVerifyCode();
 
-    WidgetsBinding.instance.addPostFrameCallback((_) async {
-      if (mounted) {
-        ref.read(timerViewModelProvider.notifier).stopTimer();
+    print('config data:  ${serviceConfig}');
 
-        // var token  =data.token ?? '';
-        // if (token.isNotEmpty) {
-        //   await deleteToken();
-        //   await saveToken(token);
-        // } else {
-        //   if (kDebugMode) {
-        //     print('Token is null can not save.');
-        //   }
-        // }
-
-        navigatorControllerPushAndRemoveUntil(context, NavPage(), false);
+    if (nafazState) {
+      if (serviceConfig != null) {
+        var enabled = serviceConfig?.verifyEmailAfterSelfServiceLoginEnabled?? '';
+        if (enabled.endsWith("1")) {
+          navigatorControllerPush(context, NafazVerifyEmailPage());
+        }else{
+          _mainPage();
+        }
       }
-    });
+    } else {
+      _mainPage();
+    }
   }
 
   void _resetVerifyOtp() {
@@ -444,6 +456,7 @@ class _VerifyOtpPageState extends ConsumerState<VerifyOtpPage> {
       ref.read(sendOtpViewModelProvider.notifier).restState();
     });
   }
+
   void _resetNafazSendVerifyCode() {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       ref.read(resendNafazSendVerifyCodeProvider.notifier).restState();
@@ -452,9 +465,8 @@ class _VerifyOtpPageState extends ConsumerState<VerifyOtpPage> {
 
   void _resendCode() {
     if (widget.moveFrom == Constants.NAFAZ) {
-      var email = ref.watch(nafazSendVerifyCodeProvider.notifier).email;
       var parameters =
-      ResponseParameters(mobile: widget.phoneNumber, email: email);
+      ResponseParameters(mobile: widget.phoneNumber, email: '');
 
       ref
           .read(resendNafazSendVerifyCodeProvider.notifier)
@@ -469,5 +481,25 @@ class _VerifyOtpPageState extends ConsumerState<VerifyOtpPage> {
     }
     _resetAntherButton(false);
     _clearFields();
+  }
+
+  void _mainPage() {
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
+      if (mounted) {
+        ref.read(timerViewModelProvider.notifier).stopTimer();
+
+        // var token  =data.token ?? '';
+        // if (token.isNotEmpty) {
+        //   await deleteToken();
+        //   await saveToken(token);
+        // } else {
+        //   if (kDebugMode) {
+        //     print('Token is null can not save.');
+        //   }
+        // }
+
+        navigatorControllerPushAndRemoveUntil(context, NavPage(), false);
+      }
+    });
   }
 }

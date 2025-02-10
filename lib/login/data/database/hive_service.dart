@@ -5,7 +5,16 @@ class HiveService {
   static const String _configBox = 'config_box';
 
   Future<void> init() async {
-    await Hive.openBox<ServiceConfigDatabase>(_configBox);
+
+    // // Delete the box from disk
+    // if(Hive.isBoxOpen(_configBox)){
+    //   await Hive.box(_configBox).close();
+    // }
+    // await Hive.deleteBoxFromDisk(_configBox);
+
+    if(!Hive.isBoxOpen(_configBox)){
+      await Hive.openBox<ServiceConfigDatabase>(_configBox);
+    }
   }
 
   Box<ServiceConfigDatabase> get configBox =>
@@ -22,6 +31,6 @@ class HiveService {
   // Retrieve the latest config (most recently added)
   ServiceConfigDatabase? getAllConfig() {
     if (configBox.isEmpty) return null;
-    return configBox.getAt(configBox.length - 1);
+    return configBox.getAt(configBox.length - 1); // Return the latest config
   }
 }

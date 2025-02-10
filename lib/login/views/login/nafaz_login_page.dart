@@ -122,7 +122,7 @@ class _NafazLoginPageState extends ConsumerState<NafazLoginPage> {
                           ],
                         )))),
             Padding(
-              padding: const EdgeInsets.all(16.0),
+              padding: const EdgeInsets.only(bottom: 30.0),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 mainAxisSize: MainAxisSize.min,

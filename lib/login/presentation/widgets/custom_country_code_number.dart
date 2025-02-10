@@ -12,6 +12,7 @@ class PhoneNumberField extends StatelessWidget {
   final String? labelText;
   final String? hintText;
   final InputDecoration? decoration;
+  final int? maxLines;
 
   const PhoneNumberField(
       {super.key,
@@ -21,13 +22,15 @@ class PhoneNumberField extends StatelessWidget {
         this.validator,
         this.labelText,
         this.hintText,
-        this.decoration});
+        this.decoration,
+      this.maxLines});
 
   @override
   Widget build(BuildContext context) {
     CountryCode selectedCountry =
         initialCountry ?? CountryCode.fromCountryCode('SA');
     return TextFormField(
+      maxLength: maxLines,
       controller: controller,
       keyboardType: TextInputType.phone,
       validator: validator,

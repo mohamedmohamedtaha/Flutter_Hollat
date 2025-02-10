@@ -80,13 +80,15 @@ class ServiceConfigDatabaseAdapter extends TypeAdapter<ServiceConfigDatabase> {
       ..selfServiceDisplayFontAr = fields[60] as String
       ..selfServiceDisplayFontEn = fields[61] as String
       ..backgroundImage = fields[62] as String
-      ..verifyMobileAfterLoginWithEmail = fields[63] as String;
+      ..verifyMobileAfterLoginWithEmail = fields[63] as String
+      ..verifyEmailAfterSelfServiceLoginRequired = fields[64] as String
+      ..verifyEmailAfterSelfServiceLoginEnabled = fields[65] as String;
   }
 
   @override
   void write(BinaryWriter writer, ServiceConfigDatabase obj) {
     writer
-      ..writeByte(64)
+      ..writeByte(66)
       ..writeByte(0)
       ..write(obj.id)
       ..writeByte(1)
@@ -214,7 +216,11 @@ class ServiceConfigDatabaseAdapter extends TypeAdapter<ServiceConfigDatabase> {
       ..writeByte(62)
       ..write(obj.backgroundImage)
       ..writeByte(63)
-      ..write(obj.verifyMobileAfterLoginWithEmail);
+      ..write(obj.verifyMobileAfterLoginWithEmail)
+      ..writeByte(64)
+      ..write(obj.verifyEmailAfterSelfServiceLoginRequired)
+      ..writeByte(65)
+      ..write(obj.verifyEmailAfterSelfServiceLoginEnabled);
   }
 
   @override

@@ -17,7 +17,6 @@ import 'package:hollat/login/presentation/widgets/custom_status_button.dart';
 import 'package:hollat/login/presentation/widgets/custom_text.dart';
 import 'package:hollat/login/presentation/widgets/custom_text_button.dart';
 import 'package:hollat/login/views/login/nafaz_send_verify_code_page.dart';
-import 'package:hollat/login/views/nav_page.dart';
 import 'package:hollat/main/riverpod/providers.dart';
 
 class NafazCodePage extends ConsumerStatefulWidget {
@@ -94,124 +93,137 @@ class _NafazCodePageState extends ConsumerState<NafazCodePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: NestedScrollView(
-        headerSliverBuilder: (context, innerBoxScrolled) => [
-          SliverAppBar(
-            expandedHeight: 140,
-            iconTheme: IconThemeData(color: AppColorsLight.whiteColor),
-            flexibleSpace: Container(
-              decoration: const BoxDecoration(
-                gradient: LinearGradient(colors: [
-                  AppColorsLight.backgroundColorNafazCode,
-                  AppColorsLight.backgroundColorNafazCode
-                ]),
-              ),
-            ),
-          ),
-        ],
-        body: SingleChildScrollView(
-          child: ConstrainedBox(
-            constraints: BoxConstraints(
-              minHeight: MediaQuery.of(context).size.height - 140,
-            ),
-            child: Padding(
-              padding: const EdgeInsets.all(20.0),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Image.asset('assets/images/nafaz_green.png',
-                      width: 91, height: 91),
-                  const SizedBox(height: 25),
-                  CustomText(
-                    LocaleKeys.confirmationCode.tr(),
-                    color: AppColorsLight.textColorNafazCode,
-                    fontSize: FontsSize.font_18,
-                    fontWeight: FontWeight.bold,
-                  ),
-                  const SizedBox(height: 8),
-                  CustomText(
-                    LocaleKeys.nafazTextCode.tr(),
-                    color: AppColorsLight.grayColor,
-                    fontSize: FontsSize.font_15,
-                    textAlign: TextAlign.center,
-                  ),
-                  const SizedBox(height: 20),
-                  CustomText(_code ?? '--',
-                      fontSize: FontsSize.font_70,
-                      color: AppColorsLight.primaryColor,
-                      fontWeight: FontWeight.bold),
-                  const SizedBox(height: 20),
-                  Consumer(builder: (context, ref, child) {
-                    final nafazStatusState =
-                    ref.watch(nafazStatusViewModelProvider);
-                    if (nafazStatusState.isLoading) {
-                      return CircularProgressIndicator();
-                    } else if (nafazStatusState.isSuccess) {
-                      return nafazStatusState.whenOrNull(
-                        success: (data) {
-                          return switch (data.status) {
-                            'WAITING' => _buildWaitingWithTimer(),
-                            'COMPLETED' => _buildCompletedWithTimer(data),
-                            'EXPIRED' => _buildExpiredWithTimer(),
-                            _ => const Text('Unknown Status'),
-                          };
-                        },
-                      ) ??
-                          const SizedBox.shrink();
-                    } else if (nafazStatusState.isError) {
-                      var error = (nafazStatusState as ConfigError);
-                      _resetNafazStatus();
-                      showErrorMessage(context, error.code, error.message);
-                      return const CustomText('Error ');
-                    } else if (nafazStatusState.isErrorApi) {
-                      var error = (nafazStatusState as ConfigErrorApi);
-                      _resetNafazStatus();
-                      showErrorMessageApi(context, error.code, error.data);
-                      return const CustomText('Api Error ');
-                    }
-                    return const SizedBox.shrink();
-                  }),
-                  const SizedBox(height: 20),
-                  Consumer(
-                    builder: (context, ref, child) {
-                      final nafazCodeState =
-                      ref.watch(nafazCodeViewModelProvider);
-                      final enableButton = ref.watch(enableButtonProvider);
-                      nafazCodeState.whenOrNull(success: (data) {
-                        _startTimer();
-                        _code = data.random;
-                        transId = data.transId;
-                        _resetNafazCodeStatus();
-                      }, error: (message, code) {
-                        showErrorMessage(context, code, message);
-                        _resetNafazCodeStatus();
-                        _resetButton(true);
-                      }, errorApi: (code, data) {
-                        showErrorMessageApi(context, code, data);
-                        _resetNafazCodeStatus();
-                        _resetButton(true);
-                      });
-                      return CustomTextButton(
-                        directWriting: true,
-                        color: AppColorsLight.redColor,
-                        onPressed: enableButton
-                            ? () {
-                          _resetButton(false);
-                          ref
-                              .read(nafazCodeViewModelProvider.notifier)
-                              .nafath(widget.nationalId);
-                        }
-                            : null,
-                        text: LocaleKeys.resendCode.tr(),
-                      );
-                    },
-                  ),
-                ],
-              ),
-            ),
-          ),
-        ),
+      backgroundColor: AppColorsLight.lightGray, // dark blue color
+      appBar: AppBar(
+        backgroundColor: AppColorsLight.backgroundColorNafazCode,
+        iconTheme: IconThemeData(color: AppColorsLight.whiteColor),
+        elevation: 0,
       ),
+      body: Container(
+        color: AppColorsLight.lightGray,
+        child: Column(
+          children: [
+            Container(
+              width: double.infinity,
+              height: MediaQuery.of(context).size.height *
+                  0.2, //20% of the screen height.
+              decoration: BoxDecoration(
+                  color: AppColorsLight.backgroundColorNafazCode,
+                  borderRadius: BorderRadius.only(
+                      bottomLeft: Radius.circular(15.0),
+                      bottomRight: Radius.circular(15.0))),
+            ),
+            SizedBox(
+              height: 40.0,
+            ),
+            Expanded(
+                child: Container(
+                  decoration: BoxDecoration(
+                      color: AppColorsLight.whiteColor,
+                      borderRadius: BorderRadius.only(
+                          topRight: Radius.circular(15.0),
+                          topLeft: Radius.circular(15.0))),
+                  child: SingleChildScrollView(
+                    child: Padding(
+                      padding: const EdgeInsets.all(20.0),
+                      child: Column(
+                        children: [
+                          Image.asset('assets/images/nafaz_green.png',
+                              width: 91, height: 91),
+                          const SizedBox(height: 25),
+                          CustomText(
+                            LocaleKeys.confirmationCode.tr(),
+                            color: AppColorsLight.textColorNafazCode,
+                            fontSize: FontsSize.font_18,
+                            fontWeight: FontWeight.bold,
+                          ),
+                          const SizedBox(height: 8),
+                          CustomText(
+                            LocaleKeys.nafazTextCode.tr(),
+                            color: AppColorsLight.grayColor,
+                            fontSize: FontsSize.font_15,
+                            textAlign: TextAlign.center,
+                          ),
+                          const SizedBox(height: 20),
+                          CustomText(_code ?? '--',
+                              fontSize: FontsSize.font_70,
+                              color: AppColorsLight.primaryColor,
+                              fontWeight: FontWeight.bold),
+                          const SizedBox(height: 20),
+                          Consumer(builder: (context, ref, child) {
+                            final nafazStatusState =
+                            ref.watch(nafazStatusViewModelProvider);
+                            if (nafazStatusState.isLoading) {
+                              return CircularProgressIndicator();
+                            } else if (nafazStatusState.isSuccess) {
+                              return nafazStatusState.whenOrNull(
+                                success: (data) {
+                                  return switch (data.status) {
+                                    'WAITING' => _buildWaitingWithTimer(),
+                                    'COMPLETED' => _buildCompletedWithTimer(data),
+                                    'EXPIRED' => _buildExpiredWithTimer(),
+                                    _ => const Text('Unknown Status'),
+                                  };
+                                },
+                              ) ??
+                                  const SizedBox.shrink();
+                            } else if (nafazStatusState.isError) {
+                              var error = (nafazStatusState as ConfigError);
+                              _resetNafazStatus();
+                              showErrorMessage(context, error.code, error.message);
+                              return const CustomText('Error ');
+                            } else if (nafazStatusState.isErrorApi) {
+                              var error = (nafazStatusState as ConfigErrorApi);
+                              _resetNafazStatus();
+                              showErrorMessageApi(context, error.code, error.data);
+                              return const CustomText('Api Error ');
+                            }
+                            return CustomStatusButton(
+                                text: LocaleKeys.orderWaiting.tr());
+                          }),
+                          const SizedBox(height: 20),
+                          Consumer(
+                            builder: (context, ref, child) {
+                              final nafazCodeState =
+                              ref.watch(nafazCodeViewModelProvider);
+                              final enableButton = ref.watch(enableButtonProvider);
+                              nafazCodeState.whenOrNull(success: (data) {
+                                _startTimer();
+                                _code = data.random;
+                                transId = data.transId;
+                                _resetNafazCodeStatus();
+                              }, error: (message, code) {
+                                showErrorMessage(context, code, message);
+                                _resetNafazCodeStatus();
+                                _resetButton(true);
+                              }, errorApi: (code, data) {
+                                showErrorMessageApi(context, code, data);
+                                _resetNafazCodeStatus();
+                                _resetButton(true);
+                              });
+                              return CustomTextButton(
+                                directWriting: true,
+                                color: AppColorsLight.redColor,
+                                onPressed: enableButton
+                                    ? () {
+                                  _resetButton(false);
+                                  ref
+                                      .read(nafazCodeViewModelProvider.notifier)
+                                      .nafath(widget.nationalId);
+                                }
+                                    : null,
+                                text: LocaleKeys.resendCode.tr(),
+                              );
+                            },
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ))
+          ],
+        ),
+      )
     );
   }
 
@@ -249,14 +261,15 @@ class _NafazCodePageState extends ConsumerState<NafazCodePage> {
           }
         }
         var mobileVerifiedAt = data.client?.mobileVerifiedAt ?? '';
-        if (mobileVerifiedAt.isNotEmpty) {
-          //     هعمل كوفري
-          // هل متاح ولا لا
-          // وهل مطلوبة ولا لا
-          navigatorControllerPushAndRemoveUntil(context, NavPage(), false);
-        } else {
-          navigatorControllerPush(context, NafazSendVerifyCodePage());
-         }
+        // if (mobileVerifiedAt.isNotEmpty) {
+        //   //     هعمل كوفري
+        //   // هل متاح ولا لا
+        //   // وهل مطلوبة ولا لا
+        //   navigatorControllerPushAndRemoveUntil(context, NavPage(), false);
+        // } else {
+
+        navigatorControllerPush(context, NafazSendVerifyCodePage());
+        //  }
       }
     });
     return CustomStatusButton(text: LocaleKeys.orderCompleted.tr());

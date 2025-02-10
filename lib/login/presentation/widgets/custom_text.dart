@@ -12,6 +12,7 @@ class CustomText extends StatelessWidget {
   final TextAlign? textAlign;
   final TextOverflow? overflow;
   final String? fontFamily;
+  final int? maxLines;
 
   const CustomText(
       this.text, {
@@ -23,7 +24,8 @@ class CustomText extends StatelessWidget {
         this.fontWeight,
         this.textAlign,
         this.overflow,
-        this.fontFamily
+        this.fontFamily,
+        this.maxLines
       });
   @override
   Widget build(BuildContext context) {
@@ -35,6 +37,7 @@ class CustomText extends StatelessWidget {
         fontWeight: fontWeight,
         fontFamily: fontFamily ?? 'Neo Sans',
       ),
+      maxLines: maxLines ,
       textAlign: textAlign,
       overflow: overflow,
     );

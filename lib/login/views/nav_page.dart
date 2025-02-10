@@ -5,8 +5,8 @@ import 'package:hollat/login/Navigator.dart';
 import 'package:hollat/login/data/notifiers.dart';
 import 'package:hollat/login/presentation/widgets/navbar_widget.dart';
 import 'package:hollat/main/presentation/views/complaint_page.dart';
+import 'package:hollat/main/presentation/views/complaints/my_complaint_page.dart';
 import 'package:hollat/main/presentation/views/home_page.dart';
-import 'package:hollat/main/presentation/views/orders_page.dart';
 import 'package:hollat/main/presentation/views/profile/profile_page.dart';
 import 'package:hollat/main/presentation/views/sama_page.dart';
 import 'package:hollat/main/riverpod/providers.dart';
@@ -17,7 +17,7 @@ List<Widget> pages = [
   const HomePage(),
   const SamaPage(),
   const ComplaintPage(),
-  const OrdersPage(),
+  const MyComplaintPage(),
   const ProfilePage(),
 
 ];

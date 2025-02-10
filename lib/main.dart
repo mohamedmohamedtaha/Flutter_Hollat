@@ -11,6 +11,7 @@ import 'package:hollat/login/data/database/service_config_database.dart';
 import 'package:hollat/login/data/sharedpreferences/local_storage_service.dart';
 import 'package:hollat/login/network/MyHttpOverrids.dart';
 import 'package:hollat/login/views/login/splash_page.dart';
+import 'package:hollat/login/views/login/verify_email/verify_otp_email_page.dart';
 import 'package:hollat/main/riverpod/providers.dart';
 
 void main() async {

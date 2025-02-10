@@ -60,13 +60,19 @@
   "selectRegion" : "Select a region",
   "selectCity" : "Select a city",
   "update" : "Update",
-  "wellcome": "wellcome",
+  "welcome": "welcome",
   "whoAreWe": "who are we ",
   "informationBank": "Information bank",
   "aboutUs": "About us",
   "postBox": "Post box",
   "fax": "Fax",
   "followUs": "Follow us",
-  "updateSuccessfully": "The profile edited successfully"
-
+  "updateSuccessfully": "The profile edited successfully",
+  "numberCompliant": "Number Complaint",
+  "date": "Date",
+  "close": "Closed",
+  "new_": "New",
+  "underApply": "Under apply",
+  "underProcess": "Under Process",
+  "skip": "Skip"
 }

@@ -13,9 +13,12 @@ import 'package:hollat/login/data/viewmodel/nafaz_verify_mobile_view_model.dart'
 import 'package:hollat/login/data/viewmodel/nafaz_view_model.dart';
 import 'package:hollat/login/data/viewmodel/normal_login_view_model.dart';
 import 'package:hollat/login/data/viewmodel/send_otp_view_model.dart';
+import 'package:hollat/login/data/viewmodel/verify_email_view_model.dart';
+import 'package:hollat/login/data/viewmodel/verify_op_email_view_model.dart';
 import 'package:hollat/login/data/viewmodel/verify_otp_view_model.dart';
 import 'package:hollat/login/network/repositores/config_repository.dart';
 import 'package:hollat/login/network/repositores/normal_login_repository.dart';
+import 'package:hollat/login/views/login/verify_email/verify_otp_email_page.dart';
 import 'package:hollat/main/riverpod/dio_providers.dart';
 
 // final apiServiceProvider = Provider<ApiService>((ref) =>ApiService());
@@ -101,6 +104,11 @@ final nafazSendVerifyCodeProvider = StateNotifierProvider.autoDispose<
   return NafazSendVerifyCodeViewModel(
       repository: ref.read(normalLoginRepositoryProvider));
 });
+final verifyEmailViewModelProvider = StateNotifierProvider.autoDispose<
+    VerifyEmailViewModel, ConfigState>((ref) {
+  return VerifyEmailViewModel(
+      repository: ref.read(normalLoginRepositoryProvider));
+});
 final resendNafazSendVerifyCodeProvider = StateNotifierProvider.autoDispose<
     NafazSendVerifyCodeViewModel, ConfigState>((ref) {
   return NafazSendVerifyCodeViewModel(
@@ -110,6 +118,12 @@ final nafazVerifyMobileViewModelProvider =
 StateNotifierProvider.autoDispose<NafazVerifyMobileViewModel, ConfigState>(
         (ref) {
       return NafazVerifyMobileViewModel(
+          repository: ref.read(normalLoginRepositoryProvider));
+    });
+final verifyOtpEmailPageProvider =
+StateNotifierProvider.autoDispose<VerifyOtpEmailViewModel, ConfigState>(
+        (ref) {
+      return VerifyOtpEmailViewModel(
           repository: ref.read(normalLoginRepositoryProvider));
     });
 final verifyOtpVieWModelProvider =

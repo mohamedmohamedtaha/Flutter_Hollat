@@ -71,7 +71,7 @@ class NormalLoginRepository {
   Future<ResponseModel>  nafazSendVerifyCode(ResponseParameters parameters) async {
     final Map<String, dynamic> requestBody = {
       'mobile': parameters.mobile,
-      'email': parameters.email,
+     // 'email': parameters.email,
       // Add other parameters if needed
     };
     final response = await _apiClient.request(
@@ -90,6 +90,25 @@ class NormalLoginRepository {
     return parseResponse<ResponseModel>(response,ResponseModel.fromJson);
   }
 
+  Future<ResponseModel>  verifyEmail(ResponseParameters parameters) async {
+    final Map<String, dynamic> requestBody = {
+      'email': parameters.email
+      // Add other parameters if needed
+    };
+    final response = await _apiClient.request(
+        path: Url.verifyEmail, method : 'POST',queryParameters: requestBody,isAuthorize: true);
+    return parseResponse<ResponseModel>(response,ResponseModel.fromJson);
+  }
+
+  Future<ResponseModel>  verifyOtpEmail(LoginResponseParameters parameters) async {
+    final Map<String, dynamic> requestBody = {
+      'otp_code':parameters.otpCode
+      // Add other parameters if needed
+    };
+    final response = await _apiClient.request(
+        path: Url.verifyOtpEmail, method : 'POST',queryParameters: requestBody,isAuthorize: true);
+    return parseResponse<ResponseModel>(response,ResponseModel.fromJson);
+  }
   Future<ResponseModel>  verifyOtp(LoginResponseParameters parameters) async {
     final Map<String, dynamic> requestBody = {
       'otp_code':parameters.otpCode,

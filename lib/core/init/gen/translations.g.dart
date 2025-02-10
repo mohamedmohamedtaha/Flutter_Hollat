@@ -64,7 +64,7 @@ abstract class  LocaleKeys {
   static const selectRegion = 'selectRegion';
   static const selectCity = 'selectCity';
   static const update = 'update';
-  static const wellcome = 'wellcome';
+  static const welcome = 'welcome';
   static const whoAreWe = 'whoAreWe';
   static const informationBank = 'informationBank';
   static const aboutUs = 'aboutUs';
@@ -72,5 +72,12 @@ abstract class  LocaleKeys {
   static const fax = 'fax';
   static const followUs = 'followUs';
   static const updateSuccessfully = 'updateSuccessfully';
+  static const numberCompliant = 'numberCompliant';
+  static const date = 'date';
+  static const close = 'close';
+  static const new_ = 'new_';
+  static const underApply = 'underApply';
+  static const underProcess = 'underProcess';
+  static const skip = 'skip';
 
 }

@@ -10,18 +10,24 @@ class CustomTextField extends StatelessWidget {
   final TextInputType keyboardType;
   final Widget? prefixIcon;
   final void Function(String)? onChanged;
+  final Color? fillColor;
+  final bool filled;
+  final bool readOnly;
+  final void Function()? onTap;
 
-  const CustomTextField(
-      {super.key,
-        required this.controller,
-        this.labelText = '',
-        this.hintText = '',
-        this.maxLength,
-        this.obscureText = false,
-        this.validator,
-        this.keyboardType = TextInputType.text,
-        this.prefixIcon,
-        this.onChanged});
+  const CustomTextField({super.key,
+    required this.controller,
+    this.labelText = '',
+    this.hintText = '',
+    this.maxLength,
+    this.obscureText = false,
+    this.validator,
+    this.keyboardType = TextInputType.text,
+    this.prefixIcon,
+    this.onChanged,
+    this.fillColor,
+    this.filled = false,
+    this.readOnly = false, this.onTap});
 
   @override
   Widget build(BuildContext context) {
@@ -29,11 +35,14 @@ class CustomTextField extends StatelessWidget {
       controller: controller,
       obscureText: obscureText,
       keyboardType: keyboardType,
-      maxLength: maxLength ?? 100,
+      maxLength: maxLength ,
+      readOnly: readOnly,
       decoration: InputDecoration(
           labelText: labelText,
           hintText: hintText,
           prefixIcon: prefixIcon,
+          fillColor: fillColor,
+          filled: filled,
           border: OutlineInputBorder(borderRadius: BorderRadius.circular(10.0)),
           // Standard border
           enabledBorder: OutlineInputBorder(
@@ -41,11 +50,14 @@ class CustomTextField extends StatelessWidget {
               borderRadius: BorderRadius.circular(10.0) // Non-focused border
           ),
           focusedBorder: OutlineInputBorder(
-              borderSide: BorderSide(color: Theme.of(context).primaryColor),
+              borderSide: BorderSide(color: Theme
+                  .of(context)
+                  .primaryColor),
               borderRadius: BorderRadius.circular(10.0) // Focused border
           )),
       validator: validator,
       onChanged: onChanged,
+      onTap: onTap,
     );
   }
 }

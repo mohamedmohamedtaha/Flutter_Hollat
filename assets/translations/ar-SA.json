@@ -60,12 +60,20 @@
   "selectRegion": "اختر المنطقة",
   "selectCity": "اختر المدينة",
   "update": "تعديل",
-  "wellcome": "مرحباً",
+  "welcome": "مرحباً",
   "whoAreWe": "من نحن ",
   "informationBank": "تواصل معنا",
   "aboutUs": "عننا",
   "postBox": "صندوق البريد",
   "fax": "فاكس",
   "followUs": "تابعنا",
-  "updateSuccessfully": "تم تعديل الملف بنجاح"
+  "updateSuccessfully": "تم تعديل الملف بنجاح",
+  "numberCompliant": "رقم الشكوي",
+  "date": "التاريخ",
+  "close": "مغلقة",
+  "new_": "جديد",
+  "underApply": "تحت التنفيذ",
+  "underProcess": "تحت المعالجة لدي الجهة المالية",
+  "skip": "تخطي"
+
 }

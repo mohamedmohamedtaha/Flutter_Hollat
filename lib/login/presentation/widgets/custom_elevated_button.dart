@@ -10,6 +10,7 @@ class CustomElevatedButton extends StatelessWidget {
   final EdgeInsetsGeometry? padding;
   final TextStyle? textStyle;
   final Widget? child;
+  final Color? color;
 
   const CustomElevatedButton(
       {super.key,
@@ -19,17 +20,21 @@ class CustomElevatedButton extends StatelessWidget {
         this.style,
         this.padding,
         this.textStyle,
-        this.child});
+        this.child,
+        this.color});
 
   @override
   Widget build(BuildContext context) {
     return ElevatedButton(
       style: (style ?? ElevatedButton.styleFrom()).merge(
           ElevatedButton.styleFrom(
-              backgroundColor: enabled ? AppColorsLight.primaryColor: AppColorsLight.grayColor,
+              backgroundColor: enabled
+                  ? color ?? AppColorsLight.primaryColor
+                  : AppColorsLight.grayColor,
               foregroundColor: AppColorsLight.whiteColor,
               minimumSize: const Size(double.infinity, 40.0),
-              padding: padding, //padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 15),
+              padding: padding,
+              //padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 15),
               shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(5)))),
       onPressed: enabled ? onPressed : null,
@@ -37,7 +42,8 @@ class CustomElevatedButton extends StatelessWidget {
           Text(
             text,
             style: textStyle ??
-                const TextStyle(fontSize: FontsSize.font_22, fontWeight: FontWeight.w600),
+                const TextStyle(
+                    fontSize: FontsSize.font_22, fontWeight: FontWeight.w600),
           ),
     );
   }

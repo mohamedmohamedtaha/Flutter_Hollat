@@ -108,7 +108,7 @@ class SplashPage_State extends ConsumerState<SplashPage> {
                             )
                           ],
                         ))),
-                ConfigError(:final message) =>_showError(message),
+                ConfigError(:final message) => _showError(message),
                 ConfigErrorApi(:final code, :final data) =>
                     _showErrorApi(code, data),
                 _ => Container(),
@@ -123,58 +123,44 @@ class SplashPage_State extends ConsumerState<SplashPage> {
 
   Widget _showError(String message) {
     _resetConfig();
-    return  Center(
-      child: CustomText('Error: $message'));
+    return Center(child: CustomText('Error: $message'));
   }
 
-  Widget _showErrorApi(int code,ServiceConfigResponse data) {
-         _resetConfig();
+  Widget _showErrorApi(int code, ServiceConfigResponse data) {
+    _resetConfig();
     showErrorMessageApi(context, code, data);
     return Center(child: CustomText('Error: $code'));
   }
 
   void _saveConfiguration(ServiceConfigResponse data) {
-    ServiceConfigDatabase serviceConfigDatabase =
-    ServiceConfigDatabase();
+    ServiceConfigDatabase serviceConfigDatabase = ServiceConfigDatabase();
     ThemeConfig theme = data.theme;
-    serviceConfigDatabase.largeLogo =
-        data.theme.logo.value ?? '';
-    serviceConfigDatabase.smallLogo =
-        data.theme.miniLogo.value ?? "";
-    serviceConfigDatabase.primaryColor =
-        data.theme.headerColor.value ?? '';
-    serviceConfigDatabase.smallImage =
-        data.theme.miniLogo.value ?? '';
+    serviceConfigDatabase.largeLogo = data.theme.logo.value ?? '';
+    serviceConfigDatabase.smallLogo = data.theme.miniLogo.value ?? "";
+    serviceConfigDatabase.primaryColor = data.theme.headerColor.value ?? '';
+    serviceConfigDatabase.smallImage = data.theme.miniLogo.value ?? '';
 
     //---------------------------- Login Config ----------------------------
-    serviceConfigDatabase.nafathEnabled =
-        data.nafathEnabled.value ?? '';
-    nafathEnabled =
-        data.nafathEnabled.value ?? '';
-    serviceConfigDatabase.selfServiceOtpBy =
-        data.selfServiceOtpBy.value;
-    serviceConfigDatabase
-        .verifyMobileAfterLoginWithEmail = data
-        .verifyMobileAfterLoginWithEmail
-        ?.value ??
-        '';
-    ref
-        .read(
-        serviceConfigDatabaseViewModelProvider)
-        .clearConfig();
+    serviceConfigDatabase.nafathEnabled = data.nafathEnabled.value ?? '';
+    nafathEnabled = data.nafathEnabled.value ?? '';
+    serviceConfigDatabase.selfServiceOtpBy = data.selfServiceOtpBy.value;
+    serviceConfigDatabase.verifyMobileAfterLoginWithEmail =
+        data.verifyMobileAfterLoginWithEmail.value ?? '';
+    serviceConfigDatabase.verifyEmailAfterSelfServiceLoginRequired =
+        data.verifyEmailAfterSelfServiceLoginRequired.value ?? '';
+    serviceConfigDatabase.verifyEmailAfterSelfServiceLoginEnabled =
+        data.verifyEmailAfterSelfServiceLoginEnabled.value ?? '';
+    ref.read(serviceConfigDatabaseViewModelProvider).clearConfig();
 
     ref
-        .read(
-        serviceConfigDatabaseViewModelProvider)
+        .read(serviceConfigDatabaseViewModelProvider)
         .saveConfig(serviceConfigDatabase);
     _isImageLoaded = true;
   }
-  void _resetConfig(){
-    WidgetsBinding.instance.addPostFrameCallback((_){
-      ref
-          .read(
-          configViewModelProvider.notifier)
-          .resetConfig();
+
+  void _resetConfig() {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      ref.read(configViewModelProvider.notifier).resetConfig();
     });
   }
 }

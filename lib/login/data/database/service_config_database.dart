@@ -194,6 +194,11 @@ class ServiceConfigDatabase {
 
   @HiveField(63)
   String verifyMobileAfterLoginWithEmail = "";
+  @HiveField(64)
+  String verifyEmailAfterSelfServiceLoginRequired = "";
+
+  @HiveField(65)
+  String verifyEmailAfterSelfServiceLoginEnabled = "";
   @override
   String toString() {
     return 'ServiceConfigDatabase('
@@ -203,7 +208,9 @@ class ServiceConfigDatabase {
         'smallImage: $smallImage, '
         'nafathEnabled: $nafathEnabled, '
         'selfServiceOtpBy: $selfServiceOtpBy, '
-        'verifyMobileAfterLoginWithEmail: $verifyMobileAfterLoginWithEmail'
+        'verifyMobileAfterLoginWithEmail: $verifyMobileAfterLoginWithEmail,'
+        'verifyEmailAfterSelfServiceLoginRequired: $verifyEmailAfterSelfServiceLoginRequired,'
+        'verifyEmailAfterSelfServiceLoginEnabled: $verifyEmailAfterSelfServiceLoginEnabled'
         ')';
   }
 }
