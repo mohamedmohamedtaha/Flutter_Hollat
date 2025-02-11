@@ -10,14 +10,12 @@ import 'package:hollat/main/riverpod/api_client.dart';
 
 class ClientProfileRepository{
   final ApiClient _apiClient;
-
   ClientProfileRepository(this._apiClient);
 
   Future<ClientProfileModel> getClientProfile() async {
     final response = await _apiClient.request(
         path: Url.clientProfile, method : 'GET',isAuthorize: true);
     return parseResponse<ClientProfileModel>(response,ClientProfileModel.fromJson);
-
   }
   Future<ResponseModel>  updateClientProfile(UpdateProfile parameters) async {
     final Map<String, dynamic> requestBody = {
@@ -63,6 +61,5 @@ class ClientProfileRepository{
     final response = await _apiClient.request(
         path: Url.allCities, method : 'GET',queryParameters: requestBody,isAuthorize: true);
     return parseResponse<CitiesModel>(response,CitiesModel.fromJson);
-
   }
 }

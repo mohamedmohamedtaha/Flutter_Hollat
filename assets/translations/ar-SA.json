@@ -74,6 +74,7 @@
   "new_": "جديد",
   "underApply": "تحت التنفيذ",
   "underProcess": "تحت المعالجة لدي الجهة المالية",
-  "skip": "تخطي"
-
+  "skip": "تخطي",
+  "noDataFound": "لا توجد بيانات",
+  "textTotalCompliant": "أجمالي الشكاوي المقدمة"
 }

@@ -74,5 +74,7 @@
   "new_": "New",
   "underApply": "Under apply",
   "underProcess": "Under Process",
-  "skip": "Skip"
+  "skip": "Skip",
+  "noDataFound": "No data found",
+  "textTotalCompliant":"Total complaints submitted"
 }

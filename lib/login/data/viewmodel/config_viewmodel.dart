@@ -36,11 +36,14 @@ class ConfigViewModel extends StateNotifier<ConfigState> {
 sealed class ConfigState<T> {
   const ConfigState();
 
+  bool get isInitial => this is ConfigInitial<T>;
+
   bool get isLoading => this is ConfigLoading<T>;
 
   bool get isSuccess => this is ConfigSuccess<T>;
 
   bool get isError => this is ConfigError<T>;
+
   bool get isErrorApi => this is ConfigErrorApi<T>;
 }
 

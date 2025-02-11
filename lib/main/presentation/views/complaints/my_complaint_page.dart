@@ -5,11 +5,13 @@ import 'package:hollat/core/global/theme/app_color/app_color_light.dart';
 import 'package:hollat/core/global/theme/font/fonts_size.dart';
 import 'package:hollat/core/global/validation/validation.dart';
 import 'package:hollat/core/init/gen/translations.g.dart';
+import 'package:hollat/login/data/viewmodel/config_viewmodel.dart';
 import 'package:hollat/login/presentation/widgets/custom_data_picker.dart';
 import 'package:hollat/login/presentation/widgets/custom_text.dart';
 import 'package:hollat/login/presentation/widgets/custom_text_field.dart';
 import 'package:hollat/main/presentation/widgets/custom_radio_group.dart';
 import 'package:hollat/main/riverpod/providers.dart';
+import 'package:hollat/main/riverpod/ticket_providers.dart';
 
 class MyComplaintPage extends ConsumerStatefulWidget {
   const MyComplaintPage({super.key});
@@ -22,18 +24,36 @@ class _MyComplaintPageState extends ConsumerState<MyComplaintPage> {
   TextEditingController searchTextEditingController = TextEditingController();
   TextEditingController dateTextEditingController = TextEditingController();
   DateTime? _selectedBirthDate;
-@override
-  void initState() {
+  final ScrollController _scrollController = ScrollController();
+  final int _perPage = 1;
+  bool _isLoadingMore = false;
 
+  @override
+  void initState() {
     super.initState();
-    Future.microtask(() {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      ref.read(oldTicketProvide.notifier).oldTickets(_perPage);
       ref.read(serviceConfigDatabaseViewModelProvider).getAllConfig();
-      print('config ${ref.watch(serviceConfigDatabaseViewModelProvider).config}');
+      print(
+          'config ${ref.watch(serviceConfigDatabaseViewModelProvider).config}');
+    });
+    _scrollController.addListener(() {
+      if (_scrollController.position.pixels ==
+          _scrollController.position.maxScrollExtent) {
+        if (_isLoadingMore) return; //Prevent multiple requests
+
+        _isLoadingMore = true;
+        ref.read(oldTicketProvide.notifier).oldTickets(_perPage);
+        _isLoadingMore = false;
+      }
     });
   }
+
   @override
   Widget build(BuildContext context) {
+    final oldTicketState = ref.watch(oldTicketProvide);
     return Scaffold(
+      backgroundColor: AppColorsLight.lightGray,
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
@@ -42,7 +62,7 @@ class _MyComplaintPageState extends ConsumerState<MyComplaintPage> {
               color: AppColorsLight.colorPrimaryDark,
             ),
             child: Padding(
-              padding: EdgeInsets.all(12.0),
+              padding: EdgeInsets.only(left: 25.0, right: 25),
               child: Column(
                 children: [
                   CustomTextField(
@@ -55,7 +75,6 @@ class _MyComplaintPageState extends ConsumerState<MyComplaintPage> {
                     keyboardType: TextInputType.number,
                     maxLength: 10,
                   ),
-                  SizedBox(height: 12),
                   CustomTextField(
                     controller: dateTextEditingController,
                     labelText: LocaleKeys.date.tr(),
@@ -76,19 +95,38 @@ class _MyComplaintPageState extends ConsumerState<MyComplaintPage> {
                     },
                     readOnly: true,
                   ),
-                  SizedBox(height: 12),
                   CustomRadioGroup(),
                 ],
               ),
             ),
           ),
           Expanded(
-            child: ListView.builder(
-              itemCount: 10,
+            child: oldTicketState.isLoading || oldTicketState.isInitial
+                ? Center(child: CircularProgressIndicator())
+                : (oldTicketState as ConfigSuccess).data.data.length <= 0
+                ? Center(child: CustomText(LocaleKeys.noDataFound.tr()))
+                : ListView.builder(
+              controller: _scrollController,
+              itemCount:
+              (oldTicketState as ConfigSuccess).data.data.length +
+                  (_isLoadingMore ? 1 : 0),
               itemBuilder: (context, index) {
+                if (index ==
+                    (oldTicketState as ConfigSuccess)
+                        .data
+                        .data
+                        .length &&
+                    _isLoadingMore) {
+                  return Center(
+                      child:
+                      CircularProgressIndicator()); //Loader at bottom
+                }
+                final tickets = (oldTicketState as ConfigSuccess)
+                    .data
+                    .data[index];
                 return Padding(
-                  padding:
-                  const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
+                  padding: const EdgeInsets.symmetric(
+                      vertical: 10, horizontal: 20),
                   child: Material(
                     elevation: 5,
                     color: AppColorsLight.whiteColor,
@@ -108,20 +146,22 @@ class _MyComplaintPageState extends ConsumerState<MyComplaintPage> {
                           SizedBox(width: 12),
                           Expanded(
                             child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
+                              crossAxisAlignment:
+                              CrossAxisAlignment.start,
                               children: [
                                 Row(
                                   mainAxisAlignment:
                                   MainAxisAlignment.spaceBetween,
                                   children: [
                                     CustomText(
-                                      '12345678',
+                                      '3:00pm',
                                       fontWeight: FontWeight.bold,
                                     ),
                                     CustomText(
                                       '3:00pm',
                                       fontSize: FontsSize.font_12,
-                                      color: AppColorsLight.colorPrimaryDark,
+                                      color: AppColorsLight
+                                          .colorPrimaryDark,
                                     ),
                                   ],
                                 ),
@@ -145,15 +185,18 @@ class _MyComplaintPageState extends ConsumerState<MyComplaintPage> {
                                     ),
                                     Container(
                                       decoration: BoxDecoration(
-                                          color:
-                                          AppColorsLight.colorPrimaryDark,
+                                          color: AppColorsLight
+                                              .colorPrimaryDark,
                                           borderRadius:
-                                          BorderRadius.circular(3.0)),
+                                          BorderRadius.circular(
+                                              3.0)),
                                       padding: EdgeInsets.symmetric(
-                                          horizontal: 20, vertical: 4),
+                                          horizontal: 20,
+                                          vertical: 4),
                                       child: CustomText(
                                         'جديد',
-                                        color: AppColorsLight.whiteColor,
+                                        color:
+                                        AppColorsLight.whiteColor,
                                       ),
                                     ),
                                   ],

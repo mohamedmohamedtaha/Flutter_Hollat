@@ -21,21 +21,25 @@ class SamaPage extends StatelessWidget {
             navigatorControllerPush(context, WhoAreWePage());
 
           },
-          child: CustomInfoPage(text:LocaleKeys.whoAreWe.tr() ,description: '',),
+          child: CustomInfoPage(text:LocaleKeys.whoAreWe.tr() ,description: '',
+              imagePath: 'assets/images/info.svg',),
         ),
       InkWell(
         onTap: (){
           navigatorControllerPush(context, InformationBankPage());
 
         },
-        child: CustomInfoPage(text:LocaleKeys.informationBank.tr() ,description: '',),
+        child: CustomInfoPage(text:LocaleKeys.informationBank.tr() ,description: '',
+          imagePath: 'assets/images/phone.svg'),
       ),
       InkWell(
         onTap: (){
 
           navigatorControllerPush(context, ContactUsPage());
         },
-        child: CustomInfoPage(text:LocaleKeys.contactUs.tr() ,description: '',),
+        child: CustomInfoPage(text:LocaleKeys.contactUs.tr() ,description: '',
+          imagePath: 'assets/images/info.svg',
+        ),
       )
     ],
     ),
