@@ -17,7 +17,7 @@ void showLanguageBottomSheet(BuildContext context) {
         padding: EdgeInsets.all(8.0),
         decoration: BoxDecoration(
             color: AppColorsLight.whiteColor,
-            borderRadius: BorderRadius.vertical(top: Radius.circular(20))),
+            borderRadius: BorderRadius.vertical(top: Radius.circular(20.0))),
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [

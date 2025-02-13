@@ -76,5 +76,16 @@
   "underProcess": "تحت المعالجة لدي الجهة المالية",
   "skip": "تخطي",
   "noDataFound": "لا توجد بيانات",
-  "textTotalCompliant": "أجمالي الشكاوي المقدمة"
+  "textTotalCompliant": "أجمالي الشكاوي المقدمة",
+  "complaint": "تصعيد الشكوى",
+  "complaintUp": "يمكنك تصعيد الشكوي في حال ان لم\n يكن هناك حل للمشكله",
+  "details": "التفاصيل",
+  "addAttachment": "اضافة مرفق",
+  "uploadAttachment": "يمكنك رفع صورة او ملف PDF بحد أقصي 2 ميجابايت\\n للملف الواحد بإجمالي عدد 5 ملفات",
+  "selectFiles": "اختر الملفات",
+  "send": "ارسال",
+  "sendReply": "إرسال رد",
+  "youSatisfied": "هل أنت راضي عن مستوى الخدمة؟",
+  "error": "خطأ غير معروف",
+  "apiError": "خطأ غير معروف من ال api"
 }

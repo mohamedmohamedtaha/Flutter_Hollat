@@ -79,5 +79,18 @@ abstract class  LocaleKeys {
   static const underApply = 'underApply';
   static const underProcess = 'underProcess';
   static const skip = 'skip';
+  static const noDataFound = 'noDataFound';
+  static const textTotalCompliant = 'textTotalCompliant';
+  static const complaint = 'complaint';
+  static const complaintUp = 'complaintUp';
+  static const details = 'details';
+  static const addAttachment = 'addAttachment';
+  static const uploadAttachment = 'uploadAttachment';
+  static const selectFiles = 'selectFiles';
+  static const send = 'send';
+  static const sendReply = 'sendReply';
+  static const youSatisfied = 'youSatisfied';
+  static const error = 'error';
+  static const apiError = 'apiError';
 
 }

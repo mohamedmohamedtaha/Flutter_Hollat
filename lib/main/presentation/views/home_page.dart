@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:hollat/core/global/theme/app_color/app_color_light.dart';
 import 'package:hollat/core/global/theme/font/fonts_size.dart';
 import 'package:hollat/core/init/gen/translations.g.dart';
+import 'package:hollat/core/utils/show_error_message.dart';
 import 'package:hollat/login/Navigator.dart';
 import 'package:hollat/login/data/viewmodel/config_viewmodel.dart';
 import 'package:hollat/login/presentation/widgets/custom_text.dart';
@@ -82,10 +83,18 @@ class _MyComplaintPageState extends ConsumerState<HomePage> {
                 ),
               ),
             ),
-            oldTicketState.isLoading || oldTicketState.isInitial
+            oldTicketState.isError
+                ? _error((oldTicketState as ConfigError).code,
+                (oldTicketState as ConfigError).message)
+                : oldTicketState.isErrorApi
+                ? _errorApi((oldTicketState as ConfigErrorApi).code,
+                (oldTicketState as ConfigErrorApi).data)
+                : oldTicketState.isLoading || oldTicketState.isInitial
                 ? Center(child: CircularProgressIndicator())
-                : (oldTicketState as ConfigSuccess).data.data.length <= 0
-                ? Center(child: CustomText(LocaleKeys.noDataFound.tr()))
+                : (oldTicketState as ConfigSuccess).data.data.length <=
+                0
+                ? Center(
+                child: CustomText(LocaleKeys.noDataFound.tr()))
                 : SizedBox(
               height: heightScreen * 0.2,
               width: double.infinity,
@@ -106,7 +115,8 @@ class _MyComplaintPageState extends ConsumerState<HomePage> {
                         child:
                         CircularProgressIndicator()); //Loader at bottom
                   }
-                  final tickets = (oldTicketState as ConfigSuccess)
+                  final tickets =
+                  (oldTicketState as ConfigSuccess)
                       .data
                       .data[index];
                   return Padding(
@@ -139,35 +149,49 @@ class _MyComplaintPageState extends ConsumerState<HomePage> {
                       'assets/images/man.png',
                     ),
                   ),
-                   Expanded(child:Container(
-                         height: 150,
-                    decoration: BoxDecoration(borderRadius: BorderRadius.only(topRight: Radius.circular(15.0),
-                    bottomRight:  Radius.circular(15.0),
-                    ),
-                      color: AppColorsLight.whiteColor,),
-                    child: Padding(padding: EdgeInsets.only(left: 15.0,right: 15.0),
-                      child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        CustomText(
-                          LocaleKeys.textTotalCompliant.tr(),
-                          color: AppColorsLight.grayColor,
+                  Expanded(
+                    child: Container(
+                        height: 150,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.only(
+                            topRight: Radius.circular(15.0),
+                            bottomRight: Radius.circular(15.0),
+                          ),
+                          color: AppColorsLight.whiteColor,
                         ),
-                        SizedBox(height: 15.0,),
-                        Row(
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            CustomNumberTicket(number: '02',state: LocaleKeys.new_),
-                            CustomNumberTicket(number: '03',state: LocaleKeys.underProcess),
-                            CustomNumberTicket(number: '02',state: LocaleKeys.close),
-
-                          ],
-                        ),
-                      ],
-                    ),
-                  )),)
+                        child: Padding(
+                          padding: EdgeInsets.only(left: 15.0, right: 15.0),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              CustomText(
+                                LocaleKeys.textTotalCompliant.tr(),
+                                color: AppColorsLight.grayColor,
+                                fontSize: FontsSize.font_12,
+                                fontWeight: FontWeight.bold,
+                              ),
+                              SizedBox(
+                                height: 15.0,
+                              ),
+                              Row(
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                mainAxisAlignment:
+                                MainAxisAlignment.spaceBetween,
+                                children: [
+                                  CustomNumberTicket(
+                                      number: '02', state: LocaleKeys.new_.tr()),
+                                  CustomNumberTicket(
+                                      number: '03',
+                                      state: LocaleKeys.underProcess.tr()),
+                                  CustomNumberTicket(
+                                      number: '02', state: LocaleKeys.close.tr()),
+                                ],
+                              ),
+                            ],
+                          ),
+                        )),
+                  )
                 ],
               ),
             ),
@@ -195,5 +219,17 @@ class _MyComplaintPageState extends ConsumerState<HomePage> {
         ),
       ),
     );
+  }
+
+  Widget _error(int code, String message) {
+    showErrorMessage(context, code, message);
+    ref.read(oldTicketProvide.notifier).resetSate();
+    return CustomText('Error');
+  }
+
+  Widget _errorApi(int code, dynamic data) {
+    showErrorMessageApi(context, code, data);
+    ref.read(oldTicketProvide.notifier).resetSate();
+    return CustomText('Error api');
   }
 }

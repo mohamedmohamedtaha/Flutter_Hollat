@@ -171,12 +171,12 @@ class _NafazCodePageState extends ConsumerState<NafazCodePage> {
                               var error = (nafazStatusState as ConfigError);
                               _resetNafazStatus();
                               showErrorMessage(context, error.code, error.message);
-                              return const CustomText('Error ');
+                              return CustomText(LocaleKeys.error.tr());
                             } else if (nafazStatusState.isErrorApi) {
                               var error = (nafazStatusState as ConfigErrorApi);
                               _resetNafazStatus();
                               showErrorMessageApi(context, error.code, error.data);
-                              return const CustomText('Api Error ');
+                              return CustomText(LocaleKeys.apiError.tr());
                             }
                             return CustomStatusButton(
                                 text: LocaleKeys.orderWaiting.tr());

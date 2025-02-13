@@ -76,5 +76,16 @@
   "underProcess": "Under Process",
   "skip": "Skip",
   "noDataFound": "No data found",
-  "textTotalCompliant":"Total complaints submitted"
+  "textTotalCompliant":"Total complaints submitted",
+  "complaint": "Escalate the complaint",
+  "complaintUp": "You can escalate the complaint if there is/n no solution to the problem",
+  "details": "Details",
+  "addAttachment": "Add attachment",
+  "uploadAttachment": "You can upload an image or PDF file with a maximum of 2 MB per file,\n with a total of 5 files",
+  "selectFiles": "Select files",
+  "send": "Send",
+  "sendReply": "Send reply",
+  "youSatisfied": "Are you satisfied with the level of service?",
+  "error": "Unknown error",
+  "apiError": "Unknown api error "
 }

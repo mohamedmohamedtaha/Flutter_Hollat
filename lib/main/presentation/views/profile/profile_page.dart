@@ -15,7 +15,10 @@ import 'package:hollat/login/presentation/widgets/custom_text.dart';
 import 'package:hollat/login/presentation/widgets/custom_text_button.dart';
 import 'package:hollat/login/views/login/splash_page.dart';
 import 'package:hollat/main/presentation/views/change_language/change_language_page.dart';
+import 'package:hollat/main/presentation/views/complaints/send_comment_page.dart';
+import 'package:hollat/main/presentation/views/complaints/send_complaint_page.dart';
 import 'package:hollat/main/presentation/views/profile/update_client_profile.dart';
+import 'package:hollat/main/presentation/views/rating/rating_page.dart';
 import 'package:hollat/main/riverpod/provider_main.dart';
 
 class ProfilePage extends ConsumerStatefulWidget {
@@ -213,7 +216,10 @@ class _ProfilePageState extends ConsumerState<ProfilePage> {
                             Divider(),
                             CustomTextButton(
                               onPressed: () {
-                                showLanguageBottomSheet(context);
+                                showRatingBottomSheet(context);
+                              //  showSendCommentBottomSheet(context);
+                               // showSendComplaintBottomSheet(context);
+                              //  showLanguageBottomSheet(context);
                               },
                               text: LocaleKeys.changeLanguage.tr(),
                             ),

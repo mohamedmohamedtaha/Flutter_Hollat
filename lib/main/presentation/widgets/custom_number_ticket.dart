@@ -23,7 +23,7 @@ class CustomNumberTicket extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           CustomText(number,
-            color: AppColorsLight.primaryColor,
+            color: AppColorsLight.colorPrimaryDark,
           fontWeight: FontWeight.bold,
           fontSize: FontsSize.font_16,),
           CustomText(state),

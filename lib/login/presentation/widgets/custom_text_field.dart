@@ -6,6 +6,7 @@ class CustomTextField extends StatelessWidget {
   final String hintText;
   final bool obscureText;
   final int? maxLength;
+  final int? maxLines;
   final String? Function(String?)? validator;
   final TextInputType keyboardType;
   final Widget? prefixIcon;
@@ -20,6 +21,7 @@ class CustomTextField extends StatelessWidget {
     this.labelText = '',
     this.hintText = '',
     this.maxLength,
+    this.maxLines,
     this.obscureText = false,
     this.validator,
     this.keyboardType = TextInputType.text,
@@ -36,6 +38,7 @@ class CustomTextField extends StatelessWidget {
       obscureText: obscureText,
       keyboardType: keyboardType,
       maxLength: maxLength ,
+      maxLines: maxLines ,
       readOnly: readOnly,
       decoration: InputDecoration(
           labelText: labelText,
