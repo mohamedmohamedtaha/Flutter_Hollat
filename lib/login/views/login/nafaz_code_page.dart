@@ -8,7 +8,7 @@ import 'package:hollat/core/global/theme/app_color/app_color_light.dart';
 import 'package:hollat/core/global/theme/font/fonts_size.dart';
 import 'package:hollat/core/init/gen/translations.g.dart';
 import 'package:hollat/core/utils/show_error_message.dart';
-import 'package:hollat/login/Navigator.dart';
+import 'package:hollat/login/navigator.dart';
 import 'package:hollat/login/data/models/nafath/nafaz_status.dart';
 import 'package:hollat/login/data/models/nafath/nafaz_status_response.dart';
 import 'package:hollat/login/data/sharedpreferences/save_token.dart';
@@ -27,9 +27,9 @@ class NafazCodePage extends ConsumerStatefulWidget {
 
   const NafazCodePage(
       {super.key,
-        required this.nationalId,
-        required this.randomCode,
-        required this.transId});
+      required this.nationalId,
+      required this.randomCode,
+      required this.transId});
 
   @override
   ConsumerState<NafazCodePage> createState() => _NafazCodePageState();
@@ -54,7 +54,7 @@ class _NafazCodePageState extends ConsumerState<NafazCodePage> {
   void callNafazStatus() async {
     try {
       final nafazStatus =
-      NafazStatus(id: widget.nationalId, random: _code, transId: transId);
+          NafazStatus(id: widget.nationalId, random: _code, transId: transId);
       await ref
           .read(nafazStatusViewModelProvider.notifier)
           .nafathStatus(nafazStatus);
@@ -136,27 +136,27 @@ class _NafazCodePageState extends ConsumerState<NafazCodePage> {
                     textAlign: TextAlign.center,
                   ),
                   const SizedBox(height: 20),
-                  CustomText(_code ?? '--',
+                  CustomText(_code,
                       fontSize: FontsSize.font_70,
                       color: AppColorsLight.primaryColor,
                       fontWeight: FontWeight.bold),
                   const SizedBox(height: 20),
                   Consumer(builder: (context, ref, child) {
                     final nafazStatusState =
-                    ref.watch(nafazStatusViewModelProvider);
+                        ref.watch(nafazStatusViewModelProvider);
                     if (nafazStatusState.isLoading) {
                       return CircularProgressIndicator();
                     } else if (nafazStatusState.isSuccess) {
                       return nafazStatusState.whenOrNull(
-                        success: (data) {
-                          return switch (data.status) {
-                            'WAITING' => _buildWaitingWithTimer(),
-                            'COMPLETED' => _buildCompletedWithTimer(data),
-                            'EXPIRED' => _buildExpiredWithTimer(),
-                            _ => const Text('Unknown Status'),
-                          };
-                        },
-                      ) ??
+                            success: (data) {
+                              return switch (data.status) {
+                                'WAITING' => _buildWaitingWithTimer(),
+                                'COMPLETED' => _buildCompletedWithTimer(data),
+                                'EXPIRED' => _buildExpiredWithTimer(),
+                                _ => const Text('Unknown Status'),
+                              };
+                            },
+                          ) ??
                           const SizedBox.shrink();
                     } else if (nafazStatusState.isError) {
                       var error = (nafazStatusState as ConfigError);
@@ -175,7 +175,7 @@ class _NafazCodePageState extends ConsumerState<NafazCodePage> {
                   Consumer(
                     builder: (context, ref, child) {
                       final nafazCodeState =
-                      ref.watch(nafazCodeViewModelProvider);
+                          ref.watch(nafazCodeViewModelProvider);
                       final enableButton = ref.watch(enableButtonProvider);
                       nafazCodeState.whenOrNull(success: (data) {
                         _startTimer();
@@ -196,11 +196,11 @@ class _NafazCodePageState extends ConsumerState<NafazCodePage> {
                         color: AppColorsLight.redColor,
                         onPressed: enableButton
                             ? () {
-                          _resetButton(false);
-                          ref
-                              .read(nafazCodeViewModelProvider.notifier)
-                              .nafath(widget.nationalId);
-                        }
+                                _resetButton(false);
+                                ref
+                                    .read(nafazCodeViewModelProvider.notifier)
+                                    .nafath(widget.nationalId);
+                              }
                             : null,
                         text: LocaleKeys.resendCode.tr(),
                       );
@@ -249,6 +249,7 @@ class _NafazCodePageState extends ConsumerState<NafazCodePage> {
           }
         }
         var mobileVerifiedAt = data.client?.mobileVerifiedAt ?? '';
+        if (!mounted) return;
         if (mobileVerifiedAt.isNotEmpty) {
           //     هعمل كوفري
           // هل متاح ولا لا
@@ -256,7 +257,7 @@ class _NafazCodePageState extends ConsumerState<NafazCodePage> {
           navigatorControllerPushAndRemoveUntil(context, NavPage(), false);
         } else {
           navigatorControllerPush(context, NafazSendVerifyCodePage());
-         }
+        }
       }
     });
     return CustomStatusButton(text: LocaleKeys.orderCompleted.tr());

@@ -4,19 +4,20 @@ import 'package:hollat/login/data/viewmodel/config_viewmodel.dart';
 import 'package:hollat/login/network/error_handling.dart';
 import 'package:hollat/login/network/repositores/normal_login_repository.dart';
 
-class NafazVerifyMobileViewModel extends StateNotifier<ConfigState>{
+class NafazVerifyMobileViewModel extends StateNotifier<ConfigState> {
   final NormalLoginRepository repository;
-  NafazVerifyMobileViewModel({required this.repository}) : super(ConfigInitial());
+  NafazVerifyMobileViewModel({required this.repository})
+      : super(ConfigInitial());
   Future<void> nafathVerifyMobile(LoginResponseParameters parameters) async {
     state = ConfigLoading();
     try {
       final captcha = await repository.nafathVerifyMobile(parameters);
       state = ConfigSuccess(captcha);
-    }on ApiException catch (e) {
-      print('final error: ${e.statusCode} message: ${e.message}');
-      state = ConfigError(e.message,e.statusCode ?? 0);
+    } on ApiException catch (e) {
+      // print('final error: ${e.statusCode} message: ${e.message}');
+      state = ConfigError(e.message, e.statusCode ?? 0);
     } on AppException catch (e) {
-      state = ConfigError(e.message,e.hashCode);
+      state = ConfigError(e.message, e.hashCode);
     }
   }
 

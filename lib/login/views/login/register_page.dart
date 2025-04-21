@@ -8,8 +8,8 @@ import 'package:hollat/core/global/theme/font/fonts_size.dart';
 import 'package:hollat/core/global/validation/validation.dart';
 import 'package:hollat/core/init/gen/translations.g.dart';
 import 'package:hollat/core/utils/show_error_message.dart';
-import 'package:hollat/login/Navigator.dart';
-import 'package:hollat/login/data/models/nationaltypes/NationalTypes.dart';
+import 'package:hollat/login/navigator.dart';
+import 'package:hollat/login/data/models/nationaltypes/national_types.dart';
 import 'package:hollat/login/data/models/reloadcaptcha/captcha.dart';
 import 'package:hollat/login/data/viewmodel/config_viewmodel.dart';
 import 'package:hollat/login/domain/entities/create_account/create_account.dart';
@@ -41,16 +41,13 @@ class _RegisterPageState extends ConsumerState<RegisterPage> {
   // NationalTypesResponse? _nationalTypes;
   NationalTypes? _selectedType;
   int _selectedTypeNationalId = -1;
-
-  final bool _isLoading = true;
   String key = '';
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     Future.microtask(
-          () {
+      () {
         ref.read(normalLoginViewModelProvider.notifier).reloadCaptcha();
         ref
             .read(getAllNationalTypesViewModelProvider.notifier)
@@ -65,7 +62,6 @@ class _RegisterPageState extends ConsumerState<RegisterPage> {
 
   @override
   void dispose() {
-    // TODO: implement dispose
     super.dispose();
     controllerCheckCode.dispose();
     controllerIdNumber.dispose();
@@ -78,11 +74,7 @@ class _RegisterPageState extends ConsumerState<RegisterPage> {
 
   @override
   Widget build(BuildContext context) {
-    double widthScreen = MediaQuery
-        .of(context)
-        .size
-        .width;
-    final state = ref.watch(normalLoginViewModelProvider);
+    double widthScreen = MediaQuery.of(context).size.width;
     return Scaffold(
       appBar: AppBar(
         automaticallyImplyLeading: true, // If you want to hide back button
@@ -147,30 +139,29 @@ class _RegisterPageState extends ConsumerState<RegisterPage> {
                         ),
                         Consumer(builder: (context, ref, child) {
                           final state =
-                          ref.watch(getAllNationalTypesViewModelProvider);
+                              ref.watch(getAllNationalTypesViewModelProvider);
                           return switch (state) {
                             ConfigInitial() => const SizedBox.shrink(),
                             ConfigLoading() =>
-                            const Center(child: CircularProgressIndicator()),
+                              const Center(child: CircularProgressIndicator()),
                             ConfigSuccess(:final data) =>
-                                CustomDropdown<NationalTypes>(
-                                  items: data.data,
-                                  selectedValue: _selectedType,
-                                  onChanged: (NationalTypes? newValue) {
-                                    setState(() {
-                                      _selectedTypeNationalId =
-                                          newValue?.id ?? -1;
-                                    });
-                                  },
-                                  displayText: (item) => item.titleAr,
-                                  hintText: LocaleKeys.selectNationalType.tr(),
-                                ),
+                              CustomDropdown<NationalTypes>(
+                                items: data.data,
+                                selectedValue: _selectedType,
+                                onChanged: (NationalTypes? newValue) {
+                                  setState(() {
+                                    _selectedTypeNationalId =
+                                        newValue?.id ?? -1;
+                                  });
+                                },
+                                displayText: (item) => item.titleAr,
+                                hintText: LocaleKeys.selectNationalType.tr(),
+                              ),
                             ConfigError(:final message) =>
-                                Text('Error: $message'),
-                            ConfigErrorApi(:final data) =>
-                                Text('Error: $data'),
+                              Text('Error: $message'),
+                            ConfigErrorApi(:final data) => Text('Error: $data'),
                             NormalLoginRepository() =>
-                            throw UnimplementedError(),
+                              throw UnimplementedError(),
                           };
                         }),
                         SizedBox(
@@ -209,7 +200,8 @@ class _RegisterPageState extends ConsumerState<RegisterPage> {
                           alignment: Alignment.centerLeft,
                           child: TextButton(
                               style: ElevatedButton.styleFrom(
-                                  minimumSize: const Size(FontsSize.font_40, 30.0),
+                                  minimumSize:
+                                      const Size(FontsSize.font_40, 30.0),
                                   shape: RoundedRectangleBorder(
                                       borderRadius: BorderRadius.circular(5))),
                               onPressed: () async {
@@ -224,18 +216,21 @@ class _RegisterPageState extends ConsumerState<RegisterPage> {
                               child: Row(
                                 mainAxisSize: MainAxisSize.min,
                                 children: [
-                                  Icon(size: FontsSize.font_30,
+                                  Icon(
+                                      size: FontsSize.font_30,
                                       color: AppColorsLight.primaryColor,
                                       Icons.date_range),
                                   SizedBox(width: 5),
-                                  CustomText('',
-                                    style: TextStyle(fontWeight:
-                                    FontWeight.bold),fontSize: FontsSize.font_16,),
+                                  CustomText(
+                                    '',
+                                    style:
+                                        TextStyle(fontWeight: FontWeight.bold),
+                                    fontSize: FontsSize.font_16,
+                                  ),
                                   SizedBox(width: 5),
                                   CustomText(
                                     _selectedDate != null
-                                        ? ' ${Validation.formatDateTimeToString(
-                                        _selectedDate!)}'
+                                        ? ' ${Validation.formatDateTimeToString(_selectedDate!)}'
                                         : '',
                                     style: TextStyle(fontSize: 16.0),
                                   )
@@ -267,19 +262,18 @@ class _RegisterPageState extends ConsumerState<RegisterPage> {
                             SizedBox(width: 10),
                             Consumer(builder: (context, ref, child) {
                               final state =
-                              ref.watch(normalLoginViewModelProvider);
+                                  ref.watch(normalLoginViewModelProvider);
                               return switch (state) {
                                 ConfigInitial() => const SizedBox.shrink(),
-                                ConfigLoading() =>
-                                const Center(
+                                ConfigLoading() => const Center(
                                     child: CircularProgressIndicator()),
                                 ConfigSuccess(:final data) => _capatcha(data),
-                                ConfigErrorApi(:final data) => Text('Error: $data'),
-                              ConfigError(:final message)=>
-                              Text('Error: $message'),
-                              NormalLoginRepository() =>
-                              throw UnimplementedError(),
-                              // TODO: Handle this case.
+                                ConfigErrorApi(:final data) =>
+                                  Text('Error: $data'),
+                                ConfigError(:final message) =>
+                                  Text('Error: $message'),
+                                NormalLoginRepository() =>
+                                  throw UnimplementedError(),
                               };
                             }),
                             SizedBox(width: 10),
@@ -308,21 +302,22 @@ class _RegisterPageState extends ConsumerState<RegisterPage> {
                         SizedBox(height: 20),
                         Consumer(
                           builder: (context, ref, child) {
-                            var state = ref.watch(
-                                createAccountViewModelProvider);
-                            final enableButton = ref.watch(
-                                enableButtonProviderDefaultTrue);
+                            var state =
+                                ref.watch(createAccountViewModelProvider);
+                            final enableButton =
+                                ref.watch(enableButtonProviderDefaultTrue);
                             state.whenOrNull(success: (data) {
                               WidgetsBinding.instance
                                   .addPostFrameCallback((_) async {
                                 if (mounted) {
                                   showMessage(context, data.message);
                                   ref
-                                      .read(
-                                      enableButtonProviderDefaultTrue.notifier)
+                                      .read(enableButtonProviderDefaultTrue
+                                          .notifier)
                                       .state = true;
-                                  ref.read(
-                                      createAccountViewModelProvider.notifier)
+                                  ref
+                                      .read(createAccountViewModelProvider
+                                          .notifier)
                                       .restState();
                                   navigatorControllerPup(context);
                                 }
@@ -331,22 +326,24 @@ class _RegisterPageState extends ConsumerState<RegisterPage> {
                               WidgetsBinding.instance.addPostFrameCallback((_) {
                                 showErrorMessage(context, code, message);
                                 ref
-                                    .read(
-                                    enableButtonProviderDefaultTrue.notifier)
+                                    .read(enableButtonProviderDefaultTrue
+                                        .notifier)
                                     .state = true;
-                                ref.read(
-                                    createAccountViewModelProvider.notifier)
+                                ref
+                                    .read(
+                                        createAccountViewModelProvider.notifier)
                                     .restState();
                               });
-                            },errorApi:(code,data)  {
+                            }, errorApi: (code, data) {
                               WidgetsBinding.instance.addPostFrameCallback((_) {
                                 showErrorMessageApi(context, code, data);
                                 ref
-                                    .read(
-                                    enableButtonProviderDefaultTrue.notifier)
+                                    .read(enableButtonProviderDefaultTrue
+                                        .notifier)
                                     .state = true;
-                                ref.read(
-                                    createAccountViewModelProvider.notifier)
+                                ref
+                                    .read(
+                                        createAccountViewModelProvider.notifier)
                                     .restState();
                               });
                             });
@@ -356,114 +353,135 @@ class _RegisterPageState extends ConsumerState<RegisterPage> {
                               textStyle: const TextStyle(
                                   fontSize: 18, letterSpacing: 1.2),
                               enabled: enableButton,
-                              onPressed: enableButton ? () {
-                                var phone = Validation.checkPhone(
-                                    controllerPhoneNumber.text);
-                                if (!phone ||
-                                    controllerPhoneNumber.text.length != 9) {
-                                  ScaffoldMessenger.of(context).showSnackBar(
-                                    SnackBar(
-                                      duration: Duration(seconds: 2),
-                                      behavior: SnackBarBehavior.floating,
-                                      content: Text(
-                                          LocaleKeys.errorPhoneRequired.tr()),
-                                    ),
-                                  );
-                                  return;
-                                }
+                              onPressed: enableButton
+                                  ? () {
+                                      var phone = Validation.checkPhone(
+                                          controllerPhoneNumber.text);
+                                      if (!phone ||
+                                          controllerPhoneNumber.text.length !=
+                                              9) {
+                                        ScaffoldMessenger.of(context)
+                                            .showSnackBar(
+                                          SnackBar(
+                                            duration: Duration(seconds: 2),
+                                            behavior: SnackBarBehavior.floating,
+                                            content: Text(LocaleKeys
+                                                .errorPhoneRequired
+                                                .tr()),
+                                          ),
+                                        );
+                                        return;
+                                      }
 
-                                if (controllerUserName.text.isEmpty) {
-                                  ScaffoldMessenger.of(context).showSnackBar(
-                                    SnackBar(
-                                      duration: Duration(seconds: 2),
-                                      behavior: SnackBarBehavior.floating,
-                                      content: Text(
-                                          LocaleKeys.userNameRequired.tr()),
-                                    ),
-                                  );
-                                  return;
-                                }
-                                if (_selectedTypeNationalId == -1) {
-                                  ScaffoldMessenger.of(context).showSnackBar(
-                                    SnackBar(
-                                      duration: Duration(seconds: 2),
-                                      behavior: SnackBarBehavior.floating,
-                                      content: Text(
-                                          LocaleKeys.selectNationalType.tr()),
-                                    ),
-                                  );
-                                  return;
-                                }
-                                var idNumber = controllerIdNumber.text;
-                                if (idNumber.isEmpty || idNumber.length != 10) {
-                                  ScaffoldMessenger.of(context).showSnackBar(
-                                    SnackBar(
-                                      duration: Duration(seconds: 2),
-                                      behavior: SnackBarBehavior.floating,
-                                      content:
-                                      Text(LocaleKeys.yourIdNotValid.tr()),
-                                    ),
-                                  );
-                                  return;
-                                }
-                                var email = Validation.checkEmailAddress(
-                                    controllerEmail.text);
-                                if (!email) {
-                                  ScaffoldMessenger.of(context).showSnackBar(
-                                    SnackBar(
-                                      duration: Duration(seconds: 2),
-                                      behavior: SnackBarBehavior.floating,
-                                      content: Text(
-                                          LocaleKeys.errorEmailRequired.tr()),
-                                    ),
-                                  );
-                                  return;
-                                }
-                                if (_selectedDate == null) {
-                                  ScaffoldMessenger.of(context).showSnackBar(
-                                    SnackBar(
-                                      duration: Duration(seconds: 2),
-                                      behavior: SnackBarBehavior.floating,
-                                      content:
-                                      Text(LocaleKeys.selectBirthDate.tr()),
-                                    ),
-                                  );
-                                  return;
-                                }
-                                var checkCode = controllerCheckCode.text;
-                                if (checkCode.isEmpty || checkCode.length < 5) {
-                                  ScaffoldMessenger.of(context).showSnackBar(
-                                    SnackBar(
-                                      duration: Duration(seconds: 2),
-                                      behavior: SnackBarBehavior.floating,
-                                      content: Text(
-                                          LocaleKeys.checkCodeRequired.tr()),
-                                    ),
-                                  );
-                                  return;
-                                }
-                                // Call create API create account
-                                var createAccountModel = CreateAccount(
-                                    key: key,
-                                    capatchaCode: controllerCheckCode.text,
-                                    nationalId:
-                                    controllerIdNumber.text,
-                                    name: controllerUserName.text,
-                                    mobile: controllerPhoneNumber.text,
-                                    email: controllerEmail.text,
-                                    birthDay: Validation.formatDateTimeToString(_selectedDate!),
-                                    nationalIdTypeId:
-                                    _selectedTypeNationalId.toString());
-                                ref
-                                    .read(
-                                    createAccountViewModelProvider.notifier)
-                                    .createClient(createAccountModel);
+                                      if (controllerUserName.text.isEmpty) {
+                                        ScaffoldMessenger.of(context)
+                                            .showSnackBar(
+                                          SnackBar(
+                                            duration: Duration(seconds: 2),
+                                            behavior: SnackBarBehavior.floating,
+                                            content: Text(LocaleKeys
+                                                .userNameRequired
+                                                .tr()),
+                                          ),
+                                        );
+                                        return;
+                                      }
+                                      if (_selectedTypeNationalId == -1) {
+                                        ScaffoldMessenger.of(context)
+                                            .showSnackBar(
+                                          SnackBar(
+                                            duration: Duration(seconds: 2),
+                                            behavior: SnackBarBehavior.floating,
+                                            content: Text(LocaleKeys
+                                                .selectNationalType
+                                                .tr()),
+                                          ),
+                                        );
+                                        return;
+                                      }
+                                      var idNumber = controllerIdNumber.text;
+                                      if (idNumber.isEmpty ||
+                                          idNumber.length != 10) {
+                                        ScaffoldMessenger.of(context)
+                                            .showSnackBar(
+                                          SnackBar(
+                                            duration: Duration(seconds: 2),
+                                            behavior: SnackBarBehavior.floating,
+                                            content: Text(
+                                                LocaleKeys.yourIdNotValid.tr()),
+                                          ),
+                                        );
+                                        return;
+                                      }
+                                      var email = Validation.checkEmailAddress(
+                                          controllerEmail.text);
+                                      if (!email) {
+                                        ScaffoldMessenger.of(context)
+                                            .showSnackBar(
+                                          SnackBar(
+                                            duration: Duration(seconds: 2),
+                                            behavior: SnackBarBehavior.floating,
+                                            content: Text(LocaleKeys
+                                                .errorEmailRequired
+                                                .tr()),
+                                          ),
+                                        );
+                                        return;
+                                      }
+                                      if (_selectedDate == null) {
+                                        ScaffoldMessenger.of(context)
+                                            .showSnackBar(
+                                          SnackBar(
+                                            duration: Duration(seconds: 2),
+                                            behavior: SnackBarBehavior.floating,
+                                            content: Text(LocaleKeys
+                                                .selectBirthDate
+                                                .tr()),
+                                          ),
+                                        );
+                                        return;
+                                      }
+                                      var checkCode = controllerCheckCode.text;
+                                      if (checkCode.isEmpty ||
+                                          checkCode.length < 5) {
+                                        ScaffoldMessenger.of(context)
+                                            .showSnackBar(
+                                          SnackBar(
+                                            duration: Duration(seconds: 2),
+                                            behavior: SnackBarBehavior.floating,
+                                            content: Text(LocaleKeys
+                                                .checkCodeRequired
+                                                .tr()),
+                                          ),
+                                        );
+                                        return;
+                                      }
+                                      // Call create API create account
+                                      var createAccountModel = CreateAccount(
+                                          key: key,
+                                          capatchaCode:
+                                              controllerCheckCode.text,
+                                          nationalId: controllerIdNumber.text,
+                                          name: controllerUserName.text,
+                                          mobile: controllerPhoneNumber.text,
+                                          email: controllerEmail.text,
+                                          birthDay:
+                                              Validation.formatDateTimeToString(
+                                                  _selectedDate!),
+                                          nationalIdTypeId:
+                                              _selectedTypeNationalId
+                                                  .toString());
+                                      ref
+                                          .read(createAccountViewModelProvider
+                                              .notifier)
+                                          .createClient(createAccountModel);
 
-                                ref
-                                    .read(
-                                    enableButtonProviderDefaultTrue.notifier)
-                                    .state = false;
-                              } : null,
+                                      ref
+                                          .read(enableButtonProviderDefaultTrue
+                                              .notifier)
+                                          .state = false;
+                                    }
+                                  : null,
                             );
                           },
                         ),

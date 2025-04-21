@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:hollat/core/global/theme/app_color/app_color_light.dart';
-import 'package:hollat/login/Navigator.dart';
+import 'package:hollat/login/navigator.dart';
 import 'package:hollat/login/data/notifiers.dart';
 import 'package:hollat/login/presentation/widgets/navbar_widget.dart';
 import 'package:hollat/main/presentation/views/complaint_page.dart';
@@ -19,7 +19,6 @@ List<Widget> pages = [
   const ComplaintPage(),
   const OrdersPage(),
   const ProfilePage(),
-
 ];
 String title = 'Holat';
 
@@ -32,19 +31,20 @@ class NavPage extends ConsumerWidget {
     return Scaffold(
       backgroundColor: AppColorsLight.moreLightGray,
       appBar: AppBar(
-        backgroundColor:AppColorsLight.colorPrimaryDark,
+        backgroundColor: AppColorsLight.colorPrimaryDark,
         automaticallyImplyLeading: true,
         title: Text(title),
         //  centerTitle: true,
-        leading: Icon(Icons.notification_add,),
+        leading: Icon(
+          Icons.notification_add,
+        ),
         actions: [
           IconButton(
               onPressed: () {
                 ref
                     .read(localStorageViewModelProvider.notifier)
                     .changeDarkMode(!isDarkMode);
-              }
-              ,
+              },
               icon: isDarkMode
                   ? const Icon(Icons.light_mode)
                   : const Icon(Icons.dark_mode)),
@@ -55,7 +55,8 @@ class NavPage extends ConsumerWidget {
                 navigatorControllerPush(
                     context, const SettingsPage(title: 'Settings'));
               },
-              icon: const Icon(Icons.person),color: AppColorsLight.whiteColor)
+              icon: const Icon(Icons.person),
+              color: AppColorsLight.whiteColor)
         ],
       ),
       bottomNavigationBar: const NavbarWidget(),

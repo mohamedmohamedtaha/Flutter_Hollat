@@ -23,12 +23,14 @@ class LocalStorageServiceVieWModel extends StateNotifier<bool> {
   }
 
   Future<void> loadMode() async {
-    final storedMode = LocalStorageService.getData<bool>(Constants.MODE_KEY) ?? false;
+    final storedMode =
+        LocalStorageService.getData<bool>(Constants.modeKey) ?? false;
     state = storedMode;
   }
+
   Future<void> changeDarkMode(bool value) async {
     state = value;
-    await LocalStorageService.saveData<bool>(Constants.MODE_KEY, value);
+    await LocalStorageService.saveData<bool>(Constants.modeKey, value);
   }
   // Future<void> _loadMode() async {
   //   _isDarkMode = LocalStorageService.getData(Constants.MODE_KEY) ?? false;

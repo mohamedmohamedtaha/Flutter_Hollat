@@ -5,7 +5,7 @@ import 'package:hollat/core/global/theme/app_color/app_color_light.dart';
 import 'package:hollat/core/global/theme/font/fonts_size.dart';
 import 'package:hollat/core/init/gen/translations.g.dart';
 import 'package:hollat/easy_localization/app_lang.dart';
-import 'package:hollat/login/Navigator.dart';
+import 'package:hollat/login/navigator.dart';
 import 'package:hollat/login/presentation/widgets/custom_text.dart';
 
 void showLanguageBottomSheet(BuildContext context) {

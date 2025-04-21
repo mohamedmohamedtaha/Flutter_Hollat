@@ -8,11 +8,11 @@ import 'package:hollat/core/global/validation/validation.dart';
 import 'package:hollat/core/init/gen/translations.g.dart';
 import 'package:hollat/core/utils/show_error_message.dart';
 import 'package:hollat/easy_localization/app_lang.dart';
-import 'package:hollat/login/Navigator.dart';
+import 'package:hollat/login/navigator.dart';
 import 'package:hollat/login/data/models/client/city_data.dart';
 import 'package:hollat/login/data/models/client/country_data.dart';
 import 'package:hollat/login/data/models/client/region_data.dart';
-import 'package:hollat/login/data/models/nationaltypes/NationalTypes.dart';
+import 'package:hollat/login/data/models/nationaltypes/national_types.dart';
 import 'package:hollat/login/data/viewmodel/config_viewmodel.dart';
 import 'package:hollat/login/network/repositores/normal_login_repository.dart';
 import 'package:hollat/login/presentation/widgets/custom_country_code_number.dart';
@@ -52,11 +52,12 @@ class _ProfilePageState extends ConsumerState<UpdateClientProfile> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     Future.microtask(
-          () {
-        ref.read(getAllNationalTypesViewModelProvider.notifier).getAllNationalTypes();
+      () {
+        ref
+            .read(getAllNationalTypesViewModelProvider.notifier)
+            .getAllNationalTypes();
         ref.read(countriesViewModelProvider.notifier).getAllCountries();
       },
     );
@@ -73,43 +74,40 @@ class _ProfilePageState extends ConsumerState<UpdateClientProfile> {
 
   @override
   Widget build(BuildContext context) {
-    double widthScreen = MediaQuery
-        .of(context)
-        .size
-        .width;
+    double widthScreen = MediaQuery.of(context).size.width;
     return Scaffold(
         appBar: AppBar(
           automaticallyImplyLeading: true, // If you want to hide back button
         ),
-        body: Consumer(builder: (context, ref, child) {
-          var clientProfileState = ref.watch(clientProfileViewModelProvider);
-          clientProfileState.whenOrNull(errorApi: (code, data) {
-            WidgetsBinding.instance.addPostFrameCallback((_) {
-              showErrorMessageApi(context, code, data);
-              ref.read(clientProfileViewModelProvider.notifier).resetSate();
+        body: Consumer(
+          builder: (context, ref, child) {
+            var clientProfileState = ref.watch(clientProfileViewModelProvider);
+            clientProfileState.whenOrNull(errorApi: (code, data) {
+              WidgetsBinding.instance.addPostFrameCallback((_) {
+                showErrorMessageApi(context, code, data);
+                ref.read(clientProfileViewModelProvider.notifier).resetSate();
+              });
+            }, success: (final data) {
+              controllerUserName.text = data.name;
+              controllerPhoneNumber.text = data.mobile;
+              controllerEmail.text = data.email;
+              controllerIdNumber.text = data.nationalId;
+              _selectedTypeNationalId = data.nationalIdTypeId;
+              // _countryData = data.nationalIdTypeId.toString();
+              if (data.birthDate != null) {
+                _selectedBirthDate =
+                    Validation.formatStringToDateTime(data.birthDate!);
+              }
+              if (data.birthDate != null) {
+                _selectedIdExpiryDate =
+                    Validation.formatStringToDateTime(data.birthDate!);
+              }
             });
-          }, success: (final data) {
-            controllerUserName.text = data.name;
-            controllerPhoneNumber.text = data.mobile;
-            controllerEmail.text = data.email;
-            controllerIdNumber.text = data.nationalId;
-            _selectedTypeNationalId = data.nationalIdTypeId;
-            // _countryData = data.nationalIdTypeId.toString();
-            if (data.birthDate != null) {
-              _selectedBirthDate =
-                  Validation.formatStringToDateTime(data.birthDate!);
-            }
-            if (data.birthDate != null) {
-              _selectedIdExpiryDate =
-                  Validation.formatStringToDateTime(data.birthDate!);
-            }
-          });
-          return switch (clientProfileState) {
-            ConfigInitial() => const SizedBox.shrink(),
-            ConfigLoading() =>
-            const Center(child: CircularProgressIndicator()),
-            ConfigSuccess(:final data) =>
-                Center(
+            return switch (clientProfileState) {
+              ConfigInitial() => const SizedBox.shrink(),
+              ConfigLoading() =>
+                const Center(child: CircularProgressIndicator()),
+              ConfigSuccess(:final data) => Center(
                   child: SingleChildScrollView(
                     child: Padding(
                         padding: const EdgeInsets.all(20.0),
@@ -169,89 +167,39 @@ class _ProfilePageState extends ConsumerState<UpdateClientProfile> {
                                     height: 20,
                                   ),
                                   Consumer(builder: (context, ref, child) {
-                                    final state =
-                                    ref.watch(
+                                    final state = ref.watch(
                                         getAllNationalTypesViewModelProvider);
                                     return switch (state) {
                                       ConfigInitial() =>
-                                      const SizedBox.shrink(),
-                                      ConfigLoading() =>
-                                      const Center(
+                                        const SizedBox.shrink(),
+                                      ConfigLoading() => const Center(
                                           child: CircularProgressIndicator()),
                                       ConfigSuccess(:final data) =>
-                                          CustomDropdown<NationalTypes>(
-                                            items: data.data,
-                                            selectedValue: _selectedType,
-                                            onChanged: (
-                                                NationalTypes? newValue) {
-                                              setState(() {
-                                                _selectedTypeNationalId =
-                                                    newValue?.id ?? -1;
-                                              });
-                                            },
-                                            displayText: (item) =>
-                                            AppLang.currentLanguage(context) ==
-                                                'ar'
-                                                ? item.titleAr
-                                                : item.titleEn,
-                                            hintText: LocaleKeys
-                                                .selectNationalType.tr(),
-                                          ),
+                                        CustomDropdown<NationalTypes>(
+                                          items: data.data,
+                                          selectedValue: _selectedType,
+                                          onChanged: (NationalTypes? newValue) {
+                                            setState(() {
+                                              _selectedTypeNationalId =
+                                                  newValue?.id ?? -1;
+                                            });
+                                          },
+                                          displayText: (item) =>
+                                              AppLang.currentLanguage(
+                                                          context) ==
+                                                      'ar'
+                                                  ? item.titleAr
+                                                  : item.titleEn,
+                                          hintText: LocaleKeys
+                                              .selectNationalType
+                                              .tr(),
+                                        ),
                                       ConfigError(:final message) =>
-                                          Text('Error: $message'),
+                                        Text('Error: $message'),
                                       ConfigErrorApi(:final data) =>
-                                          Text('Error: $data'),
+                                        Text('Error: $data'),
                                       NormalLoginRepository() =>
-                                      throw UnimplementedError(),
-                                    };
-                                  }),
-                                  SizedBox(
-                                    height: 20,
-                                  ),
-                                  Consumer(builder: (context, ref, child) {
-                                    final state = ref.watch(
-                                        countriesViewModelProvider);
-                                    return switch (state) {
-                                      ConfigInitial() =>
-                                      const SizedBox.shrink(),
-                                      ConfigLoading() =>
-                                      const Center(
-                                          child: CircularProgressIndicator()),
-                                      ConfigSuccess(:final data) =>
-                                          CustomDropdown<CountryData>(
-                                            items: data.data,
-                                            selectedValue: _countryData,
-                                            onChanged: (CountryData? newValue) {
-                                              setState(() {
-                                                var holdNewValue = newValue
-                                                    ?.id ?? -1;
-                                                if (_selectedCountryId !=
-                                                    holdNewValue) {
-                                                  ref
-                                                      .read(
-                                                      regionsProfileViewModelProvider
-                                                          .notifier)
-                                                      .getAllRegions(
-                                                      holdNewValue.toString());
-                                                }
-                                                _selectedCountryId =
-                                                    holdNewValue;
-                                              });
-                                            },
-                                            displayText: (item) =>
-                                            AppLang.currentLanguage(context) ==
-                                                'ar'
-                                                ? item.titleAr
-                                                : item.titleEn,
-                                            hintText: LocaleKeys.selectCountry
-                                                .tr(),
-                                          ),
-                                      ConfigError(:final message) =>
-                                          Text('Error: $message'),
-                                      ConfigErrorApi(:final data) =>
-                                          Text('Error: $data'),
-                                      NormalLoginRepository() =>
-                                      throw UnimplementedError(),
+                                        throw UnimplementedError(),
                                     };
                                   }),
                                   SizedBox(
@@ -259,89 +207,136 @@ class _ProfilePageState extends ConsumerState<UpdateClientProfile> {
                                   ),
                                   Consumer(builder: (context, ref, child) {
                                     final state =
-                                    ref.watch(regionsProfileViewModelProvider);
+                                        ref.watch(countriesViewModelProvider);
                                     return switch (state) {
                                       ConfigInitial() =>
-                                      const SizedBox.shrink(),
-                                      ConfigLoading() =>
-                                      const Center(
+                                        const SizedBox.shrink(),
+                                      ConfigLoading() => const Center(
                                           child: CircularProgressIndicator()),
                                       ConfigSuccess(:final data) =>
-                                          CustomDropdown<RegionData>(
-                                            items: data.data,
-                                            selectedValue: _regionData,
-                                            onChanged: (RegionData? newValue) {
-                                              setState(() {
-                                                var holdNewValue = newValue
-                                                    ?.id ?? -1;
-                                                if (_selectedRegionId !=
-                                                    holdNewValue) {
-                                                  ref
-                                                      .read(
-                                                      citiesViewModelProvider
-                                                          .notifier)
-                                                      .getAllCities(
-                                                      _selectedCountryId
-                                                          .toString(),
-                                                      holdNewValue.toString());
-                                                }
-                                                _selectedRegionId =
-                                                    holdNewValue;
-                                              });
-                                            },
-                                            displayText: (item) =>
-                                            AppLang.currentLanguage(context) ==
-                                                'ar'
-                                                ? item.titleAr
-                                                : item.titleEn,
-                                            hintText: LocaleKeys.selectRegion
-                                                .tr(),
-                                          ),
+                                        CustomDropdown<CountryData>(
+                                          items: data.data,
+                                          selectedValue: _countryData,
+                                          onChanged: (CountryData? newValue) {
+                                            setState(() {
+                                              var holdNewValue =
+                                                  newValue?.id ?? -1;
+                                              if (_selectedCountryId !=
+                                                  holdNewValue) {
+                                                ref
+                                                    .read(
+                                                        regionsProfileViewModelProvider
+                                                            .notifier)
+                                                    .getAllRegions(holdNewValue
+                                                        .toString());
+                                              }
+                                              _selectedCountryId = holdNewValue;
+                                            });
+                                          },
+                                          displayText: (item) =>
+                                              AppLang.currentLanguage(
+                                                          context) ==
+                                                      'ar'
+                                                  ? item.titleAr
+                                                  : item.titleEn,
+                                          hintText:
+                                              LocaleKeys.selectCountry.tr(),
+                                        ),
                                       ConfigError(:final message) =>
-                                          Text('Error: $message'),
+                                        Text('Error: $message'),
                                       ConfigErrorApi(:final data) =>
-                                          Text('Error: $data'),
+                                        Text('Error: $data'),
                                       NormalLoginRepository() =>
-                                      throw UnimplementedError(),
+                                        throw UnimplementedError(),
                                     };
                                   }),
                                   SizedBox(
                                     height: 20,
                                   ),
                                   Consumer(builder: (context, ref, child) {
-                                    final state = ref.watch(
-                                        citiesViewModelProvider);
+                                    final state = ref
+                                        .watch(regionsProfileViewModelProvider);
                                     return switch (state) {
                                       ConfigInitial() =>
-                                      const SizedBox.shrink(),
-                                      ConfigLoading() =>
-                                      const Center(
+                                        const SizedBox.shrink(),
+                                      ConfigLoading() => const Center(
                                           child: CircularProgressIndicator()),
                                       ConfigSuccess(:final data) =>
-                                          CustomDropdown<CityData>(
-                                            items: data.data,
-                                            selectedValue: _cityData,
-                                            onChanged: (CityData? newValue) {
-                                              setState(() {
-                                                var holdNewValue = newValue
-                                                    ?.id ?? -1;
-                                                _selectedCityId = holdNewValue;
-                                              });
-                                            },
-                                            displayText: (item) =>
-                                            AppLang.currentLanguage(context) ==
-                                                'ar'
-                                                ? item.titleAr
-                                                : item.titleEn,
-                                            hintText: LocaleKeys.selectCity
-                                                .tr(),
-                                          ),
+                                        CustomDropdown<RegionData>(
+                                          items: data.data,
+                                          selectedValue: _regionData,
+                                          onChanged: (RegionData? newValue) {
+                                            setState(() {
+                                              var holdNewValue =
+                                                  newValue?.id ?? -1;
+                                              if (_selectedRegionId !=
+                                                  holdNewValue) {
+                                                ref
+                                                    .read(
+                                                        citiesViewModelProvider
+                                                            .notifier)
+                                                    .getAllCities(
+                                                        _selectedCountryId
+                                                            .toString(),
+                                                        holdNewValue
+                                                            .toString());
+                                              }
+                                              _selectedRegionId = holdNewValue;
+                                            });
+                                          },
+                                          displayText: (item) =>
+                                              AppLang.currentLanguage(
+                                                          context) ==
+                                                      'ar'
+                                                  ? item.titleAr
+                                                  : item.titleEn,
+                                          hintText:
+                                              LocaleKeys.selectRegion.tr(),
+                                        ),
                                       ConfigError(:final message) =>
-                                          Text('Error: $message'),
+                                        Text('Error: $message'),
                                       ConfigErrorApi(:final data) =>
-                                          Text('Error: $data'),
+                                        Text('Error: $data'),
                                       NormalLoginRepository() =>
-                                      throw UnimplementedError(),
+                                        throw UnimplementedError(),
+                                    };
+                                  }),
+                                  SizedBox(
+                                    height: 20,
+                                  ),
+                                  Consumer(builder: (context, ref, child) {
+                                    final state =
+                                        ref.watch(citiesViewModelProvider);
+                                    return switch (state) {
+                                      ConfigInitial() =>
+                                        const SizedBox.shrink(),
+                                      ConfigLoading() => const Center(
+                                          child: CircularProgressIndicator()),
+                                      ConfigSuccess(:final data) =>
+                                        CustomDropdown<CityData>(
+                                          items: data.data,
+                                          selectedValue: _cityData,
+                                          onChanged: (CityData? newValue) {
+                                            setState(() {
+                                              var holdNewValue =
+                                                  newValue?.id ?? -1;
+                                              _selectedCityId = holdNewValue;
+                                            });
+                                          },
+                                          displayText: (item) =>
+                                              AppLang.currentLanguage(
+                                                          context) ==
+                                                      'ar'
+                                                  ? item.titleAr
+                                                  : item.titleEn,
+                                          hintText: LocaleKeys.selectCity.tr(),
+                                        ),
+                                      ConfigError(:final message) =>
+                                        Text('Error: $message'),
+                                      ConfigErrorApi(:final data) =>
+                                        Text('Error: $data'),
+                                      NormalLoginRepository() =>
+                                        throw UnimplementedError(),
                                     };
                                   }),
                                   SizedBox(
@@ -379,44 +374,42 @@ class _ProfilePageState extends ConsumerState<UpdateClientProfile> {
                                   CustomTextButton(
                                       text: '',
                                       style: ElevatedButton.styleFrom(
-                                          backgroundColor: AppColorsLight
-                                              .lightGray,
-                                          minimumSize: const Size(
-                                              double.infinity, 40.0),
+                                          backgroundColor:
+                                              AppColorsLight.lightGray,
+                                          minimumSize:
+                                              const Size(double.infinity, 40.0),
                                           shape: RoundedRectangleBorder(
-                                              borderRadius: BorderRadius
-                                                  .circular(5))),
+                                              borderRadius:
+                                                  BorderRadius.circular(5))),
                                       onPressed: () async {
-                                        final date = await CustomDatePicker
-                                            .show(
-                                            context: context,
-                                            firstDate: DateTime(1900),
-                                            lastDate: DateTime.now());
+                                        final date =
+                                            await CustomDatePicker.show(
+                                                context: context,
+                                                firstDate: DateTime(1900),
+                                                lastDate: DateTime.now());
                                         if (date != null) {
-                                          setState(() =>
-                                          _selectedBirthDate = date);
+                                          setState(
+                                              () => _selectedBirthDate = date);
                                         }
                                       },
                                       child: Align(
                                         alignment:
-                                        AppLang.currentLanguage(context) == 'ar'
-                                            ? Alignment.centerRight
-                                            : Alignment.centerLeft,
+                                            AppLang.currentLanguage(context) ==
+                                                    'ar'
+                                                ? Alignment.centerRight
+                                                : Alignment.centerLeft,
                                         child: Row(
                                           mainAxisSize: MainAxisSize.min,
                                           children: [
                                             Icon(
                                                 size: FontsSize.font_30,
-                                                color: AppColorsLight
-                                                    .primaryColor,
+                                                color:
+                                                    AppColorsLight.primaryColor,
                                                 Icons.date_range),
                                             SizedBox(width: 5),
                                             CustomText(
                                               _selectedBirthDate != null
-                                                  ? '${LocaleKeys.dateOfBirth
-                                                  .tr()}: ${Validation
-                                                  .formatDateTimeToString(
-                                                  _selectedBirthDate!)}'
+                                                  ? '${LocaleKeys.dateOfBirth.tr()}: ${Validation.formatDateTimeToString(_selectedBirthDate!)}'
                                                   : LocaleKeys.dateOfBirth.tr(),
                                               style: TextStyle(fontSize: 16.0),
                                             )
@@ -427,46 +420,44 @@ class _ProfilePageState extends ConsumerState<UpdateClientProfile> {
                                   CustomTextButton(
                                       text: '',
                                       style: ElevatedButton.styleFrom(
-                                          backgroundColor: AppColorsLight
-                                              .lightGray,
-                                          minimumSize: const Size(
-                                              double.infinity, 40.0),
+                                          backgroundColor:
+                                              AppColorsLight.lightGray,
+                                          minimumSize:
+                                              const Size(double.infinity, 40.0),
                                           shape: RoundedRectangleBorder(
-                                              borderRadius: BorderRadius
-                                                  .circular(5))),
+                                              borderRadius:
+                                                  BorderRadius.circular(5))),
                                       onPressed: () async {
-                                        final date = await CustomDatePicker
-                                            .show(
-                                            context: context,
-                                            firstDate: DateTime(1900),
-                                            lastDate: DateTime(2040));
+                                        final date =
+                                            await CustomDatePicker.show(
+                                                context: context,
+                                                firstDate: DateTime(1900),
+                                                lastDate: DateTime(2040));
                                         if (date != null) {
                                           setState(() =>
-                                          _selectedIdExpiryDate = date);
+                                              _selectedIdExpiryDate = date);
                                         }
                                       },
                                       child: Align(
                                         alignment:
-                                        AppLang.currentLanguage(context) == 'ar'
-                                            ? Alignment.centerRight
-                                            : Alignment.centerLeft,
+                                            AppLang.currentLanguage(context) ==
+                                                    'ar'
+                                                ? Alignment.centerRight
+                                                : Alignment.centerLeft,
                                         child: Row(
                                           mainAxisSize: MainAxisSize.min,
                                           children: [
                                             Icon(
                                                 size: FontsSize.font_30,
-                                                color: AppColorsLight
-                                                    .primaryColor,
+                                                color:
+                                                    AppColorsLight.primaryColor,
                                                 Icons.date_range),
                                             SizedBox(width: 5),
                                             CustomText(
                                               _selectedIdExpiryDate != null
-                                                  ? '${LocaleKeys.idExpiryDate
-                                                  .tr()}: ${Validation
-                                                  .formatDateTimeToString(
-                                                  _selectedIdExpiryDate!)}'
+                                                  ? '${LocaleKeys.idExpiryDate.tr()}: ${Validation.formatDateTimeToString(_selectedIdExpiryDate!)}'
                                                   : LocaleKeys.idExpiryDate
-                                                  .tr(),
+                                                      .tr(),
                                               style: TextStyle(fontSize: 16.0),
                                             )
                                           ],
@@ -475,18 +466,23 @@ class _ProfilePageState extends ConsumerState<UpdateClientProfile> {
                                   SizedBox(height: 20),
                                   Consumer(
                                     builder: (context, ref, child) {
-                                      final enableButton =
-                                      ref.watch(
+                                      final enableButton = ref.watch(
                                           enableButtonProviderDefaultTrue);
-                                      var updateProfileState = ref.watch(updateProfileViewModelProvider);
+                                      var updateProfileState = ref.watch(
+                                          updateProfileViewModelProvider);
                                       if (updateProfileState is ConfigLoading) {
-                                        return Center(child: CircularProgressIndicator());
+                                        return Center(
+                                            child: CircularProgressIndicator());
                                       }
-                                      updateProfileState.whenOrNull(success: (data) {
+                                      updateProfileState.whenOrNull(
+                                          success: (data) {
                                         WidgetsBinding.instance
                                             .addPostFrameCallback((_) async {
                                           if (mounted) {
-                                            showMessage(context, LocaleKeys.updateSuccessfully.tr());
+                                            showMessage(
+                                                context,
+                                                LocaleKeys.updateSuccessfully
+                                                    .tr());
                                             navigatorControllerPup(context);
                                             _resetLogout();
                                           }
@@ -508,15 +504,15 @@ class _ProfilePageState extends ConsumerState<UpdateClientProfile> {
                                       });
 
                                       return CustomElevatedButton(
-                                          text: LocaleKeys.update.tr(),
-                                          textStyle: const TextStyle(
-                                              fontSize: 18, letterSpacing: 1.2),
-                                          enabled: enableButton,
-                                          onPressed: enableButton
-                                              ? () {
-                                            _updateProfile();
-                                          }
-                                              : null,
+                                        text: LocaleKeys.update.tr(),
+                                        textStyle: const TextStyle(
+                                            fontSize: 18, letterSpacing: 1.2),
+                                        enabled: enableButton,
+                                        onPressed: enableButton
+                                            ? () {
+                                                _updateProfile();
+                                              }
+                                            : null,
                                       );
                                     },
                                   ),
@@ -527,93 +523,67 @@ class _ProfilePageState extends ConsumerState<UpdateClientProfile> {
                         )),
                   ),
                 ),
-            ConfigError(:final message) =>
-                Center(
+              ConfigError(:final message) => Center(
                     child: CustomText(
-                      'Error: $message',
-                    )),
-            ConfigErrorApi(:final data) =>
-                Center(
+                  'Error: $message',
+                )),
+              ConfigErrorApi(:final data) => Center(
                     child: CustomText(
-                      'Error: $data',
-                    )),
-            NormalLoginRepository() => throw UnimplementedError(),
-          };
-        },)
-    );
+                  'Error: $data',
+                )),
+              NormalLoginRepository() => throw UnimplementedError(),
+            };
+          },
+        ));
   }
 
   void _updateProfile() {
-    var phone = Validation.checkPhone(
-        controllerPhoneNumber.text);
-    if (!phone ||
-        controllerPhoneNumber.text.length !=
-            9) {
-      showMessage(context, LocaleKeys
-          .errorPhoneRequired
-          .tr());
+    var phone = Validation.checkPhone(controllerPhoneNumber.text);
+    if (!phone || controllerPhoneNumber.text.length != 9) {
+      showMessage(context, LocaleKeys.errorPhoneRequired.tr());
       return;
     }
 
     if (controllerUserName.text.isEmpty) {
-      showMessage(context, LocaleKeys
-          .userNameRequired
-          .tr());
+      showMessage(context, LocaleKeys.userNameRequired.tr());
       return;
     }
     if (_selectedTypeNationalId == -1) {
-      showMessage(context, LocaleKeys
-          .selectNationalType
-          .tr());
+      showMessage(context, LocaleKeys.selectNationalType.tr());
       return;
     }
     if (_selectedCountryId == -1) {
-      showMessage(context, LocaleKeys
-          .selectCountry
-          .tr());
+      showMessage(context, LocaleKeys.selectCountry.tr());
       return;
     }
     if (_selectedRegionId == -1) {
-      showMessage(context, LocaleKeys
-          .selectRegion
-          .tr());
+      showMessage(context, LocaleKeys.selectRegion.tr());
       return;
     }
     if (_selectedCityId == -1) {
-      showMessage(context, LocaleKeys
-          .selectCity
-          .tr());
+      showMessage(context, LocaleKeys.selectCity.tr());
       return;
     }
     var idNumber = controllerIdNumber.text;
-    if (idNumber.isEmpty ||
-        idNumber.length != 10) {
-      showMessage(context, LocaleKeys
-          .yourIdNotValid
-          .tr());
+    if (idNumber.isEmpty || idNumber.length != 10) {
+      showMessage(context, LocaleKeys.yourIdNotValid.tr());
       return;
     }
-    var email = Validation.checkEmailAddress(
-        controllerEmail.text);
+    var email = Validation.checkEmailAddress(controllerEmail.text);
     if (!email) {
-      showMessage(context, LocaleKeys
-          .errorEmailRequired
-          .tr());
+      showMessage(context, LocaleKeys.errorEmailRequired.tr());
       return;
     }
     if (_selectedBirthDate == null) {
-      showMessage(context, LocaleKeys
-          .selectBirthDate
-          .tr());
+      showMessage(context, LocaleKeys.selectBirthDate.tr());
       return;
     }
     if (_selectedIdExpiryDate == null) {
-      showMessage(context, LocaleKeys
-          .selectIdExpiryDate
-          .tr());
+      showMessage(context, LocaleKeys.selectIdExpiryDate.tr());
       return;
     }
-    var parameters = UpdateProfile(name: controllerUserName.text,
+    var parameters = UpdateProfile(
+        name: controllerUserName.text,
         mobile: controllerPhoneNumber.text,
         email: controllerEmail.text,
         nationalId: controllerIdNumber.text,
@@ -621,29 +591,17 @@ class _ProfilePageState extends ConsumerState<UpdateClientProfile> {
         regionId: _selectedRegionId.toString(),
         cityId: _selectedCityId.toString(),
         birthDay: Validation.formatDateTimeToString(_selectedBirthDate!),
-        idEndDate: Validation.formatDateTimeToString(_selectedIdExpiryDate!)
-    );
+        idEndDate: Validation.formatDateTimeToString(_selectedIdExpiryDate!));
     // Call create API Update profile
     ref
-        .read(
-        updateProfileViewModelProvider.notifier)
+        .read(updateProfileViewModelProvider.notifier)
         .updateClientProfile(parameters);
 
-    ref
-        .read(enableButtonProviderDefaultTrue
-        .notifier)
-        .state = false;
+    ref.read(enableButtonProviderDefaultTrue.notifier).state = false;
   }
 
   void _resetLogout() {
-    ref
-        .read(
-        updateProfileViewModelProvider.notifier)
-        .resetSate();
-    ref
-        .read(
-        enableButtonProviderDefaultTrue
-            .notifier)
-        .state = true;
+    ref.read(updateProfileViewModelProvider.notifier).resetSate();
+    ref.read(enableButtonProviderDefaultTrue.notifier).state = true;
   }
 }

@@ -45,8 +45,8 @@ class CustomDatePicker extends StatelessWidget {
     safeInitialDate = safeInitialDate.isBefore(safeFirstDate)
         ? safeFirstDate
         : safeInitialDate.isAfter(safeLastDate)
-        ? safeLastDate
-        : safeInitialDate;
+            ? safeLastDate
+            : safeInitialDate;
 
     return showDatePicker(
       context: context,
@@ -93,12 +93,13 @@ class CustomDatePicker extends StatelessWidget {
     );
   }
 }
+
 // Usage example with date display
 class DateSelectionExample extends StatefulWidget {
   const DateSelectionExample({super.key});
 
   @override
-  _DateSelectionExampleState createState() => _DateSelectionExampleState();
+  State createState() => _DateSelectionExampleState();
 }
 
 class _DateSelectionExampleState extends State<DateSelectionExample> {
@@ -129,39 +130,39 @@ class _DateSelectionExampleState extends State<DateSelectionExample> {
   Widget _buildDateDisplay() {
     return _selectedDate != null
         ? Column(
-      children: [
-        Text(
-          'Selected Date:',
-          style: TextStyle(
-            fontSize: 16,
-            color: Colors.grey[600],
-          ),
-        ),
-        const SizedBox(height: 8),
-        Text(
-          DateFormat.yMMMMd().format(_selectedDate!),
-          style: const TextStyle(
-            fontSize: 18,
-            fontWeight: FontWeight.bold,
-          ),
-        ),
-        const SizedBox(height: 8),
-        Text(
-          'Age: ${_calculateAge(_selectedDate!)} years',
-          style: TextStyle(
-            fontSize: 16,
-            color: Colors.blue[700],
-          ),
-        ),
-      ],
-    )
+            children: [
+              Text(
+                'Selected Date:',
+                style: TextStyle(
+                  fontSize: 16,
+                  color: Colors.grey[600],
+                ),
+              ),
+              const SizedBox(height: 8),
+              Text(
+                DateFormat.yMMMMd().format(_selectedDate!),
+                style: const TextStyle(
+                  fontSize: 18,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              const SizedBox(height: 8),
+              Text(
+                'Age: ${_calculateAge(_selectedDate!)} years',
+                style: TextStyle(
+                  fontSize: 16,
+                  color: Colors.blue[700],
+                ),
+              ),
+            ],
+          )
         : Text(
-      'No date selected',
-      style: TextStyle(
-        fontSize: 16,
-        color: Colors.grey[400],
-      ),
-    );
+            'No date selected',
+            style: TextStyle(
+              fontSize: 16,
+              color: Colors.grey[400],
+            ),
+          );
   }
 
   int _calculateAge(DateTime birthDate) {

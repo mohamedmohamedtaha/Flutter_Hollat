@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:hollat/login/Navigator.dart';
+import 'package:hollat/login/navigator.dart';
 import 'package:hollat/login/data/styles.dart';
 
 class SettingsPage extends StatefulWidget {
@@ -41,12 +41,12 @@ class _SettingsPageState extends State<SettingsPage> {
             child: const Text('Close'))
       ],
     )) {
-      case 'YES': //do something
-        break;
-      case 'NO': //do something
-        break;
-      case 'May be': //do something
-        break;
+      // case 'YES': //do something
+      //   break;
+      // case 'NO': //do something
+      //   break;
+      // case 'May be': //do something
+      //   break;
     }
   }
 
@@ -240,7 +240,7 @@ class _SettingsPageState extends State<SettingsPage> {
                 Column(
                   children: List.generate(
                     5,
-                        (index) {
+                    (index) {
                       return Slider.adaptive(
                         max: 20.0,
                         divisions: 20,
@@ -256,7 +256,7 @@ class _SettingsPageState extends State<SettingsPage> {
                 ),
                 ...List.generate(
                   5,
-                      (index) {
+                  (index) {
                     return Slider.adaptive(
                       max: 20.0,
                       divisions: 20,

@@ -1,9 +1,4 @@
-import 'dart:async';
 import 'dart:core';
-import 'package:dio/dio.dart';
-import 'package:hollat/login/data/models/nafath/nafath_response.dart';
-import 'package:hollat/login/network/network_result.dart';
-
 
 enum DioMethod { post, get, put, delete }
 
@@ -56,7 +51,6 @@ class ApiService {
   //     throw Exception('Network Error');
   //   }
   // }
-
 
   // Future<dynamic> reloadCaptcha() async {
   //   try {
@@ -142,21 +136,22 @@ class ApiService {
   //   }
   // }
 
-NetworkResult<NafathResponse> _handleDioError(DioException e) {
-  if (e.response != null) {
-    return Error(
-      e.response!.statusCode ?? 500,
-      e.response?.statusMessage ?? 'Dio error: ${e.message}',
-    );
-  }
-  return switch (e.type) {
-    DioExceptionType.connectionTimeout ||
-    DioExceptionType.sendTimeout ||
-    DioExceptionType.receiveTimeout =>
-        NetworkException(TimeoutException('Connection timeout')),
-    _ => NetworkException(e),
-  };
-}
+// NetworkResult<NafathResponse> _handleDioError(DioException e) {
+//   if (e.response != null) {
+//     return Error(
+//       e.response!.statusCode ?? 500,
+//       e.response?.statusMessage ?? 'Dio error: ${e.message}',
+//     );
+//   }
+//   return switch (e.type) {
+//     DioExceptionType.connectionTimeout ||
+//     DioExceptionType.sendTimeout ||
+//     DioExceptionType.receiveTimeout =>
+//         NetworkException(TimeoutException('Connection timeout')),
+//     _ => NetworkException(e),
+//   };
+// }
+
   // Future<NetworkResult<>> sendOtp() async {
   //   try {
   //     final Duration _timeoutDuration = const Duration(seconds: 10);
@@ -184,10 +179,6 @@ NetworkResult<NafathResponse> _handleDioError(DioException e) {
   //   }
   // }
 
-
-
-
-
   // NetworkResult<NafathResponse> _handleDioError(DioException e) {
   //   if (e.response != null) {
   //     return Error(
@@ -203,70 +194,70 @@ NetworkResult<NafathResponse> _handleDioError(DioException e) {
   //     _ => NetworkException(e),
   //   };
   // }
-  void _handleResponse(Map<String, dynamic> response) {
-    if (response['status'] == 'success') {
-  //    _showSnackBar('Welcome ${response['user_name']}');
-    } else {
-  //    _showSnackBar(response['message'] ?? 'Unknown error occurred');
-    }
-  }
+  // void _handleResponse(Map<String, dynamic> response) {
+  //   if (response['status'] == 'success') {
+  // //    _showSnackBar('Welcome ${response['user_name']}');
+  //   } else {
+  // //    _showSnackBar(response['message'] ?? 'Unknown error occurred');
+  //   }
+  // }
 
-  void _handleDioErrort(DioException e) {
-    String errorMessage = 'An error occurred';
+//   void _handleDioErrort(DioException e) {
+//     String errorMessage = 'An error occurred';
 
-    if (e.response != null) {
-      // The request was made and the server responded with a status code
-      final statusCode = e.response?.statusCode;
-      final errorData = e.response?.data;
+//     if (e.response != null) {
+//       // The request was made and the server responded with a status code
+//       final statusCode = e.response?.statusCode;
+//       final errorData = e.response?.data;
 
-      switch (statusCode) {
-        case 400:
-          errorMessage = errorData['message'] ?? 'Bad request';
-          break;
-        case 401:
-          errorMessage = 'Unauthorized access';
-          break;
-        case 404:
-          errorMessage = 'User not found';
-          break;
-        case 500:
-          errorMessage = 'Server error';
-          break;
-        default:
-          errorMessage = 'Error: $statusCode';
-      }
-    } else {
-      // Error occurred before getting response (timeout, cancellation, etc.)
-      switch (e.type) {
-        case DioExceptionType.connectionTimeout:
-          errorMessage = 'Connection timeout';
-          break;
-        case DioExceptionType.sendTimeout:
-          errorMessage = 'Send timeout';
-          break;
-        case DioExceptionType.receiveTimeout:
-          errorMessage = 'Receive timeout';
-          break;
-        case DioExceptionType.badCertificate:
-          errorMessage = 'Bad certificate';
-          break;
-        case DioExceptionType.badResponse:
-          errorMessage = 'Bad response';
-          break;
-        case DioExceptionType.cancel:
-          errorMessage = 'Request canceled';
-          break;
-        case DioExceptionType.connectionError:
-          errorMessage = 'Connection error';
-          break;
-        case DioExceptionType.unknown:
-          errorMessage = 'Unknown error: ${e.message}';
-          break;
-      }
-    }
+//       switch (statusCode) {
+//         case 400:
+//           errorMessage = errorData['message'] ?? 'Bad request';
+//           break;
+//         case 401:
+//           errorMessage = 'Unauthorized access';
+//           break;
+//         case 404:
+//           errorMessage = 'User not found';
+//           break;
+//         case 500:
+//           errorMessage = 'Server error';
+//           break;
+//         default:
+//           errorMessage = 'Error: $statusCode';
+//       }
+//     } else {
+//       // Error occurred before getting response (timeout, cancellation, etc.)
+//       switch (e.type) {
+//         case DioExceptionType.connectionTimeout:
+//           errorMessage = 'Connection timeout';
+//           break;
+//         case DioExceptionType.sendTimeout:
+//           errorMessage = 'Send timeout';
+//           break;
+//         case DioExceptionType.receiveTimeout:
+//           errorMessage = 'Receive timeout';
+//           break;
+//         case DioExceptionType.badCertificate:
+//           errorMessage = 'Bad certificate';
+//           break;
+//         case DioExceptionType.badResponse:
+//           errorMessage = 'Bad response';
+//           break;
+//         case DioExceptionType.cancel:
+//           errorMessage = 'Request canceled';
+//           break;
+//         case DioExceptionType.connectionError:
+//           errorMessage = 'Connection error';
+//           break;
+//         case DioExceptionType.unknown:
+//           errorMessage = 'Unknown error: ${e.message}';
+//           break;
+//       }
+//     }
 
- //   _showSnackBar(errorMessage);
-  }
+//  //   _showSnackBar(errorMessage);
+//   }
 
   // void _showSnackBar(String message) {
   //   ScaffoldMessenger.of(context).showSnackBar(

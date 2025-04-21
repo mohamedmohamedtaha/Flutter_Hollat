@@ -1,6 +1,6 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'NationalTypes.dart';
+part of 'national_types.dart';
 
 // **************************************************************************
 // JsonSerializableGenerator

@@ -15,10 +15,9 @@ class VerifyOtpVieWModel extends StateNotifier<ConfigState> {
       final captcha = await repository.verifyOtp(parameters);
       state = ConfigSuccess(captcha);
     } on ApiException catch (e) {
-      print('final error: ${e.statusCode} message: ${e.message}');
       state = ConfigErrorApi(e.statusCode ?? 0, e.response);
     } on AppException catch (e) {
-      state = ConfigError(e.message,e.hashCode);
+      state = ConfigError(e.message, e.hashCode);
     }
   }
 

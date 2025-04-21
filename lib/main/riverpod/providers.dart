@@ -1,7 +1,8 @@
 //Services
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:hollat/login/data/database/ServiceConfigDatabaseRepository.dart';
-import 'package:hollat/login/data/database/ServiceConfigDtabaseViewModel.dart';
+import 'package:hollat/login/data/database/service_config_data_source.dart';
+import 'package:hollat/login/data/database/service_config_database_repository.dart';
+import 'package:hollat/login/data/database/service_config_database_viewmodel.dart';
 import 'package:hollat/login/data/database/hive_service.dart';
 import 'package:hollat/login/data/sharedpreferences/local_storage_view_model.dart';
 import 'package:hollat/login/data/viewmodel/config_viewmodel.dart';
@@ -26,13 +27,13 @@ final hiveServiceProvider = FutureProvider((ref) async {
 });
 
 final serviceConfigRepoProvider =
-Provider<ServiceConfigDatabaseRepository>((ref) {
+    Provider<ServiceConfigDatabaseRepository>((ref) {
   final hiveServiceAsyncValue = ref.watch(hiveServiceProvider);
 
   // Access the HiveService when it's loaded
   return hiveServiceAsyncValue.when(
     data: (hiveService) {
-      return ServiceConfigDatabaseRepository(hiveService);
+      return ServiceConfigDataSource(hiveService);
     },
     loading: () {
       throw Exception('HiveService is still loading'); // Handle loading state
@@ -49,16 +50,16 @@ Provider<ServiceConfigDatabaseRepository>((ref) {
 
 //ViewModel
 final configViewModelProvider =
-StateNotifierProvider<ConfigViewModel, ConfigState>((ref) {
-    // ref.watch(configRepositoryProvider);
+    StateNotifierProvider<ConfigViewModel, ConfigState>((ref) {
+  // ref.watch(configRepositoryProvider);
   return ConfigViewModel(ref.read(configRepositoryProvider));
 });
 final serviceConfigDatabaseViewModelProvider = Provider((ref) =>
     ServiceConfigDatabaseViewModel(ref.watch(serviceConfigRepoProvider)));
 
 final localStorageViewModelProvider =
-StateNotifierProvider<LocalStorageServiceVieWModel, bool>(
-      (ref) => LocalStorageServiceVieWModel(),
+    StateNotifierProvider<LocalStorageServiceVieWModel, bool>(
+  (ref) => LocalStorageServiceVieWModel(),
 );
 
 final configRepositoryProvider = Provider<ConfigRepository>((ref) {
@@ -66,10 +67,10 @@ final configRepositoryProvider = Provider<ConfigRepository>((ref) {
 });
 
 final normalLoginRepositoryProvider = Provider<NormalLoginRepository>(
-        (ref) => NormalLoginRepository(ref.read(apiClientProvider)));
+    (ref) => NormalLoginRepository(ref.read(apiClientProvider)));
 
 final normalLoginViewModelProvider =
-StateNotifierProvider.autoDispose<NormalLoginViewModel, ConfigState>((ref) {
+    StateNotifierProvider.autoDispose<NormalLoginViewModel, ConfigState>((ref) {
   return NormalLoginViewModel(
       repository: ref.read(normalLoginRepositoryProvider));
 });
@@ -80,18 +81,19 @@ final getAllNationalTypesViewModelProvider = StateNotifierProvider.autoDispose<
       repository: ref.read(normalLoginRepositoryProvider));
 });
 final nafazLoginViewModelProvider =
-StateNotifierProvider.autoDispose<NafazViewModel, ConfigState>((ref) {
+    StateNotifierProvider.autoDispose<NafazViewModel, ConfigState>((ref) {
   return NafazViewModel(repository: ref.read(normalLoginRepositoryProvider));
 });
 final nafazCodeViewModelProvider =
-StateNotifierProvider.autoDispose<NafazViewModel, ConfigState>((ref) {
+    StateNotifierProvider.autoDispose<NafazViewModel, ConfigState>((ref) {
   return NafazViewModel(repository: ref.read(normalLoginRepositoryProvider));
 });
 final enableButtonProvider = StateProvider.autoDispose((ref) => false);
-final enableButtonProviderDefaultTrue = StateProvider.autoDispose((ref) => true);
+final enableButtonProviderDefaultTrue =
+    StateProvider.autoDispose((ref) => true);
 
 final nafazStatusViewModelProvider =
-StateNotifierProvider.autoDispose<NafazStatusViewModel, ConfigState>((ref) {
+    StateNotifierProvider.autoDispose<NafazStatusViewModel, ConfigState>((ref) {
   return NafazStatusViewModel(
       repository: ref.read(normalLoginRepositoryProvider));
 });
@@ -107,28 +109,30 @@ final resendNafazSendVerifyCodeProvider = StateNotifierProvider.autoDispose<
       repository: ref.read(normalLoginRepositoryProvider));
 });
 final nafazVerifyMobileViewModelProvider =
-StateNotifierProvider.autoDispose<NafazVerifyMobileViewModel, ConfigState>(
+    StateNotifierProvider.autoDispose<NafazVerifyMobileViewModel, ConfigState>(
         (ref) {
-      return NafazVerifyMobileViewModel(
-          repository: ref.read(normalLoginRepositoryProvider));
-    });
+  return NafazVerifyMobileViewModel(
+      repository: ref.read(normalLoginRepositoryProvider));
+});
 final verifyOtpVieWModelProvider =
-StateNotifierProvider.autoDispose<VerifyOtpVieWModel, ConfigState>((ref) {
+    StateNotifierProvider.autoDispose<VerifyOtpVieWModel, ConfigState>((ref) {
   return VerifyOtpVieWModel(
       repository: ref.read(normalLoginRepositoryProvider));
 });
 final sendOtpViewModelProvider =
-StateNotifierProvider.autoDispose<SendOtpViewModel, ConfigState>((ref) {
+    StateNotifierProvider.autoDispose<SendOtpViewModel, ConfigState>((ref) {
   return SendOtpViewModel(repository: ref.read(normalLoginRepositoryProvider));
 });
 
 final normalSendOtpViewModelProvider =
-StateNotifierProvider.autoDispose<SendOtpViewModel, ConfigState>((ref) {
+    StateNotifierProvider.autoDispose<SendOtpViewModel, ConfigState>((ref) {
   return SendOtpViewModel(repository: ref.read(normalLoginRepositoryProvider));
 });
 final createAccountViewModelProvider =
-StateNotifierProvider.autoDispose<CreateAccountViewModel, ConfigState>((ref) {
-  return CreateAccountViewModel(repository: ref.read(normalLoginRepositoryProvider));
+    StateNotifierProvider.autoDispose<CreateAccountViewModel, ConfigState>(
+        (ref) {
+  return CreateAccountViewModel(
+      repository: ref.read(normalLoginRepositoryProvider));
 });
 
 // final nafazViewModelProvider = Provider<NormalLoginRepository>(

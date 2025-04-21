@@ -8,7 +8,7 @@ import 'package:hollat/core/global/theme/font/fonts_size.dart';
 import 'package:hollat/core/init/gen/translations.g.dart';
 import 'package:hollat/core/utils/constants.dart';
 import 'package:hollat/core/utils/show_error_message.dart';
-import 'package:hollat/login/Navigator.dart';
+import 'package:hollat/login/navigator.dart';
 import 'package:hollat/login/data/models/login_response/login_response_model.dart';
 import 'package:hollat/login/data/models/send_otp/send_otp_model.dart';
 import 'package:hollat/login/data/viewmodel/config_viewmodel.dart';
@@ -28,11 +28,11 @@ class VerifyOtpPage extends ConsumerStatefulWidget {
 
   const VerifyOtpPage(
       {required this.moveFrom,
-        required this.phoneNumber,
-        required this.nationalId,
-        required this.captchaKey,
-        required this.captchaCode,
-        super.key});
+      required this.phoneNumber,
+      required this.nationalId,
+      required this.captchaKey,
+      required this.captchaCode,
+      super.key});
 
   @override
   ConsumerState<VerifyOtpPage> createState() => _VerifyOtpPageState();
@@ -40,7 +40,7 @@ class VerifyOtpPage extends ConsumerStatefulWidget {
 
 class _VerifyOtpPageState extends ConsumerState<VerifyOtpPage> {
   final List<TextEditingController> _controllers =
-  List.generate(6, (_) => TextEditingController());
+      List.generate(6, (_) => TextEditingController());
   final List<FocusNode> _focusNodes = List.generate(6, (_) => FocusNode());
 
   String formatDuration(int totalSeconds) {
@@ -115,242 +115,241 @@ class _VerifyOtpPageState extends ConsumerState<VerifyOtpPage> {
             SizedBox(
               height: 20.0,
             ),
-          Container(
-                  width: double.infinity,
-                  decoration: BoxDecoration(
-                      color: AppColorsLight.whiteColor,
-                      borderRadius: BorderRadius.only(
-                          topLeft: Radius.circular(15.0),
-                          topRight: Radius.circular(15.0))),
-                  child: Padding(
-                      padding: const EdgeInsets.only(left: 20.0, right: 20.0),
-                      child: LayoutBuilder(
-                        builder: (context, constraints) {
-                          return FractionallySizedBox(
-                            widthFactor: widthScreen > 500 ? 0.5 : 1.0,
-                            child: Column(
-                              children: [
-                                SizedBox(height: 10),
-                                Image.asset(
-                                  'assets/images/icon_code_confirm.png',
-                                  width: 200,
-                                  height: 150,
-                                  fit: BoxFit.cover,
-                                  alignment: Alignment.center,
-                                ),
-                                // Placeholder for image
-                                CustomText(
-                                  LocaleKeys.confirmationCode.tr(),
-                                  color: AppColorsLight.primaryColor,
-                                  fontSize:FontsSize.font_20,
-                                  fontWeight:  FontWeight.bold,
-                                ),
-                                SizedBox(height: 10),
-                                CustomText(
-                                  LocaleKeys.confirmText.tr(),
-                                  fontSize: FontsSize.font_18,
-                                ),
-                                CustomText(
-                                  color: AppColorsLight.primaryColor,
-                                  widget.phoneNumber,
-                                    fontSize:FontsSize.font_18,
-                                  fontWeight:  FontWeight.bold,
-                                ),
-                                SizedBox(height: 20),
-                                Row(
-                                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                                  children: List.generate(6, (index) {
-                                    return SizedBox(
-                                      width: 40,
-                                      child: TextField(
-                                        controller: _controllers[index],
-                                        focusNode: _focusNodes[index],
-                                        textAlign: TextAlign.center,
-                                        keyboardType: TextInputType.number,
-                                        maxLength: 1,
-                                        decoration: InputDecoration(
-                                          border: OutlineInputBorder(),
-                                        ),
-                                        onChanged: (value) {
-                                          if (value.length == 1) {
-                                            // Move to next field if the input is complete
-                                            if (index < _controllers.length - 1) {
-                                              FocusScope.of(context).requestFocus(
-                                                  _focusNodes[index + 1]);
-                                            }
-                                          }
-                                        },
-                                      ),
-                                    );
-                                  }),
-                                ),
-                                SizedBox(height: 20),
-                                Consumer(
-                                  builder: (context, ref, child) {
-                                    var timerState =
+            Container(
+              width: double.infinity,
+              decoration: BoxDecoration(
+                  color: AppColorsLight.whiteColor,
+                  borderRadius: BorderRadius.only(
+                      topLeft: Radius.circular(15.0),
+                      topRight: Radius.circular(15.0))),
+              child: Padding(
+                  padding: const EdgeInsets.only(left: 20.0, right: 20.0),
+                  child: LayoutBuilder(
+                    builder: (context, constraints) {
+                      return FractionallySizedBox(
+                        widthFactor: widthScreen > 500 ? 0.5 : 1.0,
+                        child: Column(
+                          children: [
+                            SizedBox(height: 10),
+                            Image.asset(
+                              'assets/images/icon_code_confirm.png',
+                              width: 200,
+                              height: 150,
+                              fit: BoxFit.cover,
+                              alignment: Alignment.center,
+                            ),
+                            // Placeholder for image
+                            CustomText(
+                              LocaleKeys.confirmationCode.tr(),
+                              color: AppColorsLight.primaryColor,
+                              fontSize: FontsSize.font_20,
+                              fontWeight: FontWeight.bold,
+                            ),
+                            SizedBox(height: 10),
+                            CustomText(
+                              LocaleKeys.confirmText.tr(),
+                              fontSize: FontsSize.font_18,
+                            ),
+                            CustomText(
+                              color: AppColorsLight.primaryColor,
+                              widget.phoneNumber,
+                              fontSize: FontsSize.font_18,
+                              fontWeight: FontWeight.bold,
+                            ),
+                            SizedBox(height: 20),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                              children: List.generate(6, (index) {
+                                return SizedBox(
+                                  width: 40,
+                                  child: TextField(
+                                    controller: _controllers[index],
+                                    focusNode: _focusNodes[index],
+                                    textAlign: TextAlign.center,
+                                    keyboardType: TextInputType.number,
+                                    maxLength: 1,
+                                    decoration: InputDecoration(
+                                      border: OutlineInputBorder(),
+                                    ),
+                                    onChanged: (value) {
+                                      if (value.length == 1) {
+                                        // Move to next field if the input is complete
+                                        if (index < _controllers.length - 1) {
+                                          FocusScope.of(context).requestFocus(
+                                              _focusNodes[index + 1]);
+                                        }
+                                      }
+                                    },
+                                  ),
+                                );
+                              }),
+                            ),
+                            SizedBox(height: 20),
+                            Consumer(
+                              builder: (context, ref, child) {
+                                var timerState =
                                     ref.watch(timerViewModelProvider);
-                                    if (timerState <= 0) {
-                                      _resetDefaultButton(false);
-                                      _resetAntherButton(true);
-                                    }else{
-                                      _resetAntherButton(false);
-                                    }
-                                    return CustomText(
-                                      formatDuration(timerState),
-                                      textAlign: TextAlign.center,
-                                      fontSize: FontsSize.font_15,
-                                      fontWeight:  FontWeight.bold,
-                                      color: AppColorsLight.primaryColor,
-                                    );
-                                  },
-                                ),
-                                SizedBox(height: 20),
-                                Consumer(
-                                  builder: (context, ref, child) {
-                                    //Nafaz response
-                                    final nafazState =
-                                    ref.watch(nafazVerifyMobileViewModelProvider);
-                                    final enableButtonProviderDefault =
+                                if (timerState <= 0) {
+                                  _resetDefaultButton(false);
+                                  _resetAntherButton(true);
+                                } else {
+                                  _resetAntherButton(false);
+                                }
+                                return CustomText(
+                                  formatDuration(timerState),
+                                  textAlign: TextAlign.center,
+                                  fontSize: FontsSize.font_15,
+                                  fontWeight: FontWeight.bold,
+                                  color: AppColorsLight.primaryColor,
+                                );
+                              },
+                            ),
+                            SizedBox(height: 20),
+                            Consumer(
+                              builder: (context, ref, child) {
+                                //Nafaz response
+                                final nafazState = ref
+                                    .watch(nafazVerifyMobileViewModelProvider);
+                                final enableButtonProviderDefault =
                                     ref.watch(enableButtonProviderDefaultTrue);
-                                    // Check if the API is in loading state for nafaz
-                                    if (nafazState is ConfigLoading) {
-                                      return Center(
-                                          child: CircularProgressIndicator());
-                                    }
+                                // Check if the API is in loading state for nafaz
+                                if (nafazState is ConfigLoading) {
+                                  return Center(
+                                      child: CircularProgressIndicator());
+                                }
 
-                                    nafazState.whenOrNull(success: (data) {
-                                      goToMainPage();
-                                    }, error: (message, code) {
-                                      showErrorMessage(context, code, message);
-                                      _resetDefaultButton(true);
-                                      _resetNazafVerifyMobile();
-                                    }, errorApi: (code, data) {
-                                      showErrorMessageApi(context, code, data);
-                                      _resetDefaultButton(true);
-                                      _resetNazafVerifyMobile();
-                                    });
-                                    //Verify code
-                                    final verifyState =
+                                nafazState.whenOrNull(success: (data) {
+                                  goToMainPage();
+                                }, error: (message, code) {
+                                  showErrorMessage(context, code, message);
+                                  _resetDefaultButton(true);
+                                  _resetNazafVerifyMobile();
+                                }, errorApi: (code, data) {
+                                  showErrorMessageApi(context, code, data);
+                                  _resetDefaultButton(true);
+                                  _resetNazafVerifyMobile();
+                                });
+                                //Verify code
+                                final verifyState =
                                     ref.watch(verifyOtpVieWModelProvider);
 
-                                    if (verifyState is ConfigLoading) {
-                                      return Center(
-                                          child: CircularProgressIndicator());
-                                    }
-                                    verifyState.whenOrNull(success: (data) {
-                                      goToMainPage();
-                                    }, error: (message, code) {
-                                      showErrorMessage(context, code, message);
-                                      _resetVerifyOtp();
-                                      _resetDefaultButton(true);
-                                    }, errorApi: (code, data) {
-                                      showErrorMessageApi(context, code, data);
-                                      _resetVerifyOtp();
-                                      _resetDefaultButton(true);
-                                    });
-                                    return CustomElevatedButton(
-                                      text: LocaleKeys.confirmationCode.tr(),
-                                      textStyle: const TextStyle(
-                                          fontSize: 18, letterSpacing: 1.2),
-                                      enabled: enableButtonProviderDefault,
-                                      onPressed: enableButtonProviderDefault
-                                          ? () {
-                                        _callVerifyMobile();
-                                      }
-                                          : null,
-                                    );
-                                  },
-                                ),
-                                Consumer(
-                                  builder: (context, ref, child) {
-                                    final enableButton =
-                                    ref.watch(enableButtonProvider);
-                                    //Nafaz response resend
-                                    final nafazState =
-                                    ref.watch(resendNafazSendVerifyCodeProvider);
-                                    if (nafazState is ConfigLoading) {
-                                      return Center(
-                                          child: CircularProgressIndicator());
-                                    }
-                                    nafazState.whenOrNull(success: (data) {
-                                      WidgetsBinding.instance
-                                          .addPostFrameCallback((_) {
-                                        _resetDefaultButton(true);
-                                        _resetNafazSendVerifyCode();
-                                        ref
-                                            .read(timerViewModelProvider.notifier)
-                                            .resetTimer(1);
-                                      });
-                                    }, error: (message, code) {
-                                      showErrorMessage(context, code, message);
-                                      _resetAntherButton(true);
-                                      _resetNafazSendVerifyCode();
-
-                                    }, errorApi: (code, data) {
-                                      showErrorMessageApi(context, code, data);
-                                      _resetAntherButton(true);
-                                      _resetNafazSendVerifyCode();
-                                    });
-
-                                    //Verify code resend
-                                    final verifyState =
-                                    ref.watch(sendOtpViewModelProvider);
-                                    if (verifyState is ConfigLoading) {
-                                      return Center(
-                                          child: CircularProgressIndicator());
-                                    }
-                                    verifyState.whenOrNull(success: (data) {
-                                      WidgetsBinding.instance
-                                          .addPostFrameCallback((_) {
-                                        _resetDefaultButton(true);
-                                        _resetSendOtp();
-                                        ref
-                                            .read(timerViewModelProvider.notifier)
-                                            .resetTimer(1);
-                                      });
-                                    }, error: (message, code) {
-                                      showErrorMessage(context, code, message);
-                                      _resetAntherButton(true);
-                                      _resetSendOtp();
-                                    }, errorApi: (code, data) {
-                                      showErrorMessageApi(context, code, data);
-                                      _resetAntherButton(true);
-                                      _resetSendOtp();
-                                    });
-                                    return Row(
-                                      mainAxisAlignment: MainAxisAlignment.center,
-                                      mainAxisSize: MainAxisSize.min,
-                                      // Center horizontally
-                                      children: [
-                                        Icon(
-                                          Icons.sync,
-                                          color: AppColorsLight.redColor,
-                                          size: 20.0,
-                                        ),
-                                        TextButton(
-                                          onPressed: enableButton
-                                              ? () {
-                                            _resendCode();
-                                          }
-                                              : null,
-                                          child: Text(
-                                            LocaleKeys.resendCode.tr(),
-                                            style: TextStyle(
-                                                color: enableButton
-                                                    ? Colors.red
-                                                    : Colors.grey),
-                                          ),
-                                        ),
-                                      ],
-                                    );
-                                  },
-                                )
-                              ],
+                                if (verifyState is ConfigLoading) {
+                                  return Center(
+                                      child: CircularProgressIndicator());
+                                }
+                                verifyState.whenOrNull(success: (data) {
+                                  goToMainPage();
+                                }, error: (message, code) {
+                                  showErrorMessage(context, code, message);
+                                  _resetVerifyOtp();
+                                  _resetDefaultButton(true);
+                                }, errorApi: (code, data) {
+                                  showErrorMessageApi(context, code, data);
+                                  _resetVerifyOtp();
+                                  _resetDefaultButton(true);
+                                });
+                                return CustomElevatedButton(
+                                  text: LocaleKeys.confirmationCode.tr(),
+                                  textStyle: const TextStyle(
+                                      fontSize: 18, letterSpacing: 1.2),
+                                  enabled: enableButtonProviderDefault,
+                                  onPressed: enableButtonProviderDefault
+                                      ? () {
+                                          _callVerifyMobile();
+                                        }
+                                      : null,
+                                );
+                              },
                             ),
-                          );
-                        },
-                      )),
-                )
+                            Consumer(
+                              builder: (context, ref, child) {
+                                final enableButton =
+                                    ref.watch(enableButtonProvider);
+                                //Nafaz response resend
+                                final nafazState = ref
+                                    .watch(resendNafazSendVerifyCodeProvider);
+                                if (nafazState is ConfigLoading) {
+                                  return Center(
+                                      child: CircularProgressIndicator());
+                                }
+                                nafazState.whenOrNull(success: (data) {
+                                  WidgetsBinding.instance
+                                      .addPostFrameCallback((_) {
+                                    _resetDefaultButton(true);
+                                    _resetNafazSendVerifyCode();
+                                    ref
+                                        .read(timerViewModelProvider.notifier)
+                                        .resetTimer(1);
+                                  });
+                                }, error: (message, code) {
+                                  showErrorMessage(context, code, message);
+                                  _resetAntherButton(true);
+                                  _resetNafazSendVerifyCode();
+                                }, errorApi: (code, data) {
+                                  showErrorMessageApi(context, code, data);
+                                  _resetAntherButton(true);
+                                  _resetNafazSendVerifyCode();
+                                });
+
+                                //Verify code resend
+                                final verifyState =
+                                    ref.watch(sendOtpViewModelProvider);
+                                if (verifyState is ConfigLoading) {
+                                  return Center(
+                                      child: CircularProgressIndicator());
+                                }
+                                verifyState.whenOrNull(success: (data) {
+                                  WidgetsBinding.instance
+                                      .addPostFrameCallback((_) {
+                                    _resetDefaultButton(true);
+                                    _resetSendOtp();
+                                    ref
+                                        .read(timerViewModelProvider.notifier)
+                                        .resetTimer(1);
+                                  });
+                                }, error: (message, code) {
+                                  showErrorMessage(context, code, message);
+                                  _resetAntherButton(true);
+                                  _resetSendOtp();
+                                }, errorApi: (code, data) {
+                                  showErrorMessageApi(context, code, data);
+                                  _resetAntherButton(true);
+                                  _resetSendOtp();
+                                });
+                                return Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  mainAxisSize: MainAxisSize.min,
+                                  // Center horizontally
+                                  children: [
+                                    Icon(
+                                      Icons.sync,
+                                      color: AppColorsLight.redColor,
+                                      size: 20.0,
+                                    ),
+                                    TextButton(
+                                      onPressed: enableButton
+                                          ? () {
+                                              _resendCode();
+                                            }
+                                          : null,
+                                      child: Text(
+                                        LocaleKeys.resendCode.tr(),
+                                        style: TextStyle(
+                                            color: enableButton
+                                                ? Colors.red
+                                                : Colors.grey),
+                                      ),
+                                    ),
+                                  ],
+                                );
+                              },
+                            )
+                          ],
+                        ),
+                      );
+                    },
+                  )),
+            )
           ],
         ),
       ),
@@ -420,7 +419,7 @@ class _VerifyOtpPageState extends ConsumerState<VerifyOtpPage> {
       showMessage(context, LocaleKeys.confirmationCodeRequired.tr());
       return;
     }
-    if (widget.moveFrom == Constants.NAFAZ) {
+    if (widget.moveFrom == Constants.nafaz) {
       var loginResponseParameters = LoginResponseParameters(
           otpCode: otpCode,
           mobile: widget.phoneNumber,
@@ -428,7 +427,7 @@ class _VerifyOtpPageState extends ConsumerState<VerifyOtpPage> {
       ref
           .read(nafazVerifyMobileViewModelProvider.notifier)
           .nafathVerifyMobile(loginResponseParameters);
-    } else if (widget.moveFrom == Constants.NORMAL) {
+    } else if (widget.moveFrom == Constants.normal) {
       var parameters = LoginResponseParameters(
           otpCode: otpCode,
           mobile: widget.phoneNumber,
@@ -444,6 +443,7 @@ class _VerifyOtpPageState extends ConsumerState<VerifyOtpPage> {
       ref.read(sendOtpViewModelProvider.notifier).restState();
     });
   }
+
   void _resetNafazSendVerifyCode() {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       ref.read(resendNafazSendVerifyCodeProvider.notifier).restState();
@@ -451,15 +451,15 @@ class _VerifyOtpPageState extends ConsumerState<VerifyOtpPage> {
   }
 
   void _resendCode() {
-    if (widget.moveFrom == Constants.NAFAZ) {
+    if (widget.moveFrom == Constants.nafaz) {
       var email = ref.watch(nafazSendVerifyCodeProvider.notifier).email;
       var parameters =
-      ResponseParameters(mobile: widget.phoneNumber, email: email);
+          ResponseParameters(mobile: widget.phoneNumber, email: email);
 
       ref
           .read(resendNafazSendVerifyCodeProvider.notifier)
           .nafazSendVerifyCode(parameters);
-    } else if (widget.moveFrom == Constants.NORMAL) {
+    } else if (widget.moveFrom == Constants.normal) {
       var parameters = SendOtpModel(
           capatchaCode: widget.captchaCode,
           key: widget.captchaKey,

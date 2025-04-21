@@ -3,11 +3,12 @@ import 'package:hollat/login/domain/entities/error_response/error_response.dart'
 class ErrorResponseModel extends ErrorResponse {
   const ErrorResponseModel({required super.message, required super.errors});
 
-  factory ErrorResponseModel.fromJson(Map<String, dynamic>json)=>
+  factory ErrorResponseModel.fromJson(Map<String, dynamic> json) =>
       ErrorResponseModel(
           message: json['message'] as String?,
           errors: (json['errors'] as Map<String, dynamic>?)?.map((key, value) =>
-          MapEntry(key,(value as List<dynamic>).map((e) =>e as String).toList())));
+              MapEntry(key,
+                  (value as List<dynamic>).map((e) => e as String).toList())));
   // factory ErrorResponseModel.fromJson(Map<String, dynamic> json){
   //   List<String> errorMessages = [];
   //   // Check if 'errors' is of type Map<String, dynamic>

@@ -1,5 +1,5 @@
-class Constants{
-  static const String NAFAZ = "nafaz";
-  static const String NORMAL = "normal";
-  static const String MODE_KEY = 'modeKey';
+class Constants {
+  static const String nafaz = "nafaz";
+  static const String normal = "normal";
+  static const String modeKey = 'modeKey';
 }

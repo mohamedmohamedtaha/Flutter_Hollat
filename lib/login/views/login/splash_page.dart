@@ -3,12 +3,11 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:hollat/core/utils/show_error_message.dart';
-import 'package:hollat/login/Navigator.dart';
+import 'package:hollat/login/navigator.dart';
 import 'package:hollat/login/data/database/service_config_database.dart';
 import 'package:hollat/login/data/sharedpreferences/save_token.dart';
 import 'package:hollat/login/data/viewmodel/config_viewmodel.dart';
 import 'package:hollat/login/domain/entities/config_response/service_config_response.dart';
-import 'package:hollat/login/domain/entities/config_response/theme_config.dart';
 import 'package:hollat/login/presentation/widgets/custom_text.dart';
 import 'package:hollat/login/views/login/nafaz_login_page.dart';
 import 'package:hollat/login/views/login/normal_login_page.dart';
@@ -19,10 +18,10 @@ class SplashPage extends ConsumerStatefulWidget {
   const SplashPage({super.key});
 
   @override
-  ConsumerState<SplashPage> createState() => SplashPage_State();
+  ConsumerState<SplashPage> createState() => SplashPageState();
 }
 
-class SplashPage_State extends ConsumerState<SplashPage> {
+class SplashPageState extends ConsumerState<SplashPage> {
   late Timer _timer;
   bool _isImageLoaded = false;
   String nafathEnabled = '';
@@ -31,7 +30,7 @@ class SplashPage_State extends ConsumerState<SplashPage> {
   void initState() {
     super.initState();
     Future.microtask(
-          () {
+      () {
         ref.read(configViewModelProvider.notifier).loadConfig();
         startNavigationByTimer();
       },
@@ -81,37 +80,36 @@ class SplashPage_State extends ConsumerState<SplashPage> {
               return switch (configState) {
                 ConfigInitial() => const SizedBox.shrink(),
                 ConfigLoading() =>
-                const Center(child: CircularProgressIndicator()),
+                  const Center(child: CircularProgressIndicator()),
                 ConfigSuccess(:final data) => Padding(
                     padding: const EdgeInsets.all(16.0),
                     child: Center(
                         child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Container(
-                              decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(5),
-                                  color: Colors.white),
-                              child: Image.network(
-                                  frameBuilder: (context, child, frame,
-                                      wasSynchronouslyLoaded) {
-                                    if (frame != null) {
-                                      _saveConfiguration(data);
-                                    }
-                                    return child;
-                                  },
-                                  data.theme.logo.value ?? '',
-                                  errorBuilder: (context, error, stackTrace) {
-                                    return Image.asset(
-                                        'assets/images/hollatksa_logo');
-                                  }),
-                            )
-                          ],
-                        ))),
-                ConfigError(:final message) =>_showError(message),
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Container(
+                          decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(5),
+                              color: Colors.white),
+                          child: Image.network(
+                              frameBuilder: (context, child, frame,
+                                  wasSynchronouslyLoaded) {
+                                if (frame != null) {
+                                  _saveConfiguration(data);
+                                }
+                                return child;
+                              },
+                              data.theme.logo.value ?? '',
+                              errorBuilder: (context, error, stackTrace) {
+                                return Image.asset(
+                                    'assets/images/hollatksa_logo');
+                              }),
+                        )
+                      ],
+                    ))),
+                ConfigError(:final message) => _showError(message),
                 ConfigErrorApi(:final code, :final data) =>
-                    _showErrorApi(code, data),
-                _ => Container(),
+                  _showErrorApi(code, data),
               };
             },
             error: (e, stack) =>
@@ -123,58 +121,39 @@ class SplashPage_State extends ConsumerState<SplashPage> {
 
   Widget _showError(String message) {
     _resetConfig();
-    return  Center(
-      child: CustomText('Error: $message'));
+    return Center(child: CustomText('Error: $message'));
   }
 
-  Widget _showErrorApi(int code,ServiceConfigResponse data) {
-         _resetConfig();
+  Widget _showErrorApi(int code, ServiceConfigResponse data) {
+    _resetConfig();
     showErrorMessageApi(context, code, data);
     return Center(child: CustomText('Error: $code'));
   }
 
   void _saveConfiguration(ServiceConfigResponse data) {
-    ServiceConfigDatabase serviceConfigDatabase =
-    ServiceConfigDatabase();
-    ThemeConfig theme = data.theme;
-    serviceConfigDatabase.largeLogo =
-        data.theme.logo.value ?? '';
-    serviceConfigDatabase.smallLogo =
-        data.theme.miniLogo.value ?? "";
-    serviceConfigDatabase.primaryColor =
-        data.theme.headerColor.value ?? '';
-    serviceConfigDatabase.smallImage =
-        data.theme.miniLogo.value ?? '';
+    ServiceConfigDatabase serviceConfigDatabase = ServiceConfigDatabase();
+    serviceConfigDatabase.largeLogo = data.theme.logo.value;
+    serviceConfigDatabase.smallLogo = data.theme.miniLogo.value;
+    serviceConfigDatabase.primaryColor = data.theme.headerColor.value;
+    serviceConfigDatabase.smallImage = data.theme.miniLogo.value;
 
     //---------------------------- Login Config ----------------------------
-    serviceConfigDatabase.nafathEnabled =
-        data.nafathEnabled.value ?? '';
-    nafathEnabled =
-        data.nafathEnabled.value ?? '';
-    serviceConfigDatabase.selfServiceOtpBy =
-        data.selfServiceOtpBy.value;
-    serviceConfigDatabase
-        .verifyMobileAfterLoginWithEmail = data
-        .verifyMobileAfterLoginWithEmail
-        ?.value ??
-        '';
-    ref
-        .read(
-        serviceConfigDatabaseViewModelProvider)
-        .clearConfig();
+    serviceConfigDatabase.nafathEnabled = data.nafathEnabled.value;
+    nafathEnabled = data.nafathEnabled.value;
+    serviceConfigDatabase.selfServiceOtpBy = data.selfServiceOtpBy.value;
+    serviceConfigDatabase.verifyMobileAfterLoginWithEmail =
+        data.verifyMobileAfterLoginWithEmail?.value ?? '';
+    ref.read(serviceConfigDatabaseViewModelProvider).clearConfig();
 
     ref
-        .read(
-        serviceConfigDatabaseViewModelProvider)
+        .read(serviceConfigDatabaseViewModelProvider)
         .saveConfig(serviceConfigDatabase);
     _isImageLoaded = true;
   }
-  void _resetConfig(){
-    WidgetsBinding.instance.addPostFrameCallback((_){
-      ref
-          .read(
-          configViewModelProvider.notifier)
-          .resetConfig();
+
+  void _resetConfig() {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      ref.read(configViewModelProvider.notifier).resetConfig();
     });
   }
 }

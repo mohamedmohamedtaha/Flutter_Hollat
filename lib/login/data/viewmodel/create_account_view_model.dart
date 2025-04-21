@@ -15,7 +15,7 @@ class CreateAccountViewModel extends StateNotifier<ConfigState> {
       final data = await repository.createClient(parameters);
       state = ConfigSuccess(data);
     } on ApiException catch (e) {
-      print('final error: ${e.statusCode} message: ${e.message} e.response.data ${e.response?.data.toString()}');
+      // print('final error: ${e.statusCode} message: ${e.message} e.response.data ${e.response?.data.toString()}');
       state = ConfigErrorApi(e.statusCode ?? 0, e.response);
     } on AppException catch (e) {
       state = ConfigError(e.message, e.hashCode);

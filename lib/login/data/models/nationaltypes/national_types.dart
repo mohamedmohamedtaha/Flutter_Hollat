@@ -1,7 +1,8 @@
 import 'package:json_annotation/json_annotation.dart';
-part 'NationalTypes.g.dart';
+part 'national_types.g.dart';
+
 @JsonSerializable()
-class NationalTypes{
+class NationalTypes {
   @JsonKey(name: 'created_at')
   final String createdAt;
   @JsonKey(name: 'deleted_at')
@@ -15,13 +16,13 @@ class NationalTypes{
   final String updatedAt;
 
   NationalTypes({
-  required this.createdAt,
-  this.deletedAt,
-  required this.id,
-  required this.titleAr,
-  required this.titleEn,
-  required this.updatedAt,
-});
+    required this.createdAt,
+    this.deletedAt,
+    required this.id,
+    required this.titleAr,
+    required this.titleEn,
+    required this.updatedAt,
+  });
   factory NationalTypes.fromJson(Map<String, dynamic> json) =>
       _$NationalTypesFromJson(json);
 

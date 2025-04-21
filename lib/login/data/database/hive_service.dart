@@ -3,8 +3,9 @@ import 'package:hollat/login/data/database/service_config_database.dart';
 
 class HiveService {
   static const String _configBox = 'config_box';
-
   Future<void> init() async {
+    await Hive.initFlutter();
+    Hive.registerAdapter(ServiceConfigDatabaseAdapter());
     await Hive.openBox<ServiceConfigDatabase>(_configBox);
   }
 

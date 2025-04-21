@@ -38,12 +38,12 @@ class Pivot {
     required this.updatedAt,
   });
   // Add these methods to handle conversion
-  static int _parseInt(dynamic value) {
-    if (value is String) return int.parse(value);
-    return value as int;
-  }
+  // static int _parseInt(dynamic value) {
+  //   if (value is String) return int.parse(value);
+  //   return value as int;
+  // }
 
-  static String _toString(int value) => value.toString();
+  // static String _toString(int value) => value.toString();
 
   factory Pivot.fromJson(Map<String, dynamic> json) => _$PivotFromJson(json);
   Map<String, dynamic> toJson() => _$PivotToJson(this);
@@ -66,8 +66,8 @@ class Pivot {
   @override
   int get hashCode {
     return id.hashCode ^
-    clientId.hashCode ^
-    hospitalId.hashCode ^
-    fileNumber.hashCode;
+        clientId.hashCode ^
+        hospitalId.hashCode ^
+        fileNumber.hashCode;
   }
 }

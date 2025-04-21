@@ -25,7 +25,7 @@ class NavbarWidget extends StatelessWidget {
                   decoration: BoxDecoration(
                     color: AppColorsLight.whiteColor,
                     borderRadius:
-                    BorderRadius.vertical(top: Radius.circular(15)),
+                        BorderRadius.vertical(top: Radius.circular(15)),
                     boxShadow: [
                       BoxShadow(
                         color: Colors.black26,
@@ -38,7 +38,7 @@ class NavbarWidget extends StatelessWidget {
                     items: [
                       BottomNavigationBarItem(
                         icon: Icon(Icons.home),
-                        label:  LocaleKeys.home.tr(),
+                        label: LocaleKeys.home.tr(),
                       ),
                       BottomNavigationBarItem(
                         icon: Icon(Icons.account_balance),
@@ -62,12 +62,12 @@ class NavbarWidget extends StatelessWidget {
                     onTap: (value) {
                       if (value == 2) {
                         // Central button action can be handled here
-                        print("Central button tapped");
+                        // print("Central button tapped");
                       } else {
                         selectedPageNotifier.value = value;
                       }
                     },
-                    selectedItemColor:AppColorsLight.colorPrimaryDark,
+                    selectedItemColor: AppColorsLight.colorPrimaryDark,
                     unselectedItemColor: AppColorsLight.gray,
                     type: BottomNavigationBarType.fixed,
                     backgroundColor: Colors.transparent,
@@ -83,9 +83,7 @@ class NavbarWidget extends StatelessWidget {
                   bottom: kBottomNavigationBarHeight / 2,
                   // Center vertically relative to the bar, // Adjust to be above the navigation bar
                   child: GestureDetector(
-                    onTap: () {
-                      print("Central button tapped!"); // Your action here
-                    },
+                    onTap: () {},
                     child: Container(
                         width: 65,
                         height: 70,
@@ -111,7 +109,7 @@ class NavbarWidget extends StatelessWidget {
                             ),
                           ),
                         ) // Replace with your icon
-                    ),
+                        ),
                   ),
                 ),
               ],

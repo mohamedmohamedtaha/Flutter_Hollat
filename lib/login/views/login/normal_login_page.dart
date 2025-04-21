@@ -10,7 +10,7 @@ import 'package:hollat/core/init/gen/translations.g.dart';
 import 'package:hollat/core/utils/constants.dart';
 import 'package:hollat/core/utils/show_error_message.dart';
 import 'package:hollat/easy_localization/app_lang.dart';
-import 'package:hollat/login/Navigator.dart';
+import 'package:hollat/login/navigator.dart';
 import 'package:hollat/login/data/models/reloadcaptcha/captcha.dart';
 import 'package:hollat/login/data/models/send_otp/send_otp_model.dart';
 import 'package:hollat/login/data/viewmodel/config_viewmodel.dart';
@@ -37,17 +37,20 @@ class _NormalLoginPageState extends ConsumerState<NormalLoginPage> {
   CountryCode _selectedCountry = CountryCode.fromCountryCode('SA');
   TextEditingController controllerIdNumber = TextEditingController();
   String key = '';
-  String selfServiceOtpBy='';
+  String selfServiceOtpBy = '';
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     Future.microtask(
-          () {
-            reloadCaptcha();
-            ref.read(serviceConfigDatabaseViewModelProvider).getAllConfig();
-            selfServiceOtpBy = ref.watch(serviceConfigDatabaseViewModelProvider).config?.selfServiceOtpBy ?? '';
+      () {
+        reloadCaptcha();
+        ref.read(serviceConfigDatabaseViewModelProvider).getAllConfig();
+        selfServiceOtpBy = ref
+                .watch(serviceConfigDatabaseViewModelProvider)
+                .config
+                ?.selfServiceOtpBy ??
+            '';
       },
     );
   }
@@ -152,17 +155,19 @@ class _NormalLoginPageState extends ConsumerState<NormalLoginPage> {
                                 SizedBox(width: 10),
                                 Consumer(builder: (context, ref, child) {
                                   final state =
-                                  ref.watch(normalLoginViewModelProvider);
+                                      ref.watch(normalLoginViewModelProvider);
                                   return switch (state) {
                                     ConfigInitial() => const SizedBox.shrink(),
                                     ConfigLoading() => const Center(
                                         child: CircularProgressIndicator()),
                                     ConfigSuccess(:final data) =>
-                                        _capatcha(data),
-                                    ConfigErrorApi(:final code, :final data) => _errorApi(code,data),
-                                    ConfigError(:final message) => CustomText('Error: $message'),
+                                      _capatcha(data),
+                                    ConfigErrorApi(:final code, :final data) =>
+                                      _errorApi(code, data),
+                                    ConfigError(:final message) =>
+                                      CustomText('Error: $message'),
                                     NormalLoginRepository() =>
-                                    throw UnimplementedError(),
+                                      throw UnimplementedError(),
                                   };
                                 }),
                                 SizedBox(width: 10),
@@ -186,53 +191,55 @@ class _NormalLoginPageState extends ConsumerState<NormalLoginPage> {
                             Consumer(
                               builder: (context, ref, child) {
                                 var normalLoginState =
-                                ref.watch(normalSendOtpViewModelProvider);
+                                    ref.watch(normalSendOtpViewModelProvider);
                                 final enableButton =
-                                ref.watch(enableButtonProviderDefaultTrue);
+                                    ref.watch(enableButtonProviderDefaultTrue);
 
                                 if (normalLoginState is ConfigLoading) {
-                                  return Center(child: CircularProgressIndicator());
+                                  return Center(
+                                      child: CircularProgressIndicator());
                                 }
                                 normalLoginState.whenOrNull(success: (data) {
                                   showMessage(context, data.message);
                                   WidgetsBinding.instance
                                       .addPostFrameCallback((_) async {
                                     if (mounted) {
-                                    _resetNormalSendOtp();
-                                      if(selfServiceOtpBy == 'sms'){
+                                      _resetNormalSendOtp();
+                                      if (selfServiceOtpBy == 'sms') {
                                         navigatorControllerPush(
                                             context,
                                             VerifyOtpPage(
-                                              moveFrom: Constants.NORMAL,
+                                              moveFrom: Constants.normal,
                                               phoneNumber:
-                                              controllerPhoneNumber.text,
+                                                  controllerPhoneNumber.text,
                                               captchaKey: key,
                                               captchaCode:
-                                              controllerCheckCode.text,
-                                              nationalId: controllerIdNumber.text,
+                                                  controllerCheckCode.text,
+                                              nationalId:
+                                                  controllerIdNumber.text,
                                             ));
-                                      }else {
+                                      } else {
                                         navigatorControllerPush(
                                             context,
                                             VerifyOtpPage(
-                                              moveFrom: Constants.NORMAL,
+                                              moveFrom: Constants.normal,
                                               phoneNumber:
-                                              controllerPhoneNumber.text,
+                                                  controllerPhoneNumber.text,
                                               captchaKey: key,
                                               captchaCode:
-                                              controllerCheckCode.text,
-                                              nationalId: controllerIdNumber.text,
+                                                  controllerCheckCode.text,
+                                              nationalId:
+                                                  controllerIdNumber.text,
                                             ));
                                       }
-
                                     }
                                   });
                                 }, error: (message, code) {
-                                    showErrorMessage(context, code, message);
-                                    _resetNormalSendOtp();
+                                  showErrorMessage(context, code, message);
+                                  _resetNormalSendOtp();
                                 }, errorApi: (code, data) {
-                                    showErrorMessageApi(context, code, data);
-                                    _resetNormalSendOtp();
+                                  showErrorMessageApi(context, code, data);
+                                  _resetNormalSendOtp();
                                 });
                                 return Column(
                                   children: [
@@ -241,8 +248,8 @@ class _NormalLoginPageState extends ConsumerState<NormalLoginPage> {
                                       enabled: enableButton,
                                       onPressed: enableButton
                                           ? () {
-                                        _login();
-                                      }
+                                              _login();
+                                            }
                                           : null,
                                     ),
                                     SizedBox(height: 10),
@@ -253,9 +260,9 @@ class _NormalLoginPageState extends ConsumerState<NormalLoginPage> {
                                       enabled: enableButton,
                                       onPressed: enableButton
                                           ? () {
-                                        navigatorControllerPush(
-                                            context, RegisterPage());
-                                      }
+                                              navigatorControllerPush(
+                                                  context, RegisterPage());
+                                            }
                                           : null,
                                     ),
                                   ],
@@ -307,81 +314,52 @@ class _NormalLoginPageState extends ConsumerState<NormalLoginPage> {
       ),
     );
   }
-  Widget _errorApi(int code,dynamic data) {
+
+  Widget _errorApi(int code, dynamic data) {
     showErrorMessageApi(context, code, data);
     key = data.key;
     return CustomText('Error Api');
   }
+
   Widget _capatcha(Captcha data) {
     key = data.key;
     return CustomCaptcha(captcha: data);
   }
+
   void reloadCaptcha() {
     ref.read(normalLoginViewModelProvider.notifier).reloadCaptcha();
   }
 
   void _resetNormalSendOtp() {
-    WidgetsBinding.instance.addPostFrameCallback((_){
-      ref
-          .read(enableButtonProviderDefaultTrue
-          .notifier)
-          .state = true;
-      ref
-          .read(normalSendOtpViewModelProvider
-          .notifier)
-          .restState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      ref.read(enableButtonProviderDefaultTrue.notifier).state = true;
+      ref.read(normalSendOtpViewModelProvider.notifier).restState();
     });
-
   }
 
   void _login() {
-    var phone = Validation.checkPhone(
-        controllerPhoneNumber.text);
-    if (!phone ||
-        controllerPhoneNumber
-            .text.length !=
-            9) {
-      showMessage(context, LocaleKeys
-          .errorPhoneRequired
-          .tr());
+    var phone = Validation.checkPhone(controllerPhoneNumber.text);
+    if (!phone || controllerPhoneNumber.text.length != 9) {
+      showMessage(context, LocaleKeys.errorPhoneRequired.tr());
       return;
     }
-    var idNumber =
-        controllerIdNumber.text;
-    if (idNumber.isEmpty ||
-        idNumber.length != 10) {
-      showMessage(context, LocaleKeys
-          .yourIdNotValid
-          .tr());
+    var idNumber = controllerIdNumber.text;
+    if (idNumber.isEmpty || idNumber.length != 10) {
+      showMessage(context, LocaleKeys.yourIdNotValid.tr());
       return;
     }
-    var checkCode =
-        controllerCheckCode.text;
-    if (checkCode.isEmpty ||
-        checkCode.length < 5) {
-      showMessage(context, LocaleKeys
-          .checkCodeRequired
-          .tr());
+    var checkCode = controllerCheckCode.text;
+    if (checkCode.isEmpty || checkCode.length < 5) {
+      showMessage(context, LocaleKeys.checkCodeRequired.tr());
       return;
     }
 
     var parameters = SendOtpModel(
-        capatchaCode:
-        controllerCheckCode.text,
+        capatchaCode: controllerCheckCode.text,
         key: key,
-        mobile: controllerPhoneNumber
-            .text,
-        nationalId:
-        controllerIdNumber.text);
-    ref
-        .read(
-        normalSendOtpViewModelProvider
-            .notifier)
-        .sendOtp(parameters);
-    ref
-        .read(
-        enableButtonProviderDefaultTrue
-            .notifier)
-        .state = false;
+        mobile: controllerPhoneNumber.text,
+        nationalId: controllerIdNumber.text);
+    ref.read(normalSendOtpViewModelProvider.notifier).sendOtp(parameters);
+    ref.read(enableButtonProviderDefaultTrue.notifier).state = false;
   }
 }
